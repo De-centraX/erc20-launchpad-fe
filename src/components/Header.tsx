@@ -15,7 +15,7 @@ export default function Header() {
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
         <Image
-          src="/MoltenBannerBackground.jpg"
+          src="/MagmaBannerBackground.jpg"
           alt="Magma Banner Background"
           fill
           style={{ objectFit: "cover" }}

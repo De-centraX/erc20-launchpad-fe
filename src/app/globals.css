@@ -259,28 +259,28 @@ body {
 }
 
 .header-bg {
-  background-image: url("/MoltenBannerBackground.jpg");
+  background-image: url("/MagmaBannerBackground.jpg");
   background-size: 100% 100%;
   background-position: center;
   background-repeat: no-repeat;
 }
 
 .participate-button-bg {
-  background-image: url("/MoltenBannerBackground.jpg");
+  background-image: url("/MagmaBannerBackground.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
 }
 
 .featured-participate-bg {
-  background-image: url("/MoltenBannerBackground.jpg");
+  background-image: url("/MagmaBannerBackground.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
 }
 
 .home-participate-bg {
-  background-image: url("/MoltenBannerBackground.jpg");
+  background-image: url("/MagmaBannerBackground.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

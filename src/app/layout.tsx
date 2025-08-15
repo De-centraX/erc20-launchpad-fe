@@ -7,9 +7,9 @@ export const metadata: Metadata = {
   title: "Magma Launchpad",
   description: "Token Launchpad on Core",
   icons: {
-    icon: "/Molten Logo.svg",
-    shortcut: "/Molten Logo.svg",
-    apple: "/Molten Logo.svg",
+    icon: "/Magma Logo.svg",
+    shortcut: "/Magma Logo.svg",
+    apple: "/Magma Logo.svg",
   },
 };
 

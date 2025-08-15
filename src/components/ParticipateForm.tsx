@@ -442,7 +442,7 @@ export default function ParticipateForm({ presale }: ParticipateFormProps) {
                               className="font-bold"
                               style={{
                                 backgroundImage:
-                                  'url("/MoltenBannerBackground.jpg")',
+                                  'url("/MagmaBannerBackground.jpg")',
                                 backgroundSize: "cover",
                                 backgroundPosition: "center",
                                 WebkitBackgroundClip: "text",
@@ -478,7 +478,7 @@ export default function ParticipateForm({ presale }: ParticipateFormProps) {
                           !shouldDisableButton
                             ? {
                                 backgroundImage:
-                                  'url("/MoltenBannerBackground.jpg")',
+                                  'url("/MagmaBannerBackground.jpg")',
                                 backgroundSize: "cover",
                                 backgroundPosition: "center",
                               }

@@ -304,7 +304,7 @@ export default function ParticipateFormWrapper({
                       <span
                         className="font-bold"
                         style={{
-                          backgroundImage: 'url("/MoltenBannerBackground.jpg")',
+                          backgroundImage: 'url("/MagmaBannerBackground.jpg")',
                           backgroundSize: "cover",
                           backgroundPosition: "center",
                           WebkitBackgroundClip: "text",

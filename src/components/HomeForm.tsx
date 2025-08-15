@@ -479,7 +479,7 @@ export default function HomeForm() {
                 <span
                   className="text-2xl font-bold"
                   style={{
-                    backgroundImage: 'url("/MoltenBannerBackground.jpg")',
+                    backgroundImage: 'url("/MagmaBannerBackground.jpg")',
                     backgroundSize: "cover",
                     backgroundPosition: "center",
                     WebkitBackgroundClip: "text",
@@ -508,7 +508,7 @@ export default function HomeForm() {
                 <span
                   className="text-2xl font-bold"
                   style={{
-                    backgroundImage: 'url("/MoltenBannerBackground.jpg")',
+                    backgroundImage: 'url("/MagmaBannerBackground.jpg")',
                     backgroundSize: "cover",
                     backgroundPosition: "center",
                     WebkitBackgroundClip: "text",
@@ -537,7 +537,7 @@ export default function HomeForm() {
                 <span
                   className="text-2xl font-bold"
                   style={{
-                    backgroundImage: 'url("/MoltenBannerBackground.jpg")',
+                    backgroundImage: 'url("/MagmaBannerBackground.jpg")',
                     backgroundSize: "cover",
                     backgroundPosition: "center",
                     WebkitBackgroundClip: "text",
@@ -589,7 +589,7 @@ export default function HomeForm() {
                   style={
                     filterStatus === status
                       ? {
-                          backgroundImage: 'url("/MoltenBannerBackground.jpg")',
+                          backgroundImage: 'url("/MagmaBannerBackground.jpg")',
                           backgroundSize: "cover",
                           backgroundPosition: "center",
                         }
@@ -622,7 +622,7 @@ export default function HomeForm() {
                 style={
                   sortOrder === "desc"
                     ? {
-                        backgroundImage: 'url("/MoltenBannerBackground.jpg")',
+                        backgroundImage: 'url("/MagmaBannerBackground.jpg")',
                         backgroundSize: "cover",
                         backgroundPosition: "center",
                       }
@@ -644,7 +644,7 @@ export default function HomeForm() {
                 style={
                   sortOrder === "asc"
                     ? {
-                        backgroundImage: 'url("/MoltenBannerBackground.jpg")',
+                        backgroundImage: 'url("/MagmaBannerBackground.jpg")',
                         backgroundSize: "cover",
                         backgroundPosition: "center",
                       }
@@ -727,7 +727,7 @@ export default function HomeForm() {
                           style={{
                             width: `${presale.progress}%`,
                             backgroundImage:
-                              'url("/MoltenBannerBackground.jpg")',
+                              'url("/MagmaBannerBackground.jpg")',
                             backgroundSize: "cover",
                             backgroundPosition: "left",
                           }}
@@ -783,7 +783,7 @@ export default function HomeForm() {
             <div
               className="text-3xl font-bold mb-2"
               style={{
-                backgroundImage: 'url("/MoltenBannerBackground.jpg")',
+                backgroundImage: 'url("/MagmaBannerBackground.jpg")',
                 backgroundSize: "cover",
                 backgroundPosition: "center",
                 WebkitBackgroundClip: "text",
@@ -799,7 +799,7 @@ export default function HomeForm() {
             <div
               className="text-3xl font-bold mb-2"
               style={{
-                backgroundImage: 'url("/MoltenBannerBackground.jpg")',
+                backgroundImage: 'url("/MagmaBannerBackground.jpg")',
                 backgroundSize: "cover",
                 backgroundPosition: "center",
                 WebkitBackgroundClip: "text",
@@ -822,7 +822,7 @@ export default function HomeForm() {
             <div
               className="text-3xl font-bold mb-2"
               style={{
-                backgroundImage: 'url("/MoltenBannerBackground.jpg")',
+                backgroundImage: 'url("/MagmaBannerBackground.jpg")',
                 backgroundSize: "cover",
                 backgroundPosition: "center",
                 WebkitBackgroundClip: "text",

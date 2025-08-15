@@ -363,7 +363,7 @@ export default function CreateCoinForm() {
                 onClick={() => window.location.reload()}
                 className="text-white font-bold py-3 px-6 rounded-lg transition-colors relative overflow-hidden cursor-pointer hover:cursor-pointer"
                 style={{
-                  backgroundImage: 'url("/MoltenBannerBackground.jpg")',
+                  backgroundImage: 'url("/MagmaBannerBackground.jpg")',
                   backgroundSize: "cover",
                   backgroundPosition: "center",
                 }}
@@ -649,7 +649,7 @@ export default function CreateCoinForm() {
                   style={
                     !isPending && !isConfirming && !isLoading
                       ? {
-                          backgroundImage: 'url("/MoltenBannerBackground.jpg")',
+                          backgroundImage: 'url("/MagmaBannerBackground.jpg")',
                           backgroundSize: "cover",
                           backgroundPosition: "center",
                         }

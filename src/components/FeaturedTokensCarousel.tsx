@@ -156,7 +156,7 @@ export default function FeaturedTokensCarousel() {
           <div
             className="absolute inset-0"
             style={{
-              backgroundImage: 'url("/MoltenBannerBackground.jpg")',
+              backgroundImage: 'url("/MagmaBannerBackground.jpg")',
               backgroundSize: "cover",
               backgroundPosition: backgroundPosition,
             }}

@@ -128,7 +128,7 @@ export default function FeaturedTokenSidebar() {
                       }
                       className="px-3 py-1.5 rounded text-xs font-semibold transition-all duration-300 text-white animate-pulse cursor-pointer relative overflow-hidden"
                       style={{
-                        backgroundImage: 'url("/MoltenBannerBackground.jpg")',
+                        backgroundImage: 'url("/MagmaBannerBackground.jpg")',
                         backgroundSize: "cover",
                         backgroundPosition: "center",
                       }}
@@ -187,7 +187,7 @@ export default function FeaturedTokenSidebar() {
                       }
                       className="px-3 py-1.5 rounded text-xs font-semibold transition-all duration-300 text-white animate-pulse cursor-pointer relative overflow-hidden"
                       style={{
-                        backgroundImage: 'url("/MoltenBannerBackground.jpg")',
+                        backgroundImage: 'url("/MagmaBannerBackground.jpg")',
                         backgroundSize: "cover",
                         backgroundPosition: "center",
                       }}
@@ -246,7 +246,7 @@ export default function FeaturedTokenSidebar() {
                       }
                       className="px-3 py-1.5 rounded text-xs font-semibold transition-all duration-300 text-white animate-pulse cursor-pointer relative overflow-hidden"
                       style={{
-                        backgroundImage: 'url("/MoltenBannerBackground.jpg")',
+                        backgroundImage: 'url("/MagmaBannerBackground.jpg")',
                         backgroundSize: "cover",
                         backgroundPosition: "center",
                       }}
