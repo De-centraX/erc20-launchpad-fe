@@ -244,7 +244,7 @@ export default function ParticipateForm({ presale }: ParticipateFormProps) {
     !isPresaleActive;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-yellow-50 pb-12">
+    <div className="min-h-screen bg-charcoal pb-12">
       {/* Featured Tokens Sidebar - Left Side */}
       <FeaturedTokensCarousel />
 
@@ -263,15 +263,15 @@ export default function ParticipateForm({ presale }: ParticipateFormProps) {
             >
               ← Back to Launchpad
             </button>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            <h1 className="text-3xl font-bold text-light mb-2">
               {presaleStatus?.isFinalized
                 ? `Swap ${presale.tokenName}`
                 : `Participate in ${presale.tokenName}`}
             </h1>
-            <p className="text-gray-600">
+            <p className="text-gray-300">
               {presaleStatus?.isFinalized
-                ? `Trade ${presale.tokenSymbol} tokens on Core Launchpad`
-                : `Contribute Core tokens to receive ${presale.tokenSymbol}`}
+                ? `Trade ${presale.tokenSymbol} tokens on Hyped Launch`
+                : `Contribute HL tokens to receive ${presale.tokenSymbol}`}
             </p>
           </div>
           {/* Conditional Rendering: Contribute Form or Swap Interface */}
@@ -285,7 +285,7 @@ export default function ParticipateForm({ presale }: ParticipateFormProps) {
             />
           ) : (
             // Show Contribute Form for active presales
-            <div className="bg-white rounded-2xl shadow-xl p-6 mb-8">
+            <div className="bg-card rounded-2xl shadow-xl p-6 mb-8 border border-primary/20">
               <div className="flex flex-col lg:flex-row gap-8">
                 {/* Left Side - Token Data */}
                 <div className="flex-1">
@@ -306,10 +306,10 @@ export default function ParticipateForm({ presale }: ParticipateFormProps) {
 
                       {/* Token Name */}
                       <div>
-                        <h2 className="text-xl font-bold text-gray-900">
+                        <h2 className="text-xl font-bold text-light">
                           {presale.tokenName}
                         </h2>
-                        <p className="text-sm text-gray-600">
+                        <p className="text-sm text-gray-300">
                           {presale.tokenSymbol}
                         </p>
                       </div>
@@ -328,7 +328,7 @@ export default function ParticipateForm({ presale }: ParticipateFormProps) {
                           ? "bg-blue-100 text-blue-800"
                           : getRealPresaleStatus() === "Hardcap Reached"
                           ? "bg-purple-100 text-purple-800"
-                          : "bg-gray-100 text-gray-800"
+                          : "bg-gray-100 text-gray-100"
                       }`}
                     >
                       {getRealPresaleStatus()}
@@ -337,44 +337,44 @@ export default function ParticipateForm({ presale }: ParticipateFormProps) {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 text-sm">
                     <div>
-                      <span className="text-gray-600">Rate:</span>
-                      <span className="text-gray-900 font-semibold ml-2">
-                        1 Core = {formatRate(presale.presaleRate)}{" "}
+                      <span className="text-gray-300">Rate:</span>
+                      <span className="text-light font-semibold ml-2">
+                        1 HL = {formatRate(presale.presaleRate)}{" "}
                         {presale.tokenSymbol}
                       </span>
                     </div>
                     <div>
-                      <span className="text-gray-600">Soft Cap:</span>
-                      <span className="text-gray-900 font-semibold ml-2">
-                        {formatAmount(presale.softcap)} Core
+                      <span className="text-gray-300">Soft Cap:</span>
+                      <span className="text-light font-semibold ml-2">
+                        {formatAmount(presale.softcap)} HL
                       </span>
                     </div>
                     <div>
-                      <span className="text-gray-600">Hard Cap:</span>
-                      <span className="text-gray-900 font-semibold ml-2">
-                        {formatAmount(presale.hardcap)} Core
+                      <span className="text-gray-300">Hard Cap:</span>
+                      <span className="text-light font-semibold ml-2">
+                        {formatAmount(presale.hardcap)} HL
                       </span>
                     </div>
                     <div>
-                      <span className="text-gray-600">Start Time:</span>
-                      <span className="text-gray-900 font-semibold ml-2">
+                      <span className="text-gray-300">Start Time:</span>
+                      <span className="text-light font-semibold ml-2">
                         {formatDateTime(presale.startTime)}
                       </span>
                     </div>
                     <div>
-                      <span className="text-gray-600">End Time:</span>
-                      <span className="text-gray-900 font-semibold ml-2">
+                      <span className="text-gray-300">End Time:</span>
+                      <span className="text-light font-semibold ml-2">
                         {formatDateTime(presale.endTime)}
                       </span>
                     </div>
                     {presaleStatus && (
                       <>
                         <div>
-                          <span className="text-gray-600">
+                          <span className="text-gray-300">
                             Total Contributed:
                           </span>
-                          <span className="text-gray-900 font-semibold ml-2">
-                            {formatAmount(presaleStatus.totalContributed)} Core
+                          <span className="text-light font-semibold ml-2">
+                            {formatAmount(presaleStatus.totalContributed)} HL
                           </span>
                         </div>
                       </>
@@ -391,13 +391,13 @@ export default function ParticipateForm({ presale }: ParticipateFormProps) {
 
                 {/* Right Side - Contribute Form */}
                 <div className="lg:w-96">
-                  <h3 className="text-xl font-bold text-gray-900 mb-6">
-                    Contribute Core Tokens
+                  <h3 className="text-xl font-bold text-light mb-6">
+                    Contribute HL Tokens
                   </h3>
 
                   {!isConnected ? (
                     <div className="text-center py-8">
-                      <p className="text-gray-600 mb-4">
+                      <p className="text-gray-300 mb-4">
                         Please connect your wallet to participate
                       </p>
                     </div>
@@ -407,9 +407,9 @@ export default function ParticipateForm({ presale }: ParticipateFormProps) {
                       <div>
                         <label
                           htmlFor="amount"
-                          className="block text-sm font-medium text-gray-700 mb-2"
+                          className="block text-sm font-medium text-gray-300 mb-2"
                         >
-                          Amount (Core)
+                          Amount (HL)
                         </label>
                         <div className="relative">
                           <input
@@ -426,7 +426,7 @@ export default function ParticipateForm({ presale }: ParticipateFormProps) {
                             }
                           />
                           <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">
-                            Core
+                            HL
                           </div>
                         </div>
                       </div>
@@ -435,7 +435,7 @@ export default function ParticipateForm({ presale }: ParticipateFormProps) {
                       {amount && parseFloat(amount) > 0 && (
                         <div className="bg-orange-50 rounded-lg p-4">
                           <div className="flex justify-between items-center">
-                            <span className="text-gray-700">
+                            <span className="text-gray-300">
                               You will receive:
                             </span>
                             <span

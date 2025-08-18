@@ -361,13 +361,11 @@ export default function MyPositions() {
 
   if (!isConnected) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-orange-50 to-yellow-50 py-12 px-4">
+      <div className="min-h-screen bg-charcoal py-12 px-4">
         <div className="max-w-6xl mx-auto">
           <div className="text-center">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">
-              My Positions
-            </h1>
-            <p className="text-xl text-gray-600 mb-8">
+            <h1 className="text-4xl font-bold text-light mb-4">My Positions</h1>
+            <p className="text-xl text-gray-300 mb-8">
               Connect your wallet to view your positions
             </p>
             <ConnectButton />
@@ -378,7 +376,7 @@ export default function MyPositions() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-yellow-50 pb-12">
+    <div className="min-h-screen bg-charcoal pb-12">
       {/* Use the existing FeaturedTokenSidebar component */}
       <FeaturedTokensCarousel />
 
@@ -388,50 +386,50 @@ export default function MyPositions() {
         {/* Removed ml-56 since we're using carousel instead of sidebar */}
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">
-              My Positions
-            </h1>
-            <p className="text-xl text-gray-600">
+            <h1 className="text-4xl font-bold text-light mb-4">My Positions</h1>
+            <p className="text-xl text-gray-300">
               Track your presale investments and token holdings
             </p>
           </div>
 
           {/* Native Token Balance */}
-          <div className="bg-white rounded-2xl shadow-xl p-6 mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">
+          <div className="bg-card rounded-2xl shadow-xl p-6 mb-8 border border-primary/20">
+            <h2 className="text-2xl font-bold text-light mb-4">
               Wallet Balance
             </h2>
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <Image
-                  src="/core-dao-core-logo.svg"
-                  alt="Core Logo"
+                  src="/hllogo.svg"
+                  alt="Hyperliquid Logo"
                   width={32}
                   height={32}
                   className="w-9 h-9"
                 />
-                <span className="text-lg font-medium text-gray-900">Core</span>
+                <span className="text-lg font-medium text-light">
+                  Hyperliquid
+                </span>
               </div>
-              <span className="text-2xl font-bold text-gray-900">
+              <span className="text-2xl font-bold text-primary">
                 {parseFloat(nativeBalance).toFixed(4)}
               </span>
             </div>
           </div>
 
           {/* User Positions */}
-          <div className="bg-white rounded-2xl shadow-xl p-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">
+          <div className="bg-card rounded-2xl shadow-xl p-6 border border-primary/20">
+            <h2 className="text-2xl font-bold text-light mb-6">
               Presale Positions
             </h2>
 
             {loading ? (
               <div className="text-center py-8">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500 mx-auto mb-4"></div>
-                <p className="text-gray-600">Loading your positions...</p>
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+                <p className="text-gray-300">Loading your positions...</p>
               </div>
             ) : positions.length === 0 ? (
               <div className="text-center py-8">
-                <p className="text-gray-600">
+                <p className="text-gray-300">
                   You haven't participated in any presales yet.
                 </p>
               </div>
@@ -440,32 +438,32 @@ export default function MyPositions() {
                 {positions.map((position, index) => (
                   <div
                     key={index}
-                    className="border border-gray-200 rounded-lg p-6"
+                    className="border border-primary/30 rounded-lg p-6 bg-gradient-card"
                   >
                     <div className="flex items-center justify-between mb-4">
                       <div>
-                        <h3 className="text-xl font-bold text-gray-900">
+                        <h3 className="text-xl font-bold text-light">
                           {position.tokenName} ({position.tokenSymbol})
                         </h3>
-                        <p className="text-sm text-gray-600">
+                        <p className="text-sm text-gray-300">
                           Pool:{" "}
                           <a
                             href={`https://scan.coredao.org/address/${position.poolAddress}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-blue-600 hover:text-blue-800 underline cursor-pointer"
+                            className="text-primary hover:text-primary/80 underline cursor-pointer"
                           >
                             {position.poolAddress.slice(0, 6)}...
                             {position.poolAddress.slice(-4)}
                           </a>
                         </p>
-                        <p className="text-sm text-gray-600">
+                        <p className="text-sm text-gray-300">
                           Token:{" "}
                           <a
                             href={`https://scan.coredao.org/address/${position.tokenAddress}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-blue-600 hover:text-blue-800 underline cursor-pointer"
+                            className="text-primary hover:text-primary/80 underline cursor-pointer"
                           >
                             {position.tokenAddress.slice(0, 6)}...
                             {position.tokenAddress.slice(-4)}
@@ -475,10 +473,10 @@ export default function MyPositions() {
                       <span
                         className={`px-3 py-1 rounded-full text-sm font-medium ${
                           position.status === "Active"
-                            ? "bg-green-100 text-green-800"
+                            ? "bg-primary/20 text-primary border border-primary/40"
                             : position.status === "Finalized"
-                            ? "bg-blue-100 text-blue-800"
-                            : "bg-red-100 text-red-800"
+                            ? "bg-blue-500/20 text-blue-400 border border-blue-500/40"
+                            : "bg-red-500/20 text-red-400 border border-red-500/40"
                         }`}
                       >
                         {position.status}
@@ -487,38 +485,38 @@ export default function MyPositions() {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                       <div>
-                        <p className="text-sm text-gray-600">
+                        <p className="text-sm text-gray-300">
                           Current Token Balance
                         </p>
-                        <p className="text-lg font-semibold">
+                        <p className="text-lg font-semibold text-light">
                           {position.tokenBalance} {position.tokenSymbol}
                         </p>
                       </div>
                       <div>
-                        <p className="text-sm text-gray-600">Presale Rate</p>
-                        <p className="text-sm font-medium">
-                          {position.presaleRate} {position.tokenSymbol} per Core
+                        <p className="text-sm text-gray-300">Presale Rate</p>
+                        <p className="text-sm font-medium text-light">
+                          {position.presaleRate} {position.tokenSymbol} per HL
                         </p>
                       </div>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                       <div>
-                        <p className="text-sm text-gray-600">Pool Progress</p>
-                        <p className="text-sm font-medium">
+                        <p className="text-sm text-gray-300">Pool Progress</p>
+                        <p className="text-sm font-medium text-light">
                           {position.totalContributedPool} / {position.hardcap}{" "}
-                          Core
+                          HL
                         </p>
                       </div>
                       <div>
-                        <p className="text-sm text-gray-600">Softcap</p>
-                        <p className="text-sm font-medium">
-                          {position.softcap} Core
+                        <p className="text-sm text-gray-300">Softcap</p>
+                        <p className="text-sm font-medium text-light">
+                          {position.softcap} HL
                         </p>
                       </div>
                     </div>
 
-                    <div className="text-xs text-gray-500 mb-4">
+                    <div className="text-xs text-gray-400 mb-4">
                       <p>
                         Start:{" "}
                         {new Date(position.startTime * 1000).toLocaleString()}
@@ -530,7 +528,7 @@ export default function MyPositions() {
                     </div>
 
                     {/* Action Buttons */}
-                    <div className="flex gap-3 pt-4 border-t border-gray-200">
+                    <div className="flex gap-3 pt-4 border-t border-primary/20">
                       <button
                         onClick={() =>
                           handleFinalize(
@@ -543,8 +541,8 @@ export default function MyPositions() {
                         }
                         className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 cursor-pointer ${
                           position.isFinalizable
-                            ? "bg-blue-500 hover:bg-blue-600 text-white disabled:bg-gray-400 disabled:cursor-not-allowed"
-                            : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                            ? "bg-primary hover:bg-primary/80 text-white disabled:bg-gray-600 disabled:cursor-not-allowed disabled:text-gray-300"
+                            : "bg-gray-600 text-gray-400 cursor-not-allowed"
                         }`}
                       >
                         <div className="flex items-center justify-center">
@@ -592,8 +590,8 @@ export default function MyPositions() {
                           }
                           className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 cursor-pointer ${
                             position.status !== "Finalized"
-                              ? "bg-red-500 hover:bg-red-600 text-white disabled:bg-gray-400 disabled:cursor-not-allowed"
-                              : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                              ? "bg-red-500 hover:bg-red-600 text-white disabled:bg-gray-600 disabled:cursor-not-allowed disabled:text-gray-300"
+                              : "bg-gray-600 text-gray-400 cursor-not-allowed"
                           }`}
                         >
                           {pendingActions[`withdraw-${position.poolAddress}`] ||

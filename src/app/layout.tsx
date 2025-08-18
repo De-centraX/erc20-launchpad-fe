@@ -4,12 +4,12 @@ import { Providers } from "./providers";
 import ClientHeader from "@/components/ClientHeader";
 
 export const metadata: Metadata = {
-  title: "Magma Launchpad",
-  description: "Token Launchpad on Core",
+  title: "Hyped Launch",
+  description: "Token Launchpad on Hyperliquid",
   icons: {
-    icon: "/Magma Logo.svg",
-    shortcut: "/Magma Logo.svg",
-    apple: "/Magma Logo.svg",
+    icon: "/hllogo.svg",
+    shortcut: "/hllogo.svg",
+    apple: "/hllogo.svg",
   },
 };
 
@@ -20,7 +20,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="text-gray-900">
+      <body className="bg-charcoal text-light min-h-screen">
         <Providers>
           <ClientHeader />
           {children}

@@ -132,9 +132,9 @@ export default function HomeForm() {
       );
     }
 
-    // Fallback to orange star ball
+    // Fallback to cyan star ball
     return (
-      <div className="w-8 h-8 bg-gradient-to-br from-orange-400 to-red-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
+      <div className="w-8 h-8 bg-gradient-primary rounded-full flex items-center justify-center text-white text-sm font-bold border border-primary/30">
         ⭐
       </div>
     );
@@ -377,30 +377,30 @@ export default function HomeForm() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "Live":
-        return "bg-green-100 text-green-800";
+        return "bg-primary/20 text-primary border border-primary/40";
       case "Coming Soon":
-        return "bg-blue-100 text-blue-800";
+        return "bg-blue-500/20 text-blue-400 border border-blue-500/40";
       case "Ended":
-        return "bg-gray-100 text-gray-800";
+        return "bg-gray-500/20 text-gray-400 border border-gray-500/40";
       case "Finalized":
-        return "bg-purple-100 text-purple-800";
+        return "bg-purple-500/20 text-purple-400 border border-purple-500/40";
       default:
-        return "bg-gray-100 text-gray-800";
+        return "bg-gray-500/20 text-gray-400 border border-gray-500/40";
     }
   };
 
   const getButtonStyle = (status: string) => {
     switch (status) {
       case "Live":
-        return "home-participate-bg hover:opacity-90 text-white font-bold py-2 px-4 rounded-lg transition-all cursor-pointer";
+        return "bg-gradient-primary hover:opacity-90 text-white font-bold py-2 px-4 rounded-lg transition-all cursor-pointer";
       case "Coming Soon":
-        return "bg-gray-400 text-white font-bold py-2 px-4 rounded-lg cursor-not-allowed";
+        return "bg-gray-600 text-gray-300 font-bold py-2 px-4 rounded-lg cursor-not-allowed";
       case "Ended":
-        return "bg-gray-400 text-white font-bold py-2 px-4 rounded-lg cursor-not-allowed";
+        return "bg-gray-600 text-gray-300 font-bold py-2 px-4 rounded-lg cursor-not-allowed";
       case "Finalized":
-        return "bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg transition-all cursor-pointer";
+        return "bg-primary hover:bg-primary/80 text-white font-bold py-2 px-4 rounded-lg transition-all cursor-pointer";
       default:
-        return "bg-gray-400 text-white font-bold py-2 px-4 rounded-lg cursor-not-allowed";
+        return "bg-gray-600 text-gray-300 font-bold py-2 px-4 rounded-lg cursor-not-allowed";
     }
   };
 
@@ -439,32 +439,32 @@ export default function HomeForm() {
     });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-yellow-50 py-12">
+    <div className="min-h-screen bg-charcoal py-12">
       <div className="w-full px-4 sm:px-6 lg:px-8">
         {/* Header Section with Animation */}
         <div className="text-center mb-12">
           <h1
-            className="text-4xl font-bold text-gray-900 mb-4 opacity-0 animate-fadeInUp"
+            className="text-4xl font-bold text-light mb-4 opacity-0 animate-fadeInUp"
             style={{ animationDelay: "0.2s", animationFillMode: "forwards" }}
           >
-            Welcome to Core Launchpad
+            Welcome to Hyped Launch
           </h1>
           <p
-            className="text-xl text-gray-600 max-w-2xl mx-auto opacity-0 animate-fadeInUp"
+            className="text-xl text-gray-300 max-w-2xl mx-auto opacity-0 animate-fadeInUp"
             style={{ animationDelay: "0.4s", animationFillMode: "forwards" }}
           >
-            Discover and participate in the latest token presales on the Core
-            blockchain. Join exciting projects early and be part of the next big
-            thing.
+            Discover and participate in the latest token presales on the
+            Hyperliquid blockchain. Join exciting projects early and be part of
+            the next big thing.
           </p>
         </div>
 
         {/* How It Works with Staggered Animation */}
         <div
-          className="bg-white rounded-2xl shadow-xl p-8 mb-8 opacity-0 animate-fadeInUp"
+          className="bg-card rounded-2xl shadow-xl p-8 mb-8 opacity-0 animate-fadeInUp border border-primary/20"
           style={{ animationDelay: "0.6s", animationFillMode: "forwards" }}
         >
-          <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+          <h2 className="text-2xl font-bold text-light mb-6 text-center">
             How It Works
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -473,28 +473,16 @@ export default function HomeForm() {
               style={{ animationDelay: "0.8s", animationFillMode: "forwards" }}
             >
               <div
-                className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounceIn"
+                className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounceIn border border-primary/30"
                 style={{ animationDelay: "1s" }}
               >
-                <span
-                  className="text-2xl font-bold"
-                  style={{
-                    backgroundImage: 'url("/MagmaBannerBackground.jpg")',
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    backgroundClip: "text",
-                  }}
-                >
-                  1
-                </span>
+                <span className="text-2xl font-bold text-primary">1</span>
               </div>
-              <h3 className="font-bold text-lg mb-2 text-gray-900">
+              <h3 className="font-bold text-lg mb-2 text-light">
                 Connect Wallet
               </h3>
-              <p className="text-gray-600">
-                Connect your Core wallet to get started
+              <p className="text-gray-300">
+                Connect your Hyperliquid wallet to get started
               </p>
             </div>
             <div
@@ -502,27 +490,15 @@ export default function HomeForm() {
               style={{ animationDelay: "1s", animationFillMode: "forwards" }}
             >
               <div
-                className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounceIn"
+                className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounceIn border border-primary/30"
                 style={{ animationDelay: "1.2s" }}
               >
-                <span
-                  className="text-2xl font-bold"
-                  style={{
-                    backgroundImage: 'url("/MagmaBannerBackground.jpg")',
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    backgroundClip: "text",
-                  }}
-                >
-                  2
-                </span>
+                <span className="text-2xl font-bold text-primary">2</span>
               </div>
-              <h3 className="font-bold text-lg mb-2 text-gray-900">
+              <h3 className="font-bold text-lg mb-2 text-light">
                 Choose Project
               </h3>
-              <p className="text-gray-600">
+              <p className="text-gray-300">
                 Browse and select a presale project
               </p>
             </div>
@@ -531,44 +507,30 @@ export default function HomeForm() {
               style={{ animationDelay: "1.2s", animationFillMode: "forwards" }}
             >
               <div
-                className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounceIn"
+                className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounceIn border border-primary/30"
                 style={{ animationDelay: "1.4s" }}
               >
-                <span
-                  className="text-2xl font-bold"
-                  style={{
-                    backgroundImage: 'url("/MagmaBannerBackground.jpg")',
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    backgroundClip: "text",
-                  }}
-                >
-                  3
-                </span>
+                <span className="text-2xl font-bold text-primary">3</span>
               </div>
-              <h3 className="font-bold text-lg mb-2 text-gray-900">
-                Participate
-              </h3>
-              <p className="text-gray-600">Contribute and claim your tokens</p>
+              <h3 className="font-bold text-lg mb-2 text-light">Participate</h3>
+              <p className="text-gray-300">Contribute and claim your tokens</p>
             </div>
           </div>
         </div>
 
         {/* Featured Presales Section with Animation */}
         <div
-          className="bg-white rounded-2xl shadow-xl p-8 mb-8 opacity-0 animate-fadeInUp"
+          className="bg-card rounded-2xl shadow-xl p-8 mb-8 opacity-0 animate-fadeInUp border border-primary/20"
           style={{ animationDelay: "1.4s", animationFillMode: "forwards" }}
         >
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">
+          <h2 className="text-2xl font-bold text-light mb-6">
             Featured Tokens
           </h2>
 
           {/* Filter and Sort buttons */}
           <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
             {/* Filter buttons */}
-            <div className="flex space-x-2 bg-gray-100 rounded-lg p-1">
+            <div className="flex space-x-2 bg-accent-dark rounded-lg p-1">
               {(
                 [
                   "All",
@@ -583,22 +545,10 @@ export default function HomeForm() {
                   onClick={() => setFilterStatus(status)}
                   className={`px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 relative overflow-hidden ${
                     filterStatus === status
-                      ? "text-white shadow-sm"
-                      : "text-gray-600 hover:text-orange-500 hover:bg-orange-50"
+                      ? "bg-primary text-white shadow-sm"
+                      : "text-gray-300 hover:text-primary hover:bg-primary/10"
                   }`}
-                  style={
-                    filterStatus === status
-                      ? {
-                          backgroundImage: 'url("/MagmaBannerBackground.jpg")',
-                          backgroundSize: "cover",
-                          backgroundPosition: "center",
-                        }
-                      : {}
-                  }
                 >
-                  {filterStatus === status && (
-                    <div className="absolute inset-0 bg-black/20 rounded-md"></div>
-                  )}
                   <span className="relative z-10">
                     {status} (
                     {status === "All"
@@ -611,49 +561,25 @@ export default function HomeForm() {
             </div>
 
             {/* Sort buttons */}
-            <div className="flex space-x-2 bg-gray-100 rounded-lg p-1">
+            <div className="flex space-x-2 bg-accent-dark rounded-lg p-1">
               <button
                 onClick={() => setSortOrder("desc")}
                 className={`px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 relative overflow-hidden ${
                   sortOrder === "desc"
-                    ? "text-white shadow-sm"
-                    : "text-gray-600 hover:text-orange-500 hover:bg-orange-50"
+                    ? "bg-primary text-white shadow-sm"
+                    : "text-gray-300 hover:text-primary hover:bg-primary/10"
                 }`}
-                style={
-                  sortOrder === "desc"
-                    ? {
-                        backgroundImage: 'url("/MagmaBannerBackground.jpg")',
-                        backgroundSize: "cover",
-                        backgroundPosition: "center",
-                      }
-                    : {}
-                }
               >
-                {sortOrder === "desc" && (
-                  <div className="absolute inset-0 bg-black/20 rounded-md"></div>
-                )}
                 <span className="relative z-10">↓ Newest</span>
               </button>
               <button
                 onClick={() => setSortOrder("asc")}
                 className={`px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 relative overflow-hidden ${
                   sortOrder === "asc"
-                    ? "text-white shadow-sm"
-                    : "text-gray-600 hover:text-orange-500 hover:bg-orange-50"
+                    ? "bg-primary text-white shadow-sm"
+                    : "text-gray-300 hover:text-primary hover:bg-primary/10"
                 }`}
-                style={
-                  sortOrder === "asc"
-                    ? {
-                        backgroundImage: 'url("/MagmaBannerBackground.jpg")',
-                        backgroundSize: "cover",
-                        backgroundPosition: "center",
-                      }
-                    : {}
-                }
               >
-                {sortOrder === "asc" && (
-                  <div className="absolute inset-0 bg-black/20 rounded-md"></div>
-                )}
                 <span className="relative z-10">↑ Oldest</span>
               </button>
             </div>
@@ -661,12 +587,12 @@ export default function HomeForm() {
 
           {loading ? (
             <div className="text-center py-8">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto"></div>
-              <p className="mt-4 text-gray-600">Loading presales...</p>
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+              <p className="mt-4 text-gray-300">Loading presales...</p>
             </div>
           ) : filteredPresales.length === 0 ? (
             <div className="text-center py-8">
-              <p className="text-gray-600">
+              <p className="text-gray-300">
                 No presales found matching your filter.
               </p>
             </div>
@@ -678,7 +604,7 @@ export default function HomeForm() {
                 return (
                   <div
                     key={presale.poolAddress}
-                    className={`bg-gradient-to-br from-orange-100 to-yellow-100 rounded-xl p-6 border border-orange-200 relative ${
+                    className={`bg-gradient-card rounded-xl p-6 border border-primary/30 relative backdrop-blur-sm ${
                       mounted && isFirstToken ? "animate-violentShake" : ""
                     }`}
                     style={{
@@ -694,7 +620,7 @@ export default function HomeForm() {
                     {/* New Token Badge */}
                     {newTokenAddress &&
                       presale.poolAddress === newTokenAddress && (
-                        <div className="absolute -top-2 -right-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full animate-pulse z-10">
+                        <div className="absolute -top-2 -right-2 bg-primary text-white text-xs px-2 py-1 rounded-full animate-pulse z-10 font-bold">
                           NEW!
                         </div>
                       )}
@@ -702,7 +628,7 @@ export default function HomeForm() {
                       <div className="flex items-center space-x-3">
                         {/* Token Logo */}
                         <TokenImage poolAddress={presale.poolAddress} />
-                        <h3 className="font-bold text-lg text-gray-900">
+                        <h3 className="font-bold text-lg text-light">
                           {presale.tokenName}
                         </h3>
                       </div>
@@ -716,37 +642,30 @@ export default function HomeForm() {
                     </div>
                     <div className="space-y-3">
                       <div className="flex justify-between">
-                        <span className="text-gray-600">Progress:</span>
-                        <span className="font-semibold">
+                        <span className="text-gray-300">Progress:</span>
+                        <span className="font-semibold text-light">
                           {presale.progress}%
                         </span>
                       </div>
-                      <div className="w-full bg-gray-200 rounded-full h-2">
+                      <div className="w-full bg-accent-dark rounded-full h-2">
                         <div
-                          className="h-2 rounded-full relative overflow-hidden"
+                          className="h-2 rounded-full bg-gradient-primary"
                           style={{
                             width: `${presale.progress}%`,
-                            backgroundImage:
-                              'url("/MagmaBannerBackground.jpg")',
-                            backgroundSize: "cover",
-                            backgroundPosition: "left",
                           }}
-                        >
-                          {/* Dark overlay for better visibility */}
-                          <div className="absolute inset-0 bg-black/20"></div>
-                        </div>
+                        ></div>
                       </div>
                       <div className="flex justify-between text-sm">
-                        <span className="text-gray-600">
-                          Raised: {formatAmount(presale.totalContributed)} Core
+                        <span className="text-gray-300">
+                          Raised: {formatAmount(presale.totalContributed)} HL
                         </span>
-                        <span className="text-gray-600">
-                          Goal: {formatAmount(presale.hardcap)} Core
+                        <span className="text-gray-300">
+                          Goal: {formatAmount(presale.hardcap)} HL
                         </span>
                       </div>
-                      <div className="text-xs text-gray-500">
+                      <div className="text-xs text-gray-400">
                         <div>
-                          Rate: 1 Core = {formatRate(presale.presaleRate)}{" "}
+                          Rate: 1 HL = {formatRate(presale.presaleRate)}{" "}
                           {presale.tokenSymbol}
                         </div>
                         <div>Start: {formatDateTime(presale.startTime)}</div>
@@ -779,34 +698,14 @@ export default function HomeForm() {
           className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 opacity-0 animate-fadeInUp"
           style={{ animationDelay: "2s", animationFillMode: "forwards" }}
         >
-          <div className="bg-white rounded-xl p-6 text-center shadow-lg">
-            <div
-              className="text-3xl font-bold mb-2"
-              style={{
-                backgroundImage: 'url("/MagmaBannerBackground.jpg")',
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
-              }}
-            >
+          <div className="bg-card rounded-xl p-6 text-center shadow-lg border border-primary/20">
+            <div className="text-3xl font-bold mb-2 text-primary">
               {presales.length}
             </div>
-            <div className="text-gray-600">Projects Launched</div>
+            <div className="text-gray-300">Projects Launched</div>
           </div>
-          <div className="bg-white rounded-xl p-6 text-center shadow-lg">
-            <div
-              className="text-3xl font-bold mb-2"
-              style={{
-                backgroundImage: 'url("/MagmaBannerBackground.jpg")',
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
-              }}
-            >
+          <div className="bg-card rounded-xl p-6 text-center shadow-lg border border-primary/20">
+            <div className="text-3xl font-bold mb-2 text-primary">
               {presales
                 .reduce(
                   (total, presale) =>
@@ -814,25 +713,15 @@ export default function HomeForm() {
                   0
                 )
                 .toFixed(1)}{" "}
-              Core
+              HL
             </div>
-            <div className="text-gray-600">Total Goal</div>
+            <div className="text-gray-300">Total Goal</div>
           </div>
-          <div className="bg-white rounded-xl p-6 text-center shadow-lg">
-            <div
-              className="text-3xl font-bold mb-2"
-              style={{
-                backgroundImage: 'url("/MagmaBannerBackground.jpg")',
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
-              }}
-            >
+          <div className="bg-card rounded-xl p-6 text-center shadow-lg border border-primary/20">
+            <div className="text-3xl font-bold mb-2 text-primary">
               {presales.filter((p) => p.status === "Live").length}
             </div>
-            <div className="text-gray-600">Active Presales</div>
+            <div className="text-gray-300">Active Presales</div>
           </div>
         </div>
       </div>

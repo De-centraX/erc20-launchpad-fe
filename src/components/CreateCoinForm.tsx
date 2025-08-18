@@ -309,23 +309,23 @@ export default function CreateCoinForm() {
   // Show success state when transaction is successful
   if (isSuccess) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-orange-50 to-yellow-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen bg-charcoal py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">
+            <h1 className="text-4xl font-bold text-light mb-4">
               Presale Created Successfully!
             </h1>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            <p className="text-xl text-gray-300 max-w-2xl mx-auto">
               Your token presale has been deployed to the blockchain and is now
               live.
             </p>
           </div>
 
-          <div className="bg-white rounded-2xl shadow-xl p-8 text-center">
+          <div className="bg-card rounded-2xl shadow-xl p-8 text-center border border-primary/20">
             <div className="mb-8">
-              <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-20 h-20 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-4 border border-primary/30">
                 <svg
-                  className="w-10 h-10 text-green-500"
+                  className="w-10 h-10 text-primary"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -338,16 +338,16 @@ export default function CreateCoinForm() {
                   />
                 </svg>
               </div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">
+              <h2 className="text-2xl font-bold text-light mb-2">
                 Presale Deployed!
               </h2>
-              <p className="text-gray-600 mb-6">
+              <p className="text-gray-300 mb-6">
                 Your presale is now active and ready to accept contributions.
               </p>
             </div>
 
             {hash && (
-              <div className="bg-blue-50 border text-center border-blue-200 text-wrap rounded-lg p-4">
+              <div className="bg-primary/10 border text-center border-primary/30 text-wrap rounded-lg p-4">
                 <a
                   href={`https://scan.coredao.org/tx/${hash}`}
                   target="_blank"
@@ -381,13 +381,13 @@ export default function CreateCoinForm() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-yellow-50 py-12 px-4 sm:px-6 lg:px-8 animate-fadeInUp">
+    <div className="min-h-screen bg-charcoal py-12 px-4 sm:px-6 lg:px-8 animate-fadeInUp">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          <h1 className="text-4xl font-bold text-light mb-4">
             Create Your Token
           </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="text-xl text-gray-300 max-w-2xl mx-auto">
             Launch your token with a professional presale. Set up your project
             details, configure the presale parameters, and start raising funds.
           </p>
@@ -414,16 +414,16 @@ export default function CreateCoinForm() {
           </div>
         )}
 
-        <div className="bg-white rounded-2xl shadow-xl p-8">
+        <div className="bg-card rounded-2xl shadow-xl p-8 border border-primary/20">
           <form onSubmit={handleSubmit} className="space-y-8">
             {/* Token Information */}
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">
+              <h2 className="text-2xl font-bold text-light mb-6">
                 Token Information
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
                     Token Name *
                   </label>
                   <input
@@ -431,13 +431,13 @@ export default function CreateCoinForm() {
                     name="tokenName"
                     value={formData.tokenName}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent placeholder:text-gray-700"
+                    className="w-full px-4 py-3 border border-primary/30 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary bg-accent-dark text-light placeholder:text-gray-400"
                     placeholder="e.g., My Awesome Token"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-light mb-2">
                     Token Symbol *
                   </label>
                   <input
@@ -445,7 +445,7 @@ export default function CreateCoinForm() {
                     name="tokenSymbol"
                     value={formData.tokenSymbol}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent placeholder:text-gray-700"
+                    className="form-input"
                     placeholder="e.g., MAT"
                     required
                   />
@@ -453,7 +453,7 @@ export default function CreateCoinForm() {
 
                 {/* Token Logo Upload */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-light mb-2">
                     Token Logo
                   </label>
                   <div className="space-y-3">
@@ -461,7 +461,7 @@ export default function CreateCoinForm() {
                       type="file"
                       accept="image/*"
                       onChange={handleImageUpload}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-orange-50 file:text-orange-700 hover:file:bg-orange-100 text-gray-700"
+                      className="form-input file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-primary file:text-charcoal hover:file:bg-primary/80"
                       disabled={isUploadingImage}
                     />
 
@@ -474,18 +474,18 @@ export default function CreateCoinForm() {
                           className="w-16 h-16 rounded-lg object-cover border border-gray-200"
                         />
                         {isUploadingImage ? (
-                          <span className="text-sm text-gray-500">
+                          <span className="text-sm text-gray-300">
                             Uploading...
                           </span>
                         ) : imageUrl ? (
-                          <span className="text-sm text-green-600">
+                          <span className="text-sm text-primary">
                             ✓ Uploaded successfully
                           </span>
                         ) : null}
                       </div>
                     )}
 
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-gray-300">
                       Optional. Recommended size: 256x256px. Max file size: 5MB.
                     </p>
                   </div>
@@ -495,48 +495,48 @@ export default function CreateCoinForm() {
 
             {/* Presale Configuration */}
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">
+              <h2 className="text-2xl font-bold text-light mb-6">
                 Presale Configuration
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Presale Rate (tokens per Core) *
+                  <label className="block text-sm font-medium text-light mb-2">
+                    Presale Rate (tokens per HL) *
                   </label>
                   <input
                     type="number"
                     name="presaleRate"
                     value={formData.presaleRate}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent placeholder:text-gray-700"
+                    className="form-input"
                     placeholder="e.g., 10000"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Soft Cap (Core) *
+                  <label className="block text-sm font-medium text-light mb-2">
+                    Soft Cap (HL) *
                   </label>
                   <input
                     type="number"
                     name="softcap"
                     value={formData.softcap}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent placeholder:text-gray-700"
+                    className="form-input"
                     placeholder="e.g., 10"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Hard Cap (Core) *
+                  <label className="block text-sm font-medium text-light mb-2">
+                    Hard Cap (HL) *
                   </label>
                   <input
                     type="number"
                     name="hardcap"
                     value={formData.hardcap}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent placeholder:text-gray-700"
+                    className="form-input"
                     placeholder="e.g., 100"
                     required
                   />
@@ -551,7 +551,7 @@ export default function CreateCoinForm() {
                       Listing Rate (Auto-calculated):
                     </span>
                     <span className="text-sm font-bold text-blue-900">
-                      {calculatedListingRate.toLocaleString()} tokens per Core
+                      {calculatedListingRate.toLocaleString()} tokens per HL
                       (80% of presale rate)
                     </span>
                   </div>
@@ -565,12 +565,12 @@ export default function CreateCoinForm() {
 
             {/* Presale Timeline */}
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">
+              <h2 className="text-2xl font-bold text-light mb-6">
                 Presale Timeline
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-light mb-2">
                     Start Time *
                   </label>
                   <input
@@ -578,12 +578,12 @@ export default function CreateCoinForm() {
                     name="startTime"
                     value={formData.startTime}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-700"
+                    className="form-input"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-light mb-2">
                     End Time *
                   </label>
                   <input
@@ -591,7 +591,7 @@ export default function CreateCoinForm() {
                     name="endTime"
                     value={formData.endTime}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-700"
+                    className="form-input"
                     required
                   />
                 </div>
@@ -600,34 +600,34 @@ export default function CreateCoinForm() {
 
             {/* Investment Limits */}
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">
+              <h2 className="text-2xl font-bold text-light mb-6">
                 Investment Limits
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Minimum Buy (Core) *
+                  <label className="block text-sm font-medium text-light mb-2">
+                    Minimum Buy (HL) *
                   </label>
                   <input
                     type="number"
                     name="minBuy"
                     value={formData.minBuy}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent placeholder:text-gray-700"
+                    className="form-input"
                     placeholder="e.g., 0.1"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Maximum Buy (Core) *
+                  <label className="block text-sm font-medium text-light mb-2">
+                    Maximum Buy (HL) *
                   </label>
                   <input
                     type="number"
                     name="maxBuy"
                     value={formData.maxBuy}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent placeholder:text-gray-700"
+                    className="form-input"
                     placeholder="e.g., 10"
                     required
                   />
@@ -674,7 +674,7 @@ export default function CreateCoinForm() {
                 </button>
               ) : (
                 <div className="flex flex-col items-center space-y-4">
-                  <p className="text-gray-600 text-lg">
+                  <p className="text-gray-300 text-lg">
                     Connect your wallet to create a presale
                   </p>
                   <ConnectButton />

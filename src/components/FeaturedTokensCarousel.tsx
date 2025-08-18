@@ -78,10 +78,10 @@ export default function FeaturedTokensCarousel() {
   // Show loading state if no presales yet
   if (!presales || (Array.isArray(presales) && presales.length === 0)) {
     return (
-      <div className="w-full bg-gradient-to-r from-orange-50 to-yellow-50 py-8">
+      <div className="w-full bg-gradient-charcoal py-8">
         <div className="max-w-6xl mx-auto px-4">
           <div className="flex justify-center">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500"></div>
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
           </div>
         </div>
       </div>
@@ -100,10 +100,10 @@ export default function FeaturedTokensCarousel() {
   // If no presale data available yet, show loading
   if (availablePresales.length === 0) {
     return (
-      <div className="w-full bg-gradient-to-r from-orange-50 to-yellow-50 py-8">
+      <div className="w-full bg-gradient-charcoal py-8">
         <div className="w-full px-2">
           <div className="flex justify-center">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500"></div>
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
           </div>
         </div>
       </div>
@@ -150,18 +150,10 @@ export default function FeaturedTokensCarousel() {
     return (
       <div key={uniqueKey} className="slide flex-shrink-0">
         <div
-          className="w-96 h-44 relative overflow-hidden rounded-xl mx-2 cursor-pointer hover:scale-105 transition-transform duration-300"
+          className="w-96 h-44 relative overflow-hidden rounded-xl mx-2 cursor-pointer hover:scale-105 transition-transform duration-300 bg-gradient-card border border-primary/30"
           onClick={() => handleParticipate(presale.data, presale.address)}
         >
-          <div
-            className="absolute inset-0"
-            style={{
-              backgroundImage: 'url("/MagmaBannerBackground.jpg")',
-              backgroundSize: "cover",
-              backgroundPosition: backgroundPosition,
-            }}
-          ></div>
-          <div className="absolute inset-0 bg-black/30"></div>
+          <div className="absolute inset-0 bg-gradient-primary opacity-10"></div>
 
           <div className="relative z-10 p-5 h-full flex flex-col justify-between">
             <div className="text-center">
@@ -173,8 +165,8 @@ export default function FeaturedTokensCarousel() {
                   className="w-16 h-16 rounded-full mx-auto mb-6 object-cover border-2 border-white/50 animate-bounce"
                 />
               ) : (
-                <div className="w-16 h-16 bg-gradient-to-br from-orange-400 to-red-500 rounded-full mx-auto mb-6 flex items-center justify-center text-white text-lg font-bold animate-bounce">
-                  ⭐
+                <div className="w-16 h-16 bg-gradient-primary rounded-full mx-auto mb-6 flex items-center justify-center text-white text-lg font-bold animate-bounce border border-primary/50">
+                  🚀
                 </div>
               )}
 
@@ -198,7 +190,7 @@ export default function FeaturedTokensCarousel() {
   };
 
   return (
-    <div className="w-full bg-gradient-to-r from-orange-50 to-yellow-50 py-8">
+    <div className="w-full bg-gradient-charcoal py-8">
       <div className="w-full px-2">
         {/* Proven Infinite Carousel - No Jumps */}
         <div className="slider overflow-hidden relative">

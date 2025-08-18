@@ -1,148 +1,154 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useAccount, useReadContract, usePublicClient, useWriteContract, useWaitForTransactionReceipt } from "wagmi";
+import {
+  useAccount,
+  useReadContract,
+  usePublicClient,
+  useWriteContract,
+  useWaitForTransactionReceipt,
+} from "wagmi";
 import { parseEther, formatEther } from "viem";
 import PoolABI from "@/contracts/abis/Pool.json";
 
 // Uniswap V2 Router ABI for getAmountsOut and swap functions
 const ROUTER_ABI = [
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "uint256",
-        "name": "amountIn",
-        "type": "uint256"
+        internalType: "uint256",
+        name: "amountIn",
+        type: "uint256",
       },
       {
-        "internalType": "address[]",
-        "name": "path",
-        "type": "address[]"
-      }
+        internalType: "address[]",
+        name: "path",
+        type: "address[]",
+      },
     ],
-    "name": "getAmountsOut",
-    "outputs": [
+    name: "getAmountsOut",
+    outputs: [
       {
-        "internalType": "uint256[]",
-        "name": "amounts",
-        "type": "uint256[]"
-      }
+        internalType: "uint256[]",
+        name: "amounts",
+        type: "uint256[]",
+      },
     ],
-    "stateMutability": "view",
-    "type": "function"
+    stateMutability: "view",
+    type: "function",
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "uint256",
-        "name": "amountIn",
-        "type": "uint256"
+        internalType: "uint256",
+        name: "amountIn",
+        type: "uint256",
       },
       {
-        "internalType": "uint256",
-        "name": "amountOutMin",
-        "type": "uint256"
+        internalType: "uint256",
+        name: "amountOutMin",
+        type: "uint256",
       },
       {
-        "internalType": "address[]",
-        "name": "path",
-        "type": "address[]"
+        internalType: "address[]",
+        name: "path",
+        type: "address[]",
       },
       {
-        "internalType": "address",
-        "name": "to",
-        "type": "address"
+        internalType: "address",
+        name: "to",
+        type: "address",
       },
       {
-        "internalType": "uint256",
-        "name": "deadline",
-        "type": "uint256"
-      }
+        internalType: "uint256",
+        name: "deadline",
+        type: "uint256",
+      },
     ],
-    "name": "swapExactTokensForETH",
-    "outputs": [
+    name: "swapExactTokensForETH",
+    outputs: [
       {
-        "internalType": "uint256[]",
-        "name": "amounts",
-        "type": "uint256[]"
-      }
+        internalType: "uint256[]",
+        name: "amounts",
+        type: "uint256[]",
+      },
     ],
-    "stateMutability": "nonpayable",
-    "type": "function"
+    stateMutability: "nonpayable",
+    type: "function",
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "uint256",
-        "name": "amountIn",
-        "type": "uint256"
+        internalType: "uint256",
+        name: "amountIn",
+        type: "uint256",
       },
       {
-        "internalType": "uint256",
-        "name": "amountOutMin",
-        "type": "uint256"
+        internalType: "uint256",
+        name: "amountOutMin",
+        type: "uint256",
       },
       {
-        "internalType": "address[]",
-        "name": "path",
-        "type": "address[]"
+        internalType: "address[]",
+        name: "path",
+        type: "address[]",
       },
       {
-        "internalType": "address",
-        "name": "to",
-        "type": "address"
+        internalType: "address",
+        name: "to",
+        type: "address",
       },
       {
-        "internalType": "uint256",
-        "name": "deadline",
-        "type": "uint256"
-      }
+        internalType: "uint256",
+        name: "deadline",
+        type: "uint256",
+      },
     ],
-    "name": "swapExactTokensForTokens",
-    "outputs": [
+    name: "swapExactTokensForTokens",
+    outputs: [
       {
-        "internalType": "uint256[]",
-        "name": "amounts",
-        "type": "uint256[]"
-      }
+        internalType: "uint256[]",
+        name: "amounts",
+        type: "uint256[]",
+      },
     ],
-    "stateMutability": "nonpayable",
-    "type": "function"
+    stateMutability: "nonpayable",
+    type: "function",
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "uint256",
-        "name": "amountOutMin",
-        "type": "uint256"
+        internalType: "uint256",
+        name: "amountOutMin",
+        type: "uint256",
       },
       {
-        "internalType": "address[]",
-        "name": "path",
-        "type": "address[]"
+        internalType: "address[]",
+        name: "path",
+        type: "address[]",
       },
       {
-        "internalType": "address",
-        "name": "to",
-        "type": "address"
+        internalType: "address",
+        name: "to",
+        type: "address",
       },
       {
-        "internalType": "uint256",
-        "name": "deadline",
-        "type": "uint256"
-      }
+        internalType: "uint256",
+        name: "deadline",
+        type: "uint256",
+      },
     ],
-    "name": "swapExactETHForTokens",
-    "outputs": [
+    name: "swapExactETHForTokens",
+    outputs: [
       {
-        "internalType": "uint256[]",
-        "name": "amounts",
-        "type": "uint256[]"
-      }
+        internalType: "uint256[]",
+        name: "amounts",
+        type: "uint256[]",
+      },
     ],
-    "stateMutability": "payable",
-    "type": "function"
-  }
+    stateMutability: "payable",
+    type: "function",
+  },
 ] as const;
 
 interface SwapInterfaceProps {
@@ -152,7 +158,12 @@ interface SwapInterfaceProps {
   tokenAddress: string;
 }
 
-export default function SwapInterface({ poolAddress, tokenName, tokenSymbol, tokenAddress }: SwapInterfaceProps) {
+export default function SwapInterface({
+  poolAddress,
+  tokenName,
+  tokenSymbol,
+  tokenAddress,
+}: SwapInterfaceProps) {
   const { address, isConnected } = useAccount();
   const publicClient = usePublicClient();
   const [swapDirection, setSwapDirection] = useState<"buy" | "sell">("buy");
@@ -172,8 +183,6 @@ export default function SwapInterface({ poolAddress, tokenName, tokenSymbol, tok
     hash,
   });
 
-
-
   // Hardcoded addresses
   const WCORE_ADDRESS = "0x40375c92d9faf44d2f9db9bd9ba41a3317a2404f";
   const ROUTER_ADDRESS = "0xBb5e1777A331ED93E07cF043363e48d320eb96c4";
@@ -182,7 +191,7 @@ export default function SwapInterface({ poolAddress, tokenName, tokenSymbol, tok
   const { data: poolData } = useReadContract({
     address: poolAddress as `0x${string}`,
     abi: PoolABI,
-    functionName: 'getPoolData',
+    functionName: "getPoolData",
   });
 
   // Function to approve tokens
@@ -194,31 +203,28 @@ export default function SwapInterface({ poolAddress, tokenName, tokenSymbol, tok
 
     try {
       console.log("🔐 Approving tokens for router...");
-      
+
       // Call approve function on the token contract
       const result = await writeContract({
         address: tokenAddress as `0x${string}`,
         abi: [
           {
-            "inputs": [
-              {"internalType": "address", "name": "spender", "type": "address"},
-              {"internalType": "uint256", "name": "amount", "type": "uint256"}
+            inputs: [
+              { internalType: "address", name: "spender", type: "address" },
+              { internalType: "uint256", name: "amount", type: "uint256" },
             ],
-            "name": "approve",
-            "outputs": [{"internalType": "bool", "name": "", "type": "bool"}],
-            "stateMutability": "nonpayable",
-            "type": "function"
-          }
+            name: "approve",
+            outputs: [{ internalType: "bool", name: "", type: "bool" }],
+            stateMutability: "nonpayable",
+            type: "function",
+          },
         ],
-        functionName: 'approve',
-        args: [
-          ROUTER_ADDRESS as `0x${string}`,
-          parseEther(approvalAmount)
-        ],
+        functionName: "approve",
+        args: [ROUTER_ADDRESS as `0x${string}`, parseEther(approvalAmount)],
       });
-      
+
       console.log("🔐 Approval transaction sent:", result);
-      
+
       // Wait for the approval transaction to be confirmed
       console.log("⏳ Waiting for approval confirmation...");
       await new Promise((resolve) => {
@@ -228,20 +234,26 @@ export default function SwapInterface({ poolAddress, tokenName, tokenSymbol, tok
               address: tokenAddress as `0x${string}`,
               abi: [
                 {
-                  "inputs": [
-                    {"internalType": "address", "name": "owner", "type": "address"},
-                    {"internalType": "address", "name": "spender", "type": "address"}
+                  inputs: [
+                    { internalType: "address", name: "owner", type: "address" },
+                    {
+                      internalType: "address",
+                      name: "spender",
+                      type: "address",
+                    },
                   ],
-                  "name": "allowance",
-                  "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
-                  "stateMutability": "view",
-                  "type": "function"
-                }
+                  name: "allowance",
+                  outputs: [
+                    { internalType: "uint256", name: "", type: "uint256" },
+                  ],
+                  stateMutability: "view",
+                  type: "function",
+                },
               ],
-              functionName: 'allowance',
+              functionName: "allowance",
               args: [address as `0x${string}`, ROUTER_ADDRESS as `0x${string}`],
             });
-            
+
             const amountToApprove = parseEther(approvalAmount);
             if (newAllowance >= amountToApprove) {
               console.log("✅ Approval confirmed on blockchain!");
@@ -255,13 +267,12 @@ export default function SwapInterface({ poolAddress, tokenName, tokenSymbol, tok
             resolve(false);
           }
         };
-        
+
         // Start checking after 2 seconds
         setTimeout(checkApproval, 2000);
       });
-      
+
       return true;
-      
     } catch (error) {
       console.error("Error approving tokens:", error);
       alert("Approval failed. Please try again.");
@@ -289,7 +300,7 @@ export default function SwapInterface({ poolAddress, tokenName, tokenSymbol, tok
       swapDirection,
       needsApproval,
       amount,
-      tokenAddress
+      tokenAddress,
     });
 
     // For selling tokens, check and handle approval if needed
@@ -300,35 +311,40 @@ export default function SwapInterface({ poolAddress, tokenName, tokenSymbol, tok
           address: tokenAddress as `0x${string}`,
           abi: [
             {
-              "inputs": [
-                {"internalType": "address", "name": "owner", "type": "address"},
-                {"internalType": "address", "name": "spender", "type": "address"}
+              inputs: [
+                { internalType: "address", name: "owner", type: "address" },
+                { internalType: "address", name: "spender", type: "address" },
               ],
-              "name": "allowance",
-              "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
-              "stateMutability": "view",
-              "type": "function"
-            }
+              name: "allowance",
+              outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+              stateMutability: "view",
+              type: "function",
+            },
           ],
-          functionName: 'allowance',
+          functionName: "allowance",
           args: [address as `0x${string}`, ROUTER_ADDRESS as `0x${string}`],
         });
-        
+
         const amountToApprove = parseEther(amount);
-        console.log("🔐 Current allowance:", formatEther(allowance), "Amount needed:", amount);
-        
-                if (allowance < amountToApprove) {
+        console.log(
+          "🔐 Current allowance:",
+          formatEther(allowance),
+          "Amount needed:",
+          amount
+        );
+
+        if (allowance < amountToApprove) {
           console.log("⚠️ Insufficient allowance, approving first...");
-          
+
           // Call approve and wait for the transaction to be confirmed
           const approveResult = await handleApprove();
-          
+
           if (!approveResult) {
             console.log("❌ Approval failed, cannot proceed");
             alert("Token approval failed. Please try again.");
             return;
           }
-          
+
           console.log("✅ Approval successful, proceeding with swap...");
         }
       } catch (error) {
@@ -340,7 +356,7 @@ export default function SwapInterface({ poolAddress, tokenName, tokenSymbol, tok
 
     try {
       setIsLoading(true);
-      
+
       console.log("🚀 Starting swap execution...");
       console.log("📊 Swap details:", {
         direction: swapDirection,
@@ -348,20 +364,21 @@ export default function SwapInterface({ poolAddress, tokenName, tokenSymbol, tok
         tokenAddress: tokenAddress,
         wcoreAddress: WCORE_ADDRESS,
         routerAddress: ROUTER_ADDRESS,
-        userAddress: address
+        userAddress: address,
       });
-      
+
       // Convert amount to wei (18 decimals)
       const amountInWei = parseEther(amount);
       console.log("💰 Amount in wei:", amountInWei.toString());
-      
+
       // Calculate minimum amount out based on slippage
       const slippage = 5; // Default 5% slippage
       // Convert amountOut to wei first, then apply slippage
       const amountOutWei = parseEther(amountOut);
-      const minAmountOut = (amountOutWei * BigInt(100 - slippage)) / BigInt(100);
+      const minAmountOut =
+        (amountOutWei * BigInt(100 - slippage)) / BigInt(100);
       console.log("📉 Min amount out:", minAmountOut.toString());
-      
+
       // Determine the path based on swap direction
       let path: `0x${string}`[];
       if (swapDirection === "buy") {
@@ -372,17 +389,17 @@ export default function SwapInterface({ poolAddress, tokenName, tokenSymbol, tok
         path = [tokenAddress as `0x${string}`, WCORE_ADDRESS as `0x${string}`];
       }
       console.log("🛤️ Swap path:", path);
-      
+
       // Set deadline to current block timestamp + 30 seconds
       const deadline = BigInt(Math.floor(Date.now() / 1000) + 30);
       console.log("⏰ Deadline:", deadline.toString());
-      
+
       console.log("📝 Calling writeContract with args:", [
         amountInWei.toString(),
         minAmountOut.toString(),
         path,
         address,
-        deadline.toString()
+        deadline.toString(),
       ]);
 
       // Execute the swap based on direction
@@ -392,12 +409,12 @@ export default function SwapInterface({ poolAddress, tokenName, tokenSymbol, tok
         writeContract({
           address: ROUTER_ADDRESS as `0x${string}`,
           abi: ROUTER_ABI,
-          functionName: 'swapExactETHForTokens',
+          functionName: "swapExactETHForTokens",
           args: [
             minAmountOut,
             path,
             address as `0x${string}`, // recipient address
-            deadline
+            deadline,
           ],
           value: amountInWei, // Send Core ETH with the transaction
         });
@@ -407,27 +424,33 @@ export default function SwapInterface({ poolAddress, tokenName, tokenSymbol, tok
         writeContract({
           address: ROUTER_ADDRESS as `0x${string}`,
           abi: ROUTER_ABI,
-          functionName: 'swapExactTokensForETH',
+          functionName: "swapExactTokensForETH",
           args: [
             amountInWei,
             minAmountOut,
             path,
             address as `0x${string}`, // recipient address
-            deadline
+            deadline,
           ],
         });
       }
-
     } catch (error) {
       console.error("❌ Error during swap:", error);
-      alert(`Swap failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      alert(
+        `Swap failed: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
+      );
     } finally {
       setIsLoading(false);
     }
   };
 
   // Function to get swap amounts from Uniswap V2 router
-  const getSwapAmounts = async (amountIn: string, direction: "buy" | "sell") => {
+  const getSwapAmounts = async (
+    amountIn: string,
+    direction: "buy" | "sell"
+  ) => {
     if (!amountIn || parseFloat(amountIn) <= 0 || !publicClient) {
       setAmountOut("0");
       return;
@@ -436,7 +459,7 @@ export default function SwapInterface({ poolAddress, tokenName, tokenSymbol, tok
     try {
       // Convert amount to wei (18 decimals)
       const amountInWei = parseEther(amountIn);
-      
+
       // Determine the path based on swap direction
       let path: `0x${string}`[];
       if (direction === "buy") {
@@ -451,7 +474,7 @@ export default function SwapInterface({ poolAddress, tokenName, tokenSymbol, tok
       const amounts = await publicClient.readContract({
         address: ROUTER_ADDRESS as `0x${string}`,
         abi: ROUTER_ABI,
-        functionName: 'getAmountsOut',
+        functionName: "getAmountsOut",
         args: [amountInWei, path],
       });
 
@@ -481,25 +504,30 @@ export default function SwapInterface({ poolAddress, tokenName, tokenSymbol, tok
   useEffect(() => {
     const checkLiquidityPair = async () => {
       if (!publicClient || !tokenAddress || !address) return;
-      
+
       try {
         // Try to get amounts for a small amount to check if pair exists
         const testAmount = parseEther("0.001");
-        const testPath = [WCORE_ADDRESS as `0x${string}`, tokenAddress as `0x${string}`];
-        
+        const testPath = [
+          WCORE_ADDRESS as `0x${string}`,
+          tokenAddress as `0x${string}`,
+        ];
+
         const amounts = await publicClient.readContract({
           address: ROUTER_ADDRESS as `0x${string}`,
           abi: ROUTER_ABI,
-          functionName: 'getAmountsOut',
+          functionName: "getAmountsOut",
           args: [testAmount, testPath],
         });
-        
+
         console.log("✅ Liquidity pair exists, test amounts:", amounts);
-        
+
         // Check Core ETH balance (for buy operations)
-        const coreBalance = await publicClient.getBalance({ address: address as `0x${string}` });
+        const coreBalance = await publicClient.getBalance({
+          address: address as `0x${string}`,
+        });
         console.log("💰 Core ETH Balance:", formatEther(coreBalance));
-        
+
         // Check token balance and approval (if selling)
         if (swapDirection === "sell") {
           try {
@@ -508,46 +536,67 @@ export default function SwapInterface({ poolAddress, tokenName, tokenSymbol, tok
                 address: tokenAddress as `0x${string}`,
                 abi: [
                   {
-                    "inputs": [{"internalType": "address", "name": "account", "type": "address"}],
-                    "name": "balanceOf",
-                    "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
-                    "stateMutability": "view",
-                    "type": "function"
-                  }
+                    inputs: [
+                      {
+                        internalType: "address",
+                        name: "account",
+                        type: "address",
+                      },
+                    ],
+                    name: "balanceOf",
+                    outputs: [
+                      { internalType: "uint256", name: "", type: "uint256" },
+                    ],
+                    stateMutability: "view",
+                    type: "function",
+                  },
                 ],
-                functionName: 'balanceOf',
+                functionName: "balanceOf",
                 args: [address as `0x${string}`],
               }),
               publicClient.readContract({
                 address: tokenAddress as `0x${string}`,
                 abi: [
                   {
-                    "inputs": [
-                      {"internalType": "address", "name": "owner", "type": "address"},
-                      {"internalType": "address", "name": "spender", "type": "address"}
+                    inputs: [
+                      {
+                        internalType: "address",
+                        name: "owner",
+                        type: "address",
+                      },
+                      {
+                        internalType: "address",
+                        name: "spender",
+                        type: "address",
+                      },
                     ],
-                    "name": "allowance",
-                    "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
-                    "stateMutability": "view",
-                    "type": "function"
-                  }
+                    name: "allowance",
+                    outputs: [
+                      { internalType: "uint256", name: "", type: "uint256" },
+                    ],
+                    stateMutability: "view",
+                    type: "function",
+                  },
                 ],
-                functionName: 'allowance',
-                args: [address as `0x${string}`, ROUTER_ADDRESS as `0x${string}`],
-              })
+                functionName: "allowance",
+                args: [
+                  address as `0x${string}`,
+                  ROUTER_ADDRESS as `0x${string}`,
+                ],
+              }),
             ]);
-            
+
             console.log("🪙 Token Balance:", formatEther(tokenBalance));
             console.log("🔐 Current Allowance:", formatEther(allowance));
-            
+
             // Check if approval is needed
             const amountToApprove = parseEther(amount);
             console.log("🔍 Approval check:", {
               currentAllowance: formatEther(allowance),
               amountToApprove: amount,
-              needsApproval: allowance < amountToApprove
+              needsApproval: allowance < amountToApprove,
             });
-            
+
             if (allowance < amountToApprove) {
               setNeedsApproval(true);
               setApprovalAmount(amount);
@@ -561,12 +610,11 @@ export default function SwapInterface({ poolAddress, tokenName, tokenSymbol, tok
             console.log("⚠️ Could not check token balance/approval:", error);
           }
         }
-        
       } catch (error) {
         console.error("❌ No liquidity pair found:", error);
       }
     };
-    
+
     checkLiquidityPair();
   }, [publicClient, tokenAddress, address, swapDirection, amount]);
 
@@ -581,11 +629,11 @@ export default function SwapInterface({ poolAddress, tokenName, tokenSymbol, tok
 
   const calculateOutput = () => {
     if (!amount || parseFloat(amount) <= 0) return "0";
-    
+
     // Return the real amount from blockchain
     return parseFloat(amountOut).toLocaleString(undefined, {
       minimumFractionDigits: 0,
-      maximumFractionDigits: 6
+      maximumFractionDigits: 6,
     });
   };
 
@@ -599,22 +647,26 @@ export default function SwapInterface({ poolAddress, tokenName, tokenSymbol, tok
               ⭐
             </div>
             <div>
-              <h2 className="text-2xl font-bold text-gray-900">{tokenName}</h2>
+              <h2 className="text-2xl font-bold text-light">{tokenName}</h2>
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm mb-6">
             <div>
               <span className="text-gray-600">Token:</span>
-              <span className="font-semibold ml-2">{tokenName} ({tokenSymbol})</span>
+              <span className="font-semibold ml-2">
+                {tokenName} ({tokenSymbol})
+              </span>
             </div>
             <div>
               <span className="text-gray-600">Status:</span>
-              <span className="font-semibold ml-2 text-green-600">Finalized & Listed</span>
+              <span className="font-semibold ml-2 text-green-600">
+                Finalized & Listed
+              </span>
             </div>
             <div>
               <span className="text-gray-600">Token Address:</span>
-              <a 
+              <a
                 href={`https://scan.coredao.org/token/${tokenAddress}`}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -624,17 +676,17 @@ export default function SwapInterface({ poolAddress, tokenName, tokenSymbol, tok
               </a>
             </div>
           </div>
-
-
         </div>
 
         {/* Right Side - Swap Form */}
         <div className="lg:w-96">
-          <h3 className="text-xl font-bold text-gray-900 mb-6">Swap Interface</h3>
-          
+          <h3 className="text-xl font-bold text-light mb-6">Swap Interface</h3>
+
           {!isConnected ? (
             <div className="text-center py-8">
-              <p className="text-gray-600 mb-4">Please connect your wallet to swap</p>
+              <p className="text-gray-600 mb-4">
+                Please connect your wallet to swap
+              </p>
             </div>
           ) : (
             <div className="space-y-6">
@@ -664,8 +716,13 @@ export default function SwapInterface({ poolAddress, tokenName, tokenSymbol, tok
 
               {/* Amount Input */}
               <div>
-                <label htmlFor="swapAmount" className="block text-sm font-medium text-gray-700 mb-2">
-                  {swapDirection === "buy" ? "Amount (Core)" : `Amount (${tokenSymbol})`}
+                <label
+                  htmlFor="swapAmount"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  {swapDirection === "buy"
+                    ? "Amount (Core)"
+                    : `Amount (${tokenSymbol})`}
                 </label>
                 <div className="relative">
                   <input
@@ -688,8 +745,18 @@ export default function SwapInterface({ poolAddress, tokenName, tokenSymbol, tok
               {/* Swap Arrow */}
               <div className="flex justify-center">
                 <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
-                  <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+                  <svg
+                    className="w-4 h-4 text-gray-600"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"
+                    />
                   </svg>
                 </div>
               </div>
@@ -698,9 +765,12 @@ export default function SwapInterface({ poolAddress, tokenName, tokenSymbol, tok
               {amount && parseFloat(amount) > 0 && (
                 <div className="bg-green-50 rounded-lg p-4">
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-700">You will receive approximately:</span>
+                    <span className="text-gray-700">
+                      You will receive approximately:
+                    </span>
                     <span className="font-bold text-green-800">
-                      {calculateOutput()} {swapDirection === "buy" ? tokenSymbol : "Core"}
+                      {calculateOutput()}{" "}
+                      {swapDirection === "buy" ? tokenSymbol : "Core"}
                     </span>
                   </div>
                 </div>
@@ -708,7 +778,10 @@ export default function SwapInterface({ poolAddress, tokenName, tokenSymbol, tok
 
               {/* Slippage Input */}
               <div>
-                <label htmlFor="slippage" className="block text-sm font-medium text-gray-700 mb-2">
+                <label
+                  htmlFor="slippage"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
                   Slippage Tolerance (%)
                 </label>
                 <div className="relative">
@@ -731,29 +804,47 @@ export default function SwapInterface({ poolAddress, tokenName, tokenSymbol, tok
               {/* Unified Swap Button */}
               <button
                 onClick={handleSwap}
-                disabled={!amount || parseFloat(amount) <= 0 || isPending || isConfirming}
+                disabled={
+                  !amount ||
+                  parseFloat(amount) <= 0 ||
+                  isPending ||
+                  isConfirming
+                }
                 className={`w-full py-3 px-6 rounded-lg font-bold transition-colors ${
-                  !amount || parseFloat(amount) <= 0 || isPending || isConfirming
+                  !amount ||
+                  parseFloat(amount) <= 0 ||
+                  isPending ||
+                  isConfirming
                     ? "bg-gray-400 text-white cursor-not-allowed"
                     : swapDirection === "buy"
                     ? "bg-green-600 hover:bg-green-700 text-white"
                     : "bg-red-600 hover:bg-red-700 text-white"
                 }`}
               >
-                {isPending ? "Confirming..." : 
-                 isConfirming ? "Processing..." : 
-                 swapDirection === "buy" ? `Buy ${tokenSymbol}` : `Sell ${tokenSymbol}`}
+                {isPending
+                  ? "Confirming..."
+                  : isConfirming
+                  ? "Processing..."
+                  : swapDirection === "buy"
+                  ? `Buy ${tokenSymbol}`
+                  : `Sell ${tokenSymbol}`}
               </button>
-
-
 
               {/* Transaction Status */}
               {isSuccess && (
                 <div className="bg-green-50 border border-green-200 rounded-lg p-4">
                   <div className="flex items-center">
                     <div className="flex-shrink-0">
-                      <svg className="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      <svg
+                        className="h-5 w-5 text-green-400"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                          clipRule="evenodd"
+                        />
                       </svg>
                     </div>
                     <div className="ml-3">
@@ -761,7 +852,8 @@ export default function SwapInterface({ poolAddress, tokenName, tokenSymbol, tok
                         Swap successful! Your transaction has been completed.
                       </p>
                       <p className="text-sm text-green-700 mt-1">
-                        You received: {calculateOutput()} {swapDirection === "buy" ? tokenSymbol : "Core"}
+                        You received: {calculateOutput()}{" "}
+                        {swapDirection === "buy" ? tokenSymbol : "Core"}
                       </p>
                     </div>
                   </div>
@@ -771,18 +863,13 @@ export default function SwapInterface({ poolAddress, tokenName, tokenSymbol, tok
               {/* Error Display */}
               {error && (
                 <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-                  <p className="text-sm text-red-800">
-                    Error: {error.message}
-                  </p>
+                  <p className="text-sm text-red-800">Error: {error.message}</p>
                 </div>
               )}
-
-
-
             </div>
           )}
         </div>
       </div>
     </div>
   );
-} 
+}
