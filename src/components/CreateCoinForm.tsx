@@ -646,15 +646,6 @@ export default function CreateCoinForm() {
                       ? "bg-gray-400 text-white cursor-not-allowed"
                       : "text-white"
                   }`}
-                  style={
-                    !isPending && !isConfirming && !isLoading
-                      ? {
-                          backgroundImage: 'url("/MagmaBannerBackground.jpg")',
-                          backgroundSize: "cover",
-                          backgroundPosition: "center",
-                        }
-                      : {}
-                  }
                 >
                   {/* Dark overlay for better text readability */}
                   {!isPending && !isConfirming && !isLoading && (
