@@ -4,7 +4,7 @@ const { sql } = require('@vercel/postgres');
 async function setupDatabase() {
   try {
     console.log('🔌 Testing database connection...');
-    
+
     // Test connection
     const testResult = await sql`SELECT NOW() as current_time;`;
     console.log('✅ Database connection successful:', testResult.rows[0]);
@@ -46,11 +46,11 @@ async function setupDatabase() {
     console.log('🎉 Database setup completed successfully!');
   } catch (error) {
     console.error('❌ Database setup failed:', error);
-    
+
     if (error.message.includes('missing_connection_string')) {
       console.error('💡 Make sure you have POSTGRES_URL in your .env file');
     }
   }
 }
 
-setupDatabase(); 
+setupDatabase();

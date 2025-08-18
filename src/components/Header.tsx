@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { ConnectButton } from "@rainbow-me/rainbowkit";
-import Image from "next/image";
-import Link from "next/link";
-import { useForm } from "@/contexts/FormContext";
-import { useAccount } from "wagmi";
+import { ConnectButton } from '@rainbow-me/rainbowkit';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useForm } from '@/contexts/FormContext';
+import { useAccount } from 'wagmi';
 
 export default function Header() {
   const { setActiveForm } = useForm();
@@ -25,7 +25,7 @@ export default function Header() {
               className="flex items-center space-x-2 hover:opacity-80 transition-opacity brightness-110 hover:scale-105"
               onClick={(e) => {
                 e.preventDefault();
-                window.location.href = "/";
+                window.location.href = '/';
               }}
             >
               <Image
@@ -44,14 +44,14 @@ export default function Header() {
               <button
                 className="relative group cursor-pointer"
                 onClick={() => {
-                  setActiveForm("create");
-                  window.location.href = "/?form=create";
+                  setActiveForm('create');
+                  window.location.href = '/?form=create';
                 }}
               >
                 {/* Glow Effect */}
                 <div className="absolute inset-0 bg-gradient-primary rounded-lg blur-lg opacity-75 group-hover:opacity-100 transition-all duration-300 animate-pulse"></div>
                 {/* Button Content */}
-                <Link href="/create">
+                <Link href="/?form=create">
                   <div className="relative bg-gradient-primary text-white px-6 py-2 rounded-lg font-bold transition-all duration-300 transform group-hover:scale-105 group-hover:shadow-2xl cursor-pointer">
                     Create Token
                   </div>
@@ -64,11 +64,11 @@ export default function Header() {
           {isConnected && (
             <div
               className="absolute left-1/2 transform -translate-x-1/2"
-              style={{ marginLeft: "-160px" }}
+              style={{ marginLeft: '-160px' }}
             >
               <button
                 className="bg-card hover:bg-primary hover:text-white text-light px-4 py-2 rounded-lg font-bold border border-primary/30 transition-all duration-200 hover:scale-105"
-                onClick={() => (window.location.href = "/my-positions")}
+                onClick={() => (window.location.href = '/my-positions')}
               >
                 Profile
               </button>
