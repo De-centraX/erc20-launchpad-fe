@@ -6,13 +6,13 @@ import dynamic from "next/dynamic";
 const Header = dynamic(() => import("./Header"), {
   ssr: false,
   loading: () => (
-    <header className="w-full backdrop-blur-md border-b border-white/20 sticky top-0 z-50 relative h-16">
+    <header className="w-full backdrop-blur-md border-b border-primary/20 sticky top-0 z-50 h-16 bg-charcoal/80">
       <div className="flex justify-between items-center h-16 px-4 sm:px-6 lg:px-8">
         <div className="animate-pulse">
-          <div className="h-14 w-14 bg-orange-200 rounded"></div>
+          <div className="h-14 w-14 bg-card rounded"></div>
         </div>
         <div className="animate-pulse">
-          <div className="h-8 w-32 bg-orange-200 rounded"></div>
+          <div className="h-8 w-32 bg-card rounded"></div>
         </div>
       </div>
     </header>
@@ -21,4 +21,4 @@ const Header = dynamic(() => import("./Header"), {
 
 export default function ClientHeader() {
   return <Header />;
-} 
+}

@@ -190,25 +190,25 @@ export default function ParticipateFormClient({
             >
               ← Back to Launchpad
             </button>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            <h1 className="text-3xl font-bold text-light mb-2">
               Participate in {presale.tokenName}
             </h1>
             <p className="text-gray-600">
-              Contribute Core tokens to receive {presale.tokenSymbol}
+              Contribute HL tokens to receive {presale.tokenSymbol}
             </p>
           </div>
 
           {/* Presale Info Card */}
           <div className="bg-white rounded-2xl shadow-xl p-6 mb-8">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-bold text-gray-900">
+              <h2 className="text-xl font-bold text-light">
                 {presale.tokenName}
               </h2>
               <span
                 className={`text-xs font-medium px-2.5 py-0.5 rounded-full ${
                   presale.status === "Live"
                     ? "bg-green-100 text-green-800"
-                    : "bg-gray-100 text-gray-800"
+                    : "bg-gray-100 text-gray-100"
                 }`}
               >
                 {presale.status}
@@ -219,20 +219,19 @@ export default function ParticipateFormClient({
               <div>
                 <span className="text-gray-600">Rate:</span>
                 <span className="font-semibold ml-2">
-                  1 Core = {formatRate(presale.presaleRate)}{" "}
-                  {presale.tokenSymbol}
+                  1 HL = {formatRate(presale.presaleRate)} {presale.tokenSymbol}
                 </span>
               </div>
               <div>
                 <span className="text-gray-600">Soft Cap:</span>
                 <span className="font-semibold ml-2">
-                  {formatAmount(presale.softcap)} Core
+                  {formatAmount(presale.softcap)} HL
                 </span>
               </div>
               <div>
                 <span className="text-gray-600">Hard Cap:</span>
                 <span className="font-semibold ml-2">
-                  {formatAmount(presale.hardcap)} Core
+                  {formatAmount(presale.hardcap)} HL
                 </span>
               </div>
               <div>
@@ -252,7 +251,7 @@ export default function ParticipateFormClient({
                   <div>
                     <span className="text-gray-600">Total Contributed:</span>
                     <span className="font-semibold ml-2">
-                      {formatAmount(presaleStatus.totalContributed)} Core
+                      {formatAmount(presaleStatus.totalContributed)} HL
                     </span>
                   </div>
                   <div>
@@ -275,8 +274,8 @@ export default function ParticipateFormClient({
 
           {/* Participation Form */}
           <div className="bg-white rounded-2xl shadow-xl p-8">
-            <h3 className="text-xl font-bold text-gray-900 mb-6">
-              Contribute Core Tokens
+            <h3 className="text-xl font-bold text-light mb-6">
+              Contribute HL Tokens
             </h3>
 
             {!isConnected ? (
@@ -291,9 +290,9 @@ export default function ParticipateFormClient({
                 <div>
                   <label
                     htmlFor="amount"
-                    className="block text-sm font-medium text-gray-700 mb-2"
+                    className="block text-sm font-medium text-gray-300 mb-2"
                   >
-                    Amount (Core)
+                    Amount (HL)
                   </label>
                   <div className="relative">
                     <input
@@ -308,7 +307,7 @@ export default function ParticipateFormClient({
                       disabled={isPending || isConfirming || !!statusError}
                     />
                     <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">
-                      Core
+                      HL
                     </div>
                   </div>
                 </div>
@@ -317,7 +316,7 @@ export default function ParticipateFormClient({
                 {amount && parseFloat(amount) > 0 && (
                   <div className="bg-orange-50 rounded-lg p-4">
                     <div className="flex justify-between items-center">
-                      <span className="text-gray-700">You will receive:</span>
+                      <span className="text-gray-300">You will receive:</span>
                       <span
                         className="font-bold"
                         style={{
