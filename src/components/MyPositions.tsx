@@ -1,33 +1,33 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 import {
   useAccount,
   useReadContract,
   usePublicClient,
   useWriteContract,
   useWaitForTransactionReceipt,
-} from "wagmi";
-import { formatEther, parseEther } from "viem";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
-import Image from "next/image";
-import FeaturedTokensCarousel from "./FeaturedTokensCarousel"; // Import the smooth carousel
+} from 'wagmi';
+import { formatEther, parseEther } from 'viem';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
+import Image from 'next/image';
+import FeaturedTokensCarousel from './FeaturedTokensCarousel'; // Import the smooth carousel
 
 // PoolManager ABI for getting all presales
 const POOL_MANAGER_ABI = [
   {
     inputs: [],
-    name: "getAllPresales",
-    outputs: [{ internalType: "address[]", name: "", type: "address[]" }],
-    stateMutability: "view",
-    type: "function",
+    name: 'getAllPresales',
+    outputs: [{ internalType: 'address[]', name: '', type: 'address[]' }],
+    stateMutability: 'view',
+    type: 'function',
   },
   {
-    inputs: [{ internalType: "address", name: "poolAddress", type: "address" }],
-    name: "isFinalizable",
-    outputs: [{ internalType: "bool", name: "", type: "bool" }],
-    stateMutability: "view",
-    type: "function",
+    inputs: [{ internalType: 'address', name: 'poolAddress', type: 'address' }],
+    name: 'isFinalizable',
+    outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
+    stateMutability: 'view',
+    type: 'function',
   },
 ] as const;
 
@@ -35,92 +35,92 @@ const POOL_MANAGER_ABI = [
 const POOL_ABI = [
   {
     inputs: [],
-    name: "getPoolData",
+    name: 'getPoolData',
     outputs: [
       {
         components: [
-          { internalType: "address", name: "token", type: "address" },
-          { internalType: "uint256", name: "presaleRate", type: "uint256" },
-          { internalType: "uint256", name: "softcap", type: "uint256" },
-          { internalType: "uint256", name: "hardcap", type: "uint256" },
-          { internalType: "uint256", name: "liquidityRate", type: "uint256" },
-          { internalType: "uint256", name: "listingRate", type: "uint256" },
-          { internalType: "uint256", name: "startTime", type: "uint256" },
-          { internalType: "uint256", name: "endTime", type: "uint256" },
-          { internalType: "bool", name: "refund", type: "bool" },
-          { internalType: "string", name: "tokenName", type: "string" },
-          { internalType: "string", name: "tokenSymbol", type: "string" },
+          { internalType: 'address', name: 'token', type: 'address' },
+          { internalType: 'uint256', name: 'presaleRate', type: 'uint256' },
+          { internalType: 'uint256', name: 'softcap', type: 'uint256' },
+          { internalType: 'uint256', name: 'hardcap', type: 'uint256' },
+          { internalType: 'uint256', name: 'liquidityRate', type: 'uint256' },
+          { internalType: 'uint256', name: 'listingRate', type: 'uint256' },
+          { internalType: 'uint256', name: 'startTime', type: 'uint256' },
+          { internalType: 'uint256', name: 'endTime', type: 'uint256' },
+          { internalType: 'bool', name: 'refund', type: 'bool' },
+          { internalType: 'string', name: 'tokenName', type: 'string' },
+          { internalType: 'string', name: 'tokenSymbol', type: 'string' },
         ],
-        internalType: "struct Presale",
-        name: "",
-        type: "tuple",
+        internalType: 'struct Presale',
+        name: '',
+        type: 'tuple',
       },
     ],
-    stateMutability: "view",
-    type: "function",
+    stateMutability: 'view',
+    type: 'function',
   },
   {
     inputs: [],
-    name: "_presaleStats",
+    name: '_presaleStats',
     outputs: [
       {
         components: [
           {
-            internalType: "uint256",
-            name: "totalContributed",
-            type: "uint256",
+            internalType: 'uint256',
+            name: 'totalContributed',
+            type: 'uint256',
           },
           {
-            internalType: "uint256",
-            name: "totalTokenAmount",
-            type: "uint256",
+            internalType: 'uint256',
+            name: 'totalTokenAmount',
+            type: 'uint256',
           },
-          { internalType: "uint256", name: "totalClaimed", type: "uint256" },
-          { internalType: "bool", name: "isFinalized", type: "bool" },
+          { internalType: 'uint256', name: 'totalClaimed', type: 'uint256' },
+          { internalType: 'bool', name: 'isFinalized', type: 'bool' },
         ],
-        internalType: "struct Stats",
-        name: "",
-        type: "tuple",
+        internalType: 'struct Stats',
+        name: '',
+        type: 'tuple',
       },
     ],
-    stateMutability: "view",
-    type: "function",
+    stateMutability: 'view',
+    type: 'function',
   },
   {
     inputs: [],
-    name: "finalize",
+    name: 'finalize',
     outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
+    stateMutability: 'nonpayable',
+    type: 'function',
   },
   {
     inputs: [],
-    name: "expressWithdrawal",
+    name: 'expressWithdrawal',
     outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
+    stateMutability: 'nonpayable',
+    type: 'function',
   },
 ] as const;
 
 // ERC20 ABI for token balances
 const ERC20_ABI = [
   {
-    inputs: [{ internalType: "address", name: "account", type: "address" }],
-    name: "balanceOf",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    stateMutability: "view",
-    type: "function",
+    inputs: [{ internalType: 'address', name: 'account', type: 'address' }],
+    name: 'balanceOf',
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    stateMutability: 'view',
+    type: 'function',
   },
   {
     inputs: [],
-    name: "decimals",
-    outputs: [{ internalType: "uint8", name: "", type: "uint8" }],
-    stateMutability: "view",
-    type: "function",
+    name: 'decimals',
+    outputs: [{ internalType: 'uint8', name: '', type: 'uint8' }],
+    stateMutability: 'view',
+    type: 'function',
   },
 ] as const;
 
-const POOL_MANAGER_ADDRESS = "0x7173B2EA0C27Fa242B441Da725e0bE8F342Add80";
+const POOL_MANAGER_ADDRESS = '0x6c34f5f65838a749104847024DCAcF2e3BD54455';
 
 interface UserPosition {
   poolAddress: string;
@@ -128,7 +128,7 @@ interface UserPosition {
   tokenName: string;
   tokenSymbol: string;
   presaleRate: string;
-  status: "Active" | "Finalized" | "Failed";
+  status: 'Active' | 'Finalized' | 'Failed';
   startTime: number;
   endTime: number;
   softcap: string;
@@ -156,7 +156,7 @@ const useStorageSlot = (address: string, slot: bigint) => {
         });
         setData(storageData);
       } catch (error) {
-        console.error("Error reading storage:", error);
+        console.error('Error reading storage:', error);
       } finally {
         setLoading(false);
       }
@@ -173,7 +173,7 @@ export default function MyPositions() {
   const publicClient = usePublicClient();
   const [positions, setPositions] = useState<UserPosition[]>([]);
   const [loading, setLoading] = useState(false);
-  const [nativeBalance, setNativeBalance] = useState<string>("0");
+  const [nativeBalance, setNativeBalance] = useState<string>('0');
   const [pendingActions, setPendingActions] = useState<{
     [key: string]: string;
   }>({});
@@ -206,7 +206,7 @@ export default function MyPositions() {
   const { data: allPresales } = useReadContract({
     address: POOL_MANAGER_ADDRESS,
     abi: POOL_MANAGER_ABI,
-    functionName: "getAllPresales",
+    functionName: 'getAllPresales',
   });
 
   // Fetch user's positions function
@@ -222,21 +222,21 @@ export default function MyPositions() {
         const poolData = await publicClient.readContract({
           address: presaleAddress,
           abi: POOL_ABI,
-          functionName: "getPoolData",
+          functionName: 'getPoolData',
         });
 
         // Get presale stats including isFinalized status
         const presaleStats = await publicClient.readContract({
           address: presaleAddress,
           abi: POOL_ABI,
-          functionName: "_presaleStats",
+          functionName: '_presaleStats',
         });
 
         // Check if the presale is finalizable using the PoolManager contract
         const isFinalizable = await publicClient.readContract({
           address: POOL_MANAGER_ADDRESS,
           abi: POOL_MANAGER_ABI,
-          functionName: "isFinalizable",
+          functionName: 'isFinalizable',
           args: [presaleAddress],
         });
 
@@ -244,7 +244,7 @@ export default function MyPositions() {
         const tokenBalance = await publicClient.readContract({
           address: poolData.token,
           abi: ERC20_ABI,
-          functionName: "balanceOf",
+          functionName: 'balanceOf',
           args: [address],
         });
 
@@ -255,16 +255,16 @@ export default function MyPositions() {
           const currentTime = Date.now() / 1000;
 
           // Use the isFinalized status from _presaleStats
-          let status: "Active" | "Finalized" | "Failed" = "Active";
+          let status: 'Active' | 'Finalized' | 'Failed' = 'Active';
 
           if (presaleStats.isFinalized) {
-            status = "Finalized";
+            status = 'Finalized';
           } else if (currentTime > Number(poolData.endTime)) {
             // Presale ended but not finalized
             if (contractBalance >= poolData.softcap) {
-              status = "Ended (Ready to Finalize)";
+              status = 'Ended (Ready to Finalize)';
             } else {
-              status = "Failed";
+              status = 'Failed';
             }
           }
 
@@ -288,7 +288,7 @@ export default function MyPositions() {
 
       setPositions(userPositions);
     } catch (error) {
-      console.error("Error fetching user positions:", error);
+      console.error('Error fetching user positions:', error);
     } finally {
       setLoading(false);
     }
@@ -304,19 +304,19 @@ export default function MyPositions() {
     try {
       setPendingActions((prev) => ({
         ...prev,
-        [`finalize-${poolAddress}`]: "Finalizing...",
+        [`finalize-${poolAddress}`]: 'Finalizing...',
       }));
 
       writeContract({
         address: poolAddress,
         abi: POOL_ABI,
-        functionName: "finalize",
+        functionName: 'finalize',
       });
     } catch (error) {
-      console.error("Error finalizing:", error);
+      console.error('Error finalizing:', error);
       setPendingActions((prev) => ({
         ...prev,
-        [`finalize-${poolAddress}`]: "Error",
+        [`finalize-${poolAddress}`]: 'Error',
       }));
     }
   };
@@ -326,19 +326,19 @@ export default function MyPositions() {
     try {
       setPendingActions((prev) => ({
         ...prev,
-        [`withdraw-${poolAddress}`]: "Withdrawing...",
+        [`withdraw-${poolAddress}`]: 'Withdrawing...',
       }));
 
       writeContract({
         address: poolAddress,
         abi: POOL_ABI,
-        functionName: "expressWithdrawal",
+        functionName: 'expressWithdrawal',
       });
     } catch (error) {
-      console.error("Error withdrawing:", error);
+      console.error('Error withdrawing:', error);
       setPendingActions((prev) => ({
         ...prev,
-        [`withdraw-${poolAddress}`]: "Error",
+        [`withdraw-${poolAddress}`]: 'Error',
       }));
     }
   };
@@ -352,7 +352,7 @@ export default function MyPositions() {
         const balance = await publicClient.getBalance({ address });
         setNativeBalance(formatEther(balance));
       } catch (error) {
-        console.error("Error fetching native balance:", error);
+        console.error('Error fetching native balance:', error);
       }
     };
 
@@ -365,9 +365,7 @@ export default function MyPositions() {
         <div className="max-w-6xl mx-auto">
           <div className="text-center">
             <h1 className="text-4xl font-bold text-light mb-4">My Positions</h1>
-            <p className="text-xl text-gray-300 mb-8">
-              Connect your wallet to view your positions
-            </p>
+            <p className="text-xl text-gray-300 mb-8">Connect your wallet to view your positions</p>
             <ConnectButton />
           </div>
         </div>
@@ -382,7 +380,7 @@ export default function MyPositions() {
 
       {/* Main Content - Centered */}
       <div className="px-4">
-        {" "}
+        {' '}
         {/* Removed ml-56 since we're using carousel instead of sidebar */}
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
@@ -394,9 +392,7 @@ export default function MyPositions() {
 
           {/* Native Token Balance */}
           <div className="bg-card rounded-2xl shadow-xl p-6 mb-8 border border-primary/20">
-            <h2 className="text-2xl font-bold text-light mb-4">
-              Wallet Balance
-            </h2>
+            <h2 className="text-2xl font-bold text-light mb-4">Wallet Balance</h2>
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <Image
@@ -406,9 +402,7 @@ export default function MyPositions() {
                   height={32}
                   className="w-9 h-9"
                 />
-                <span className="text-lg font-medium text-light">
-                  Hyperliquid
-                </span>
+                <span className="text-lg font-medium text-light">Hyperliquid</span>
               </div>
               <span className="text-2xl font-bold text-primary">
                 {parseFloat(nativeBalance).toFixed(4)}
@@ -418,9 +412,7 @@ export default function MyPositions() {
 
           {/* User Positions */}
           <div className="bg-card rounded-2xl shadow-xl p-6 border border-primary/20">
-            <h2 className="text-2xl font-bold text-light mb-6">
-              Presale Positions
-            </h2>
+            <h2 className="text-2xl font-bold text-light mb-6">Presale Positions</h2>
 
             {loading ? (
               <div className="text-center py-8">
@@ -429,9 +421,7 @@ export default function MyPositions() {
               </div>
             ) : positions.length === 0 ? (
               <div className="text-center py-8">
-                <p className="text-gray-300">
-                  You haven't participated in any presales yet.
-                </p>
+                <p className="text-gray-300">You haven't participated in any presales yet.</p>
               </div>
             ) : (
               <div className="space-y-6">
@@ -446,9 +436,9 @@ export default function MyPositions() {
                           {position.tokenName} ({position.tokenSymbol})
                         </h3>
                         <p className="text-sm text-gray-300">
-                          Pool:{" "}
+                          Pool:{' '}
                           <a
-                            href={`https://scan.coredao.org/address/${position.poolAddress}`}
+                            href={`https://testnet.purrsec.com/address/${position.poolAddress}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-primary hover:text-primary/80 underline cursor-pointer"
@@ -458,9 +448,9 @@ export default function MyPositions() {
                           </a>
                         </p>
                         <p className="text-sm text-gray-300">
-                          Token:{" "}
+                          Token:{' '}
                           <a
-                            href={`https://scan.coredao.org/address/${position.tokenAddress}`}
+                            href={`https://testnet.purrsec.com/address/${position.tokenAddress}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-primary hover:text-primary/80 underline cursor-pointer"
@@ -472,11 +462,11 @@ export default function MyPositions() {
                       </div>
                       <span
                         className={`px-3 py-1 rounded-full text-sm font-medium ${
-                          position.status === "Active"
-                            ? "bg-primary/20 text-primary border border-primary/40"
-                            : position.status === "Finalized"
-                            ? "bg-blue-500/20 text-blue-400 border border-blue-500/40"
-                            : "bg-red-500/20 text-red-400 border border-red-500/40"
+                          position.status === 'Active'
+                            ? 'bg-primary/20 text-primary border border-primary/40'
+                            : position.status === 'Finalized'
+                            ? 'bg-blue-500/20 text-blue-400 border border-blue-500/40'
+                            : 'bg-red-500/20 text-red-400 border border-red-500/40'
                         }`}
                       >
                         {position.status}
@@ -485,9 +475,7 @@ export default function MyPositions() {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                       <div>
-                        <p className="text-sm text-gray-300">
-                          Current Token Balance
-                        </p>
+                        <p className="text-sm text-gray-300">Current Token Balance</p>
                         <p className="text-lg font-semibold text-light">
                           {position.tokenBalance} {position.tokenSymbol}
                         </p>
@@ -504,51 +492,34 @@ export default function MyPositions() {
                       <div>
                         <p className="text-sm text-gray-300">Pool Progress</p>
                         <p className="text-sm font-medium text-light">
-                          {position.totalContributedPool} / {position.hardcap}{" "}
-                          HL
+                          {position.totalContributedPool} / {position.hardcap} HL
                         </p>
                       </div>
                       <div>
                         <p className="text-sm text-gray-300">Softcap</p>
-                        <p className="text-sm font-medium text-light">
-                          {position.softcap} HL
-                        </p>
+                        <p className="text-sm font-medium text-light">{position.softcap} HL</p>
                       </div>
                     </div>
 
                     <div className="text-xs text-gray-400 mb-4">
-                      <p>
-                        Start:{" "}
-                        {new Date(position.startTime * 1000).toLocaleString()}
-                      </p>
-                      <p>
-                        End:{" "}
-                        {new Date(position.endTime * 1000).toLocaleString()}
-                      </p>
+                      <p>Start: {new Date(position.startTime * 1000).toLocaleString()}</p>
+                      <p>End: {new Date(position.endTime * 1000).toLocaleString()}</p>
                     </div>
 
                     {/* Action Buttons */}
                     <div className="flex gap-3 pt-4 border-t border-primary/20">
                       <button
-                        onClick={() =>
-                          handleFinalize(
-                            position.poolAddress,
-                            position.tokenSymbol
-                          )
-                        }
-                        disabled={
-                          isPending || isConfirming || !position.isFinalizable
-                        }
+                        onClick={() => handleFinalize(position.poolAddress, position.tokenSymbol)}
+                        disabled={isPending || isConfirming || !position.isFinalizable}
                         className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 cursor-pointer ${
                           position.isFinalizable
-                            ? "bg-primary hover:bg-primary/80 text-white disabled:bg-gray-600 disabled:cursor-not-allowed disabled:text-gray-300"
-                            : "bg-gray-600 text-gray-400 cursor-not-allowed"
+                            ? 'bg-primary hover:bg-primary/80 text-white disabled:bg-gray-600 disabled:cursor-not-allowed disabled:text-gray-300'
+                            : 'bg-gray-600 text-gray-400 cursor-not-allowed'
                         }`}
                       >
                         <div className="flex items-center justify-center">
-                          {pendingActions[
-                            `finalize-${position.poolAddress}`
-                          ] === "Finalizing..." && (
+                          {pendingActions[`finalize-${position.poolAddress}`] ===
+                            'Finalizing...' && (
                             <svg
                               className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
                               xmlns="http://www.w3.org/2000/svg"
@@ -570,32 +541,21 @@ export default function MyPositions() {
                               ></path>
                             </svg>
                           )}
-                          {pendingActions[`finalize-${position.poolAddress}`] ||
-                            "Finalize"}
+                          {pendingActions[`finalize-${position.poolAddress}`] || 'Finalize'}
                         </div>
                       </button>
 
                       <div className="relative group">
                         <button
-                          onClick={() =>
-                            handleWithdraw(
-                              position.poolAddress,
-                              position.tokenSymbol
-                            )
-                          }
-                          disabled={
-                            isPending ||
-                            isConfirming ||
-                            position.status === "Finalized"
-                          }
+                          onClick={() => handleWithdraw(position.poolAddress, position.tokenSymbol)}
+                          disabled={isPending || isConfirming || position.status === 'Finalized'}
                           className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 cursor-pointer ${
-                            position.status !== "Finalized"
-                              ? "bg-red-500 hover:bg-red-600 text-white disabled:bg-gray-600 disabled:cursor-not-allowed disabled:text-gray-300"
-                              : "bg-gray-600 text-gray-400 cursor-not-allowed"
+                            position.status !== 'Finalized'
+                              ? 'bg-red-500 hover:bg-red-600 text-white disabled:bg-gray-600 disabled:cursor-not-allowed disabled:text-gray-300'
+                              : 'bg-gray-600 text-gray-400 cursor-not-allowed'
                           }`}
                         >
-                          {pendingActions[`withdraw-${position.poolAddress}`] ||
-                            "Withdraw"}
+                          {pendingActions[`withdraw-${position.poolAddress}`] || 'Withdraw'}
                         </button>
 
                         {/* Tooltip */}
