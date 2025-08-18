@@ -3,7 +3,7 @@ import { createPublicClient, http, parseAbi } from 'viem';
 import { mainnet } from 'viem/chains';
 
 const publicClient = createPublicClient({
-  transport: http('https://rpc.coredao.org/'),
+  transport: http('https://rpc.hyperliquid-testnet.xyz/evm'),
 });
 
 // Fixed ABI definitions - using proper tuple syntax
@@ -21,15 +21,15 @@ function convertBigIntsToStrings(obj: any): any {
   if (obj === null || obj === undefined) {
     return obj;
   }
-  
+
   if (typeof obj === 'bigint') {
     return obj.toString();
   }
-  
+
   if (Array.isArray(obj)) {
     return obj.map(convertBigIntsToStrings);
   }
-  
+
   if (typeof obj === 'object') {
     const result: any = {};
     for (const [key, value] of Object.entries(obj)) {
@@ -37,7 +37,7 @@ function convertBigIntsToStrings(obj: any): any {
     }
     return result;
   }
-  
+
   return obj;
 }
 
@@ -54,11 +54,11 @@ export async function GET(request: NextRequest) {
 
   try {
     console.log(`API: Fetching presale data for address: ${address}`);
-    
+
     // Try to get data directly from the pool contract first
     let presaleData;
     let isFinalized = false;
-    
+
     try {
       console.log('API: Trying direct pool contract call...');
       presaleData = await publicClient.readContract({
@@ -67,7 +67,7 @@ export async function GET(request: NextRequest) {
         functionName: 'getPoolData',
       });
       console.log('API: Direct call successful:', presaleData);
-      
+
       // Get the finalized status from the pool contract
       try {
         const stats = await publicClient.readContract({
@@ -97,7 +97,7 @@ export async function GET(request: NextRequest) {
     const contractBalance = await publicClient.getBalance({
       address: address as `0x${string}`,
     });
-    
+
     console.log(`API: Contract balance for ${address}:`, contractBalance.toString());
 
     // Combine presale data with balance and finalized status
@@ -110,13 +110,16 @@ export async function GET(request: NextRequest) {
     // Convert BigInt values to strings for JSON serialization
     const serializedData = convertBigIntsToStrings(combinedData);
     console.log('API: Returning serialized presale data:', serializedData);
-    
+
     return NextResponse.json(serializedData);
   } catch (error) {
     console.error('API: Error fetching presale data:', error);
-    return NextResponse.json({ 
-      error: 'Failed to fetch presale data',
-      details: error instanceof Error ? error.message : 'Unknown error'
-    }, { status: 500 });
+    return NextResponse.json(
+      {
+        error: 'Failed to fetch presale data',
+        details: error instanceof Error ? error.message : 'Unknown error',
+      },
+      { status: 500 },
+    );
   }
-} 
+}
