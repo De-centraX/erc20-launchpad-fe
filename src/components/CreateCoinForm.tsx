@@ -336,11 +336,6 @@ export default function CreateCoinForm() {
               <button
                 onClick={() => window.location.reload()}
                 className="text-white font-bold py-3 px-6 rounded-lg transition-colors relative overflow-hidden cursor-pointer hover:cursor-pointer"
-                style={{
-                  backgroundImage: 'url("/MagmaBannerBackground.jpg")',
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
-                }}
               >
                 {/* Dark overlay for better text readability */}
                 <div className="absolute inset-0 bg-black/30"></div>
