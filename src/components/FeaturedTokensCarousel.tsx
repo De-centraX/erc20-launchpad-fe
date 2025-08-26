@@ -198,16 +198,6 @@ export default function FeaturedTokensCarousel() {
                 cardIndex={index}
               />
             ))}
-            {/* Duplicate set for seamless infinite loop */}
-            {availablePresales?.length > 1 &&
-              availablePresales.map((presale, index) => (
-                <TokenCard
-                  key={`duplicate-${index}`}
-                  presale={presale}
-                  uniqueKey={`duplicate-${index}`}
-                  cardIndex={index}
-                />
-              ))}
           </div>
         </div>
       </div>
