@@ -12,6 +12,7 @@ import { formatEther, parseEther } from 'viem';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import Image from 'next/image';
 import FeaturedTokensCarousel from './FeaturedTokensCarousel'; // Import the smooth carousel
+import { CONTRACTS } from '@/contracts/addresses';
 
 // PoolManager ABI for getting all presales
 const POOL_MANAGER_ABI = [
@@ -120,8 +121,6 @@ const ERC20_ABI = [
   },
 ] as const;
 
-const POOL_MANAGER_ADDRESS = '0x6c34f5f65838a749104847024DCAcF2e3BD54455';
-
 interface UserPosition {
   poolAddress: string;
   tokenAddress: string;
@@ -174,17 +173,21 @@ export default function MyPositions() {
 
   // Get all presale addresses from PoolManager
   const { data: allPresales } = useReadContract({
-    address: POOL_MANAGER_ADDRESS,
+    address: CONTRACTS.POOL_MANAGER,
     abi: POOL_MANAGER_ABI,
     functionName: 'getAllPresales',
   });
 
   // Fetch user's positions function
   const fetchUserPositions = async () => {
+    console.log(!isConnected, !address, !allPresales);
+    console.log(!isConnected || !address || !allPresales);
+
     if (!isConnected || !address || !allPresales) return;
 
     setLoading(true);
     const userPositions: UserPosition[] = [];
+    console.log(allPresales);
 
     try {
       for (const presaleAddress of allPresales) {
@@ -204,7 +207,7 @@ export default function MyPositions() {
 
         // Check if the presale is finalizable using the PoolManager contract
         const isFinalizable = await publicClient.readContract({
-          address: POOL_MANAGER_ADDRESS,
+          address: CONTRACTS.POOL_MANAGER,
           abi: POOL_MANAGER_ABI,
           functionName: 'isFinalizable',
           args: [presaleAddress],
