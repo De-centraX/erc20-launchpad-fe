@@ -558,7 +558,7 @@ export default function HomeForm() {
                 return (
                   <div
                     key={presale.poolAddress}
-                    className={`bg-gradient-card rounded-xl p-6 border border-primary/30 relative backdrop-blur-sm ${
+                    className={`bg-gradient-card rounded-xl p-6 border border-primary/30 flex flex-col justify-between relative backdrop-blur-sm ${
                       mounted && isFirstToken ? 'animate-violentShake' : ''
                     }`}
                     style={{
@@ -592,26 +592,31 @@ export default function HomeForm() {
                       </span>
                     </div>
                     <div className="space-y-3">
-                      <div className="flex justify-between">
-                        <span className="text-gray-300">Progress:</span>
-                        <span className="font-semibold text-light">{presale.progress}%</span>
-                      </div>
-                      <div className="w-full bg-accent-dark rounded-full h-2">
-                        <div
-                          className="h-2 rounded-full bg-gradient-primary"
-                          style={{
-                            width: `${presale.progress}%`,
-                          }}
-                        ></div>
-                      </div>
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-300">
-                          Raised: {formatAmount(presale.totalContributed)} SEI
-                        </span>
-                        <span className="text-gray-300">
-                          Goal: {formatAmount(presale.softcap)} SEI
-                        </span>
-                      </div>
+                      {presale.status !== 'Finalized' && (
+                        <>
+                          <div className="flex justify-between">
+                            <span className="text-gray-300">Progress:</span>
+                            <span className="font-semibold text-light">{presale.progress}%</span>
+                          </div>
+                          <div className="w-full bg-accent-dark rounded-full h-2">
+                            <div
+                              className="h-2 rounded-full bg-gradient-primary"
+                              style={{
+                                width: `${presale.progress}%`,
+                              }}
+                            ></div>
+                          </div>
+                          <div className="flex justify-between text-sm">
+                            <span className="text-gray-300">
+                              Raised: {formatAmount(presale.totalContributed)} SEI
+                            </span>
+                            <span className="text-gray-300">
+                              Goal: {formatAmount(presale.softcap)} SEI
+                            </span>
+                          </div>
+                        </>
+                      )}
+
                       <div className="text-xs text-gray-400">
                         <div>
                           Rate: 1 SEI = {formatRate(presale.presaleRate)} {presale.tokenSymbol}
