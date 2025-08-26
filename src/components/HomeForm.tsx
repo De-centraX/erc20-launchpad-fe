@@ -172,8 +172,8 @@ export default function HomeForm() {
 
         // Calculate progress based on actual contributions
         const totalContributed = BigInt(presaleData.totalContributed || '0');
-        const hardcap = BigInt(presaleData.hardcap);
-        const progress = hardcap > 0n ? Number((totalContributed * 100n) / hardcap) : 0;
+        const softcap = BigInt(presaleData.softcap);
+        const progress = Math.min(Math.max(0, Number((totalContributed * 100n) / softcap)), 100);
 
         return {
           ...presaleData,
@@ -609,7 +609,7 @@ export default function HomeForm() {
                           Raised: {formatAmount(presale.totalContributed)} SEI
                         </span>
                         <span className="text-gray-300">
-                          Goal: {formatAmount(presale.hardcap)} SEI
+                          Goal: {formatAmount(presale.softcap)} SEI
                         </span>
                       </div>
                       <div className="text-xs text-gray-400">
