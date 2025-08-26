@@ -71,6 +71,7 @@ export default function CreateCoinForm() {
   useEffect(() => {
     if (isSuccess && hash && receipt && imageUrl) {
       const saveMetadata = async () => {
+        setIsLoading(true);
         try {
           console.log('Transaction receipt:', receipt);
           console.log('Transaction logs:', receipt.logs);
@@ -212,6 +213,8 @@ export default function CreateCoinForm() {
           }
         } catch (error) {
           console.error('Failed to save metadata:', error);
+        } finally {
+          setIsLoading(false);
         }
       };
 
@@ -341,7 +344,7 @@ export default function CreateCoinForm() {
     : 0;
 
   // Show success state when transaction is successful
-  if (isSuccess) {
+  if (isSuccess && !isLoading) {
     return (
       <div className="min-h-screen bg-charcoal py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
