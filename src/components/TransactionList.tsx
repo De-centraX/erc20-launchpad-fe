@@ -112,104 +112,133 @@ export default function TransactionList({ poolAddress, tokenSymbol }: Transactio
           console.error('❌ Error getting token bytecode:', err);
         }
 
-        // Try to get all Transfer events using multiple methods
-        console.log('🔍 Attempting to fetch Transfer events from genesis block...');
+        // Try to get all Transfer events using pagination to respect RPC limits
+        console.log('🔍 Attempting to fetch Transfer events using pagination...');
 
+        const MAX_BLOCK_RANGE = 2000n; // RPC limit
         let transferEvents: any[] = [];
 
-        // Method 1: Using parseAbiItem (searching from genesis)
+        // Get the token's deployment block from metadata
+        let deploymentBlock = 0n;
+        let storedTokenAddress = null;
         try {
-          const events1 = await publicClient.getLogs({
-            address: tokenAddress as `0x${string}`,
-            event: parseAbiItem(
-              'event Transfer(address indexed from, address indexed to, uint256 value)',
-            ),
-            fromBlock: 0n, // Always search from genesis
-            toBlock: latestBlock,
-          });
-          console.log('📊 Method 1 (parseAbiItem from genesis) found:', events1.length);
+          console.log('🔍 Getting token deployment block from metadata...');
+          console.log(`🔍 Searching by token address: ${tokenAddress}`);
+
+          // Get deployment block and token address from token metadata
+          const metadataResponse = await fetch(`/api/token-metadata?token-address=${tokenAddress}`);
+          if (metadataResponse.ok) {
+            const metadata = await metadataResponse.json();
+            if (metadata.deploymentBlock) {
+              deploymentBlock = BigInt(metadata.deploymentBlock);
+              console.log(`✅ Found deployment block in metadata: ${deploymentBlock.toString()}`);
+            } else {
+              console.log('⚠️ No deployment block found in metadata');
+            }
+            if (metadata.tokenAddress) {
+              storedTokenAddress = metadata.tokenAddress;
+              console.log(`✅ Found token address in metadata: ${storedTokenAddress}`);
+            }
+          } else {
+            console.log('⚠️ Could not fetch token metadata');
+          }
+
+          if (deploymentBlock === 0n) {
+            console.log('⚠️ No deployment block available, starting from block 0');
+            deploymentBlock = 0n;
+          } else {
+            console.log(`🎯 Using deployment block from metadata: ${deploymentBlock.toString()}`);
+          }
+        } catch (err) {
+          console.error('❌ Error getting deployment block from metadata:', err);
+          console.log('⚠️ Falling back to starting from block 0');
+          deploymentBlock = 0n;
+        }
+
+        // Helper function to fetch events in batches
+        const fetchEventsInBatches = async (eventType: 'Transfer' | 'all') => {
+          const events: any[] = [];
+          let currentFromBlock = deploymentBlock; // Start from deployment block instead of 0
+
+          while (currentFromBlock < latestBlock) {
+            const currentToBlock = currentFromBlock + MAX_BLOCK_RANGE - 1n;
+            const actualToBlock = currentToBlock > latestBlock ? latestBlock : currentToBlock;
+
+            console.log(
+              `📦 Fetching blocks ${currentFromBlock.toString()} to ${actualToBlock.toString()}`,
+            );
+
+            try {
+              let batchEvents: any[] = [];
+
+              if (eventType === 'Transfer') {
+                // Fetch Transfer events specifically
+                batchEvents = await publicClient.getLogs({
+                  address: tokenAddress as `0x${string}`,
+                  event: parseAbiItem(
+                    'event Transfer(address indexed from, address indexed to, uint256 value)',
+                  ),
+                  fromBlock: currentFromBlock,
+                  toBlock: actualToBlock,
+                });
+              } else {
+                // Fetch all logs and filter for Transfer events
+                const allLogs = await publicClient.getLogs({
+                  address: tokenAddress as `0x${string}`,
+                  fromBlock: currentFromBlock,
+                  toBlock: actualToBlock,
+                });
+
+                const transferSignature =
+                  '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef';
+                batchEvents = allLogs.filter(
+                  (log) => log.topics && log.topics[0] === transferSignature,
+                );
+              }
+
+              events.push(...batchEvents);
+              console.log(
+                `✅ Batch ${currentFromBlock.toString()}-${actualToBlock.toString()}: found ${
+                  batchEvents.length
+                } events`,
+              );
+            } catch (err) {
+              console.error(
+                `❌ Batch ${currentFromBlock.toString()}-${actualToBlock.toString()} failed:`,
+                err,
+              );
+              // Continue with next batch even if this one fails
+            }
+
+            currentFromBlock = actualToBlock + 1n;
+          }
+
+          return events;
+        };
+
+        // Method 1: Fetch Transfer events using pagination
+        try {
+          console.log('🔄 Method 1: Fetching Transfer events with pagination...');
+          const events1 = await fetchEventsInBatches('Transfer');
+          console.log('📊 Method 1 found:', events1.length);
           transferEvents = events1;
         } catch (err) {
           console.error('❌ Method 1 failed:', err);
         }
 
-        // Method 2: Using event object definition (searching from genesis)
-        try {
-          const events2 = await publicClient.getLogs({
-            address: tokenAddress as `0x${string}`,
-            event: {
-              type: 'event',
-              name: 'Transfer',
-              inputs: [
-                { type: 'address', name: 'from', indexed: true },
-                { type: 'address', name: 'to', indexed: true },
-                { type: 'uint256', name: 'value', indexed: false },
-              ],
-            },
-            fromBlock: 0n, // Always search from genesis
-            toBlock: latestBlock,
-          });
-          console.log('📊 Method 2 (event object from genesis) found:', events2.length);
-
-          if (events2.length > transferEvents.length) {
-            console.log('✅ Method 2 found more events, using those instead');
-            transferEvents = events2;
-          }
-        } catch (err) {
-          console.error('❌ Method 2 failed:', err);
-        }
-
-        // Method 3: Get all logs and filter manually (searching from genesis)
-        try {
-          const allLogs = await publicClient.getLogs({
-            address: tokenAddress as `0x${string}`,
-            fromBlock: 0n, // Always search from genesis
-            toBlock: latestBlock,
-          });
-          console.log('📊 Method 3 (all logs from genesis) found:', allLogs.length);
-
-          const transferSignature =
-            '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef';
-          const manualTransferEvents = allLogs.filter(
-            (log) => log.topics && log.topics[0] === transferSignature,
-          );
-          console.log('📊 Method 3 filtered Transfer events:', manualTransferEvents.length);
-
-          if (manualTransferEvents.length > transferEvents.length) {
-            console.log('✅ Method 3 found more events, using those instead');
-            transferEvents = manualTransferEvents;
-          }
-        } catch (err) {
-          console.error('❌ Method 3 failed:', err);
-        }
-
-        // If still very few events, try from genesis block
+        // Method 2: If Method 1 found few events, try fetching all logs with pagination
         if (transferEvents.length <= 1) {
-          console.log('⚠️ Still very few events. Trying from genesis block...');
-
           try {
-            const genesisEvents = await publicClient.getLogs({
-              address: tokenAddress as `0x${string}`,
-              event: {
-                type: 'event',
-                name: 'Transfer',
-                inputs: [
-                  { type: 'address', name: 'from', indexed: true },
-                  { type: 'address', name: 'to', indexed: true },
-                  { type: 'uint256', name: 'value', indexed: false },
-                ],
-              },
-              fromBlock: 0n,
-              toBlock: latestBlock,
-            });
-            console.log('📊 Genesis block search found:', genesisEvents.length);
+            console.log('🔄 Method 2: Fetching all logs with pagination and filtering...');
+            const events2 = await fetchEventsInBatches('all');
+            console.log('📊 Method 2 found:', events2.length);
 
-            if (genesisEvents.length > transferEvents.length) {
-              console.log('✅ Genesis search found more events, using those instead');
-              transferEvents = genesisEvents;
+            if (events2.length > transferEvents.length) {
+              console.log('✅ Method 2 found more events, using those instead');
+              transferEvents = events2;
             }
           } catch (err) {
-            console.error('❌ Genesis search failed:', err);
+            console.error('❌ Method 2 failed:', err);
           }
         }
 
@@ -289,127 +318,127 @@ export default function TransactionList({ poolAddress, tokenSymbol }: Transactio
         if (transferEvents.length === 0) {
           console.log('❌ No Transfer events found. Token might not have any transfers yet.');
           setTransactions([]);
-          setIsLoading(false);
-          return;
-        }
-
-        // Log each event individually for debugging
-        console.log('🔍 Analyzing each Transfer event:');
-        transferEvents.forEach((event, index) => {
-          console.log(`Event ${index + 1}:`, {
-            blockNumber: event.blockNumber.toString(),
-            transactionHash: event.transactionHash,
-            from: event.args.from,
-            to: event.args.to,
-            value: event.args.value?.toString(),
-            topics: event.topics,
-            data: event.data,
-          });
-        });
-
-        // Process the events into transactions
-        const processedTransactions: Transaction[] = await Promise.all(
-          transferEvents.map(async (event, index) => {
-            console.log(`🔄 Processing event ${index + 1}/${transferEvents.length}:`, {
+          setError('No transfer events found for this token');
+          // Don't return here - let the finally block handle loading state
+        } else {
+          // Log each event individually for debugging
+          console.log('🔍 Analyzing each Transfer event:');
+          transferEvents.forEach((event, index) => {
+            console.log(`Event ${index + 1}:`, {
               blockNumber: event.blockNumber.toString(),
               transactionHash: event.transactionHash,
               from: event.args.from,
               to: event.args.to,
               value: event.args.value?.toString(),
+              topics: event.topics,
+              data: event.data,
             });
+          });
 
-            // Get block details for timestamp
-            const block = await publicClient.getBlock({
-              blockNumber: event.blockNumber,
-            });
-            const timestamp = Number(block.timestamp) * 1000; // Convert to milliseconds
+          // Process the events into transactions
+          const processedTransactions: Transaction[] = await Promise.all(
+            transferEvents.map(async (event, index) => {
+              console.log(`🔄 Processing event ${index + 1}/${transferEvents.length}:`, {
+                blockNumber: event.blockNumber.toString(),
+                transactionHash: event.transactionHash,
+                from: event.args.from,
+                to: event.args.to,
+                value: event.args.value?.toString(),
+              });
 
-            // Ensure event args exist
-            if (!event.args.from || !event.args.to || !event.args.value) {
-              console.error('❌ Invalid event args:', event.args);
-              throw new Error('Invalid event args');
-            }
+              // Get block details for timestamp
+              const block = await publicClient.getBlock({
+                blockNumber: event.blockNumber,
+              });
+              const timestamp = Number(block.timestamp) * 1000; // Convert to milliseconds
 
-            // Determine transaction type based on from/to addresses
-            let type: 'buy' | 'sell' | 'mint' | 'burn';
-            let user: string;
+              // Ensure event args exist
+              if (!event.args.from || !event.args.to || !event.args.value) {
+                console.error('❌ Invalid event args:', event.args);
+                throw new Error('Invalid event args');
+              }
 
-            console.log('🔍 Analyzing transaction type:', {
-              from: event.args.from,
-              to: event.args.to,
-              poolAddress: poolAddress.toLowerCase(),
-              isFromZero: event.args.from === '0x0000000000000000000000000000000000000000',
-              isToZero: event.args.to === '0x0000000000000000000000000000000000000000',
-              isFromPool: event.args.from.toLowerCase() === poolAddress.toLowerCase(),
-              isToPool: event.args.to.toLowerCase() === poolAddress.toLowerCase(),
-            });
+              // Determine transaction type based on from/to addresses
+              let type: 'buy' | 'sell' | 'mint' | 'burn';
+              let user: string;
 
-            if (event.args.from === '0x0000000000000000000000000000000000000000') {
-              // Mint: from zero address
-              type = 'mint';
-              user = event.args.to;
-              console.log('✅ Identified as MINT');
-            } else if (event.args.to === '0x0000000000000000000000000000000000000000') {
-              // Burn: to zero address
-              type = 'burn';
-              user = event.args.from;
-              console.log('✅ Identified as BURN');
-            } else if (event.args.from.toLowerCase() === poolAddress.toLowerCase()) {
-              // Buy: from pool contract (presale participation)
-              type = 'buy';
-              user = event.args.to;
-              console.log('✅ Identified as BUY');
-            } else if (event.args.to.toLowerCase() === poolAddress.toLowerCase()) {
-              // Sell: to pool contract (refund/withdrawal)
-              type = 'sell';
-              user = event.args.from;
-              console.log('✅ Identified as SELL');
-            } else {
-              // Regular transfer between users
-              type = 'buy'; // Default to buy for display
-              user = event.args.to;
-              console.log('✅ Identified as TRANSFER (defaulting to BUY)');
-            }
+              console.log('🔍 Analyzing transaction type:', {
+                from: event.args.from,
+                to: event.args.to,
+                poolAddress: poolAddress.toLowerCase(),
+                isFromZero: event.args.from === '0x0000000000000000000000000000000000000000',
+                isToZero: event.args.to === '0x0000000000000000000000000000000000000000',
+                isFromPool: event.args.from.toLowerCase() === poolAddress.toLowerCase(),
+                isToPool: event.args.to.toLowerCase() === poolAddress.toLowerCase(),
+              });
 
-            const transaction = {
-              type,
-              amount: event.args.value.toString(),
-              timestamp,
-              hash: event.transactionHash,
-              user,
-              blockNumber: Number(event.blockNumber),
-              from: event.args.from,
-              to: event.args.to,
-            };
+              if (event.args.from === '0x0000000000000000000000000000000000000000') {
+                // Mint: from zero address
+                type = 'mint';
+                user = event.args.to;
+                console.log('✅ Identified as MINT');
+              } else if (event.args.to === '0x0000000000000000000000000000000000000000') {
+                // Burn: to zero address
+                type = 'burn';
+                user = event.args.from;
+                console.log('✅ Identified as BURN');
+              } else if (event.args.from.toLowerCase() === poolAddress.toLowerCase()) {
+                // Buy: from pool contract (presale participation)
+                type = 'buy';
+                user = event.args.to;
+                console.log('✅ Identified as BUY');
+              } else if (event.args.to.toLowerCase() === poolAddress.toLowerCase()) {
+                // Sell: to pool contract (refund/withdrawal)
+                type = 'sell';
+                user = event.args.from;
+                console.log('✅ Identified as SELL');
+              } else {
+                // Regular transfer between users
+                type = 'buy'; // Default to buy for display
+                user = event.args.to;
+                console.log('✅ Identified as TRANSFER (defaulting to BUY)');
+              }
 
-            console.log('✅ Created transaction:', transaction);
-            return transaction;
-          }),
-        );
+              const transaction = {
+                type,
+                amount: event.args.value.toString(),
+                timestamp,
+                hash: event.transactionHash,
+                user,
+                blockNumber: Number(event.blockNumber),
+                from: event.args.from,
+                to: event.args.to,
+              };
 
-        console.log('📊 All processed transactions before sorting:', processedTransactions);
-        console.log('📊 Processed transactions count:', processedTransactions.length);
+              console.log('✅ Created transaction:', transaction);
+              return transaction;
+            }),
+          );
 
-        // Sort by timestamp (newest first)
-        processedTransactions.sort((a, b) => b.timestamp - a.timestamp);
-        console.log('📊 Transactions after sorting:', processedTransactions);
+          console.log('📊 All processed transactions before sorting:', processedTransactions);
+          console.log('📊 Processed transactions count:', processedTransactions.length);
 
-        // Take only the most recent 5 transactions (as requested)
-        const recentTransactions = processedTransactions.slice(0, 5);
-        console.log('📊 Recent transactions (first 5):', recentTransactions);
+          // Sort by timestamp (newest first)
+          processedTransactions.sort((a, b) => b.timestamp - a.timestamp);
+          console.log('📊 Transactions after sorting:', processedTransactions);
 
-        // Remove duplicates based on transaction hash
-        const uniqueTransactions = recentTransactions.filter(
-          (transaction, index, self) =>
-            index === self.findIndex((t) => t.hash === transaction.hash),
-        );
+          // Take only the most recent 5 transactions (as requested)
+          const recentTransactions = processedTransactions.slice(0, 5);
+          console.log('📊 Recent transactions (first 5):', recentTransactions);
 
-        console.log('✅ Final processed transactions:', recentTransactions.length);
-        console.log('✅ Unique transactions after deduplication:', uniqueTransactions.length);
-        console.log('📊 All transactions:', recentTransactions);
-        console.log('📊 Unique transactions:', uniqueTransactions);
+          // Remove duplicates based on transaction hash
+          const uniqueTransactions = recentTransactions.filter(
+            (transaction, index, self) =>
+              index === self.findIndex((t) => t.hash === transaction.hash),
+          );
 
-        setTransactions(uniqueTransactions);
+          console.log('✅ Final processed transactions:', recentTransactions.length);
+          console.log('✅ Unique transactions after deduplication:', uniqueTransactions.length);
+          console.log('📊 All transactions:', recentTransactions);
+          console.log('📊 Unique transactions:', uniqueTransactions);
+
+          setTransactions(uniqueTransactions);
+        }
       } catch (err) {
         console.error('❌ Error fetching transactions:', err);
         setError(
@@ -697,7 +726,7 @@ export default function TransactionList({ poolAddress, tokenSymbol }: Transactio
             )}
           </p>
           <a
-            href={`https://seiscan.io/token/${tokenAddress}`}
+            href={`https://seitrace.com/token/${tokenAddress}?chain=atlantic-2`}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-block mt-2 text-orange-600 hover:text-orange-700 text-sm font-medium hover:underline"

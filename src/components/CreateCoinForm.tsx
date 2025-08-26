@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useAccount, useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
+import { useAccount, useWriteContract, useWaitForTransactionReceipt, usePublicClient } from 'wagmi';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { parseEther } from 'viem';
 import { useEffect } from 'react';
@@ -39,6 +39,7 @@ const POOL_MANAGER_ABI = [
 
 export default function CreateCoinForm() {
   const { isConnected } = useAccount();
+  const publicClient = usePublicClient();
   const [isLoading, setIsLoading] = useState(false);
   const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [imageUrl, setImageUrl] = useState<string>('');
@@ -111,6 +112,44 @@ export default function CreateCoinForm() {
             poolAddress = hash;
           }
 
+          // Get the token deployment block from the pool data
+          let deploymentBlock = null;
+          let tokenAddress = null;
+          try {
+            console.log('🔍 Getting pool data to extract token address and deployment block...');
+
+            // We need to wait a bit for the transaction to be processed
+            await new Promise((resolve) => setTimeout(resolve, 2000));
+
+            // Get the pool data to find the token address
+            const poolDataResponse = await fetch(`/api/presale-data?poolAddress=${poolAddress}`);
+            if (poolDataResponse.ok) {
+              const poolData = await poolDataResponse.json();
+              console.log('📦 Pool data received:', poolData);
+
+              if (poolData.token) {
+                tokenAddress = poolData.token;
+                console.log('🪙 Token address found:', tokenAddress);
+
+                // Get the current block number as the deployment block
+                // Note: This is an approximation - the actual deployment might be a few blocks earlier
+                try {
+                  if (publicClient) {
+                    const blockNumber = await publicClient.getBlockNumber();
+                    deploymentBlock = Number(blockNumber);
+                    console.log('✅ Token deployment block (approximate):', deploymentBlock);
+                  }
+                } catch (error) {
+                  console.warn('Could not get current block number:', error);
+                  // Continue without deployment block
+                }
+              }
+            }
+          } catch (error) {
+            console.warn('Could not get deployment block:', error);
+            // Continue without deployment block
+          }
+
           // Additional debugging: log all topics from PoolManager logs
           console.log('🔍 Debugging: All PoolManager logs:');
           for (const log of receipt.logs) {
@@ -126,12 +165,15 @@ export default function CreateCoinForm() {
           console.log('✅ Saving metadata for pool address:', poolAddress);
           console.log('📸 Image URL:', imageUrl);
           console.log('🏷️ Token name:', formData.tokenName);
+          console.log('📦 Deployment block:', deploymentBlock);
+          console.log('🪙 Token address:', tokenAddress);
 
           const metadataResponse = await fetch('/api/token-metadata', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               contractAddress: poolAddress,
+              tokenAddress: tokenAddress,
               name: formData.tokenName,
               symbol: formData.tokenSymbol,
               imageUrl: imageUrl,
@@ -139,6 +181,7 @@ export default function CreateCoinForm() {
               website: formData.website,
               telegram: formData.telegram,
               twitter: formData.twitter,
+              deploymentBlock: deploymentBlock,
             }),
           });
 
@@ -316,7 +359,7 @@ export default function CreateCoinForm() {
             {hash && (
               <div className="bg-primary/10 border text-center border-primary/30 text-wrap rounded-lg p-4">
                 <a
-                  href={`https://seiscan.io/tx/${hash}`}
+                  href={`https://seitrace.com/tx/${hash}?chain=atlantic-2`}
                   target="_blank"
                   className="w-full text-sm text-center text-blue-800 text-wrap underline"
                 >
