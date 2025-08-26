@@ -4,7 +4,7 @@ import { Providers } from './providers';
 import ClientHeader from '@/components/ClientHeader';
 
 export const metadata: Metadata = {
-  title: 'Sei Launch',
+  title: 'Seipad',
   description: 'Token Launchpad on Sei',
   icons: {
     icon: '/SeiLaunchLogo.svg',

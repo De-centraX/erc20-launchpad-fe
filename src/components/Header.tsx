@@ -30,7 +30,7 @@ export default function Header() {
             >
               <Image
                 src="/SeiLaunchLogo.svg"
-                alt="Sei Launch Logo"
+                alt="Seipad Logo"
                 width={124}
                 height={124}
                 className="w-12 h-auto"

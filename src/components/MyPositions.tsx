@@ -366,7 +366,7 @@ export default function MyPositions() {
               <div className="flex items-center space-x-3">
                 <Image
                   src="/SeiLaunchLogo.svg"
-                  alt="Sei Launch Logo"
+                  alt="Seipad Logo"
                   width={32}
                   height={32}
                   className="w-9 h-9"

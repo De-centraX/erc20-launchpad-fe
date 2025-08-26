@@ -257,7 +257,7 @@ export default function ParticipateForm({ presale }: ParticipateFormProps) {
             </h1>
             <p className="text-gray-300">
               {presaleStatus?.isFinalized
-                ? `Trade ${presale.tokenSymbol} tokens on Sei Launch`
+                ? `Trade ${presale.tokenSymbol} tokens on Seipad`
                 : `Contribute SEI tokens to receive ${presale.tokenSymbol}`}
             </p>
           </div>

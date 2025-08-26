@@ -13,7 +13,7 @@ const createConfig = () => {
   }
 
   return getDefaultConfig({
-    appName: 'Sei Launch',
+    appName: 'Seipad',
     projectId: process.env.NEXT_PUBLIC_PROJECT_ID!,
     chains: [seiTestnet],
     ssr: false,

@@ -45,7 +45,7 @@ export default function Footer() {
           >
             FAQ
           </a>
-          <span>Sei Launch Protocol 2025</span>
+          <span>Seipad Protocol 2025</span>
         </div>
       </div>
     </div>

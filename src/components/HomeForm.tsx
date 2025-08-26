@@ -422,7 +422,7 @@ export default function HomeForm() {
             className="text-4xl font-bold text-light mb-4 opacity-0 animate-fadeInUp"
             style={{ animationDelay: '0.2s', animationFillMode: 'forwards' }}
           >
-            Welcome to Sei Launch
+            Welcome to Seipad
           </h1>
           <p
             className="text-xl text-gray-300 max-w-2xl mx-auto opacity-0 animate-fadeInUp"
