@@ -180,14 +180,10 @@ export default function MyPositions() {
 
   // Fetch user's positions function
   const fetchUserPositions = async () => {
-    console.log(!isConnected, !address, !allPresales);
-    console.log(!isConnected || !address || !allPresales);
-
     if (!isConnected || !address || !allPresales) return;
 
     setLoading(true);
     const userPositions: UserPosition[] = [];
-    console.log(allPresales);
 
     try {
       for (const presaleAddress of allPresales) {

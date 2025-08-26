@@ -488,9 +488,9 @@ export default function TransactionList({ poolAddress, tokenSymbol }: Transactio
       case 'buy':
       case 'mint':
         return (
-          <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center">
+          <div className="w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center">
             <svg
-              className="w-4 h-4 text-red-600"
+              className="w-4 h-4 text-primary"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -507,9 +507,9 @@ export default function TransactionList({ poolAddress, tokenSymbol }: Transactio
       case 'sell':
       case 'burn':
         return (
-          <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center">
+          <div className="w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center">
             <svg
-              className="w-4 h-4 text-red-600"
+              className="w-4 h-4 text-primary"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -525,7 +525,7 @@ export default function TransactionList({ poolAddress, tokenSymbol }: Transactio
         );
       default:
         return (
-          <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
+          <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
             <svg
               className="w-4 h-4 text-gray-600"
               fill="none"
@@ -575,7 +575,7 @@ export default function TransactionList({ poolAddress, tokenSymbol }: Transactio
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-xl p-6">
+    <div className="bg-gradient-card border border-primary/30 rounded-2xl shadow-xl p-6">
       <div className="flex items-center justify-between mb-6">
         <h3 className="text-xl font-bold text-light">Recent Transactions</h3>
         <div className="flex items-center space-x-2">
@@ -656,8 +656,8 @@ export default function TransactionList({ poolAddress, tokenSymbol }: Transactio
               key={index}
               className={`flex items-center space-x-4 p-4 rounded-lg border ${
                 tx.type === 'buy' || tx.type === 'mint'
-                  ? 'bg-red-50 border-red-200'
-                  : 'bg-red-50 border-red-200'
+                  ? 'bg-primary/10 border-primary/20'
+                  : 'bg-primary/10 border-primary/20'
               }`}
             >
               {/* Transaction Icon */}
@@ -669,7 +669,7 @@ export default function TransactionList({ poolAddress, tokenSymbol }: Transactio
                   <div className="flex items-center space-x-2">
                     <span
                       className={`font-semibold text-sm ${
-                        tx.type === 'buy' || tx.type === 'mint' ? 'text-red-800' : 'text-red-800'
+                        tx.type === 'buy' || tx.type === 'mint' ? 'text-primary' : 'text-primary'
                       }`}
                     >
                       {getTransactionTypeLabel(tx.type)}
@@ -719,20 +719,7 @@ export default function TransactionList({ poolAddress, tokenSymbol }: Transactio
         <div className="mt-6 text-center">
           <p className="text-sm text-gray-600">
             Showing {transactions.length} most recent transactions
-            {transactions.length < 5 && (
-              <span className="text-orange-600 ml-1">
-                (only {transactions.length} found on blockchain)
-              </span>
-            )}
           </p>
-          <a
-            href={`https://seitrace.com/token/${tokenAddress}?chain=atlantic-2`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-block mt-2 text-orange-600 hover:text-orange-700 text-sm font-medium hover:underline"
-          >
-            View All Transactions →
-          </a>
         </div>
       )}
     </div>

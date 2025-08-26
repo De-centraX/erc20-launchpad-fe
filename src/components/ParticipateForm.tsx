@@ -311,7 +311,7 @@ export default function ParticipateForm({ presale }: ParticipateFormProps) {
                           ? 'bg-blue-100 text-blue-800'
                           : getRealPresaleStatus() === 'Hardcap Reached'
                           ? 'bg-purple-100 text-purple-800'
-                          : 'bg-gray-100 text-gray-100'
+                          : 'bg-primary/10 text-gray-100'
                       }`}
                     >
                       {getRealPresaleStatus()}
@@ -401,7 +401,7 @@ export default function ParticipateForm({ presale }: ParticipateFormProps) {
                             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                             disabled={isPending || isConfirming || !!statusError}
                           />
-                          <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+                          <div className="absolute right-10 top-1/2 transform -translate-y-1/2 text-gray-500">
                             SEI
                           </div>
                         </div>
@@ -409,20 +409,10 @@ export default function ParticipateForm({ presale }: ParticipateFormProps) {
 
                       {/* Tokens to Receive */}
                       {amount && parseFloat(amount) > 0 && (
-                        <div className="bg-orange-50 rounded-lg p-4">
+                        <div className="bg-primary/10 rounded-lg p-4 border border-primary/20">
                           <div className="flex justify-between items-center">
-                            <span className="text-gray-300">You will receive:</span>
-                            <span
-                              className="font-bold"
-                              style={{
-                                backgroundImage: 'url("/SEILaunchBanner.jpg")',
-                                backgroundSize: 'cover',
-                                backgroundPosition: 'center',
-                                WebkitBackgroundClip: 'text',
-                                WebkitTextFillColor: 'transparent',
-                                backgroundClip: 'text',
-                              }}
-                            >
+                            <span className="text-primary font-medium">You will receive:</span>
+                            <span className="font-bold text-primary">
                               {calculateTokensToReceive()} {presale.tokenSymbol}
                             </span>
                           </div>
@@ -443,23 +433,10 @@ export default function ParticipateForm({ presale }: ParticipateFormProps) {
                         className={`w-full py-3 px-6 rounded-lg font-bold transition-colors relative overflow-hidden ${
                           shouldDisableButton
                             ? 'bg-gray-400 text-white cursor-not-allowed'
-                            : 'text-white cursor-pointer hover:opacity-90'
+                            : 'bg-primary hover:bg-primary/90 text-white cursor-pointer'
                         }`}
-                        style={
-                          !shouldDisableButton
-                            ? {
-                                backgroundImage: 'url("/SEILaunchBanner.jpg")',
-                                backgroundSize: 'cover',
-                                backgroundPosition: 'center',
-                              }
-                            : {}
-                        }
+                        style={{}}
                       >
-                        {/* Dark overlay for better text readability */}
-                        {!shouldDisableButton && (
-                          <div className="absolute inset-0 bg-black/30"></div>
-                        )}
-
                         <div className="relative z-10 flex items-center justify-center">
                           {(isPending || isConfirming) && (
                             <svg

@@ -59,7 +59,7 @@ const ROUTER_ABI = [
         type: 'uint256',
       },
     ],
-    name: 'swapTokensForExactSEI',
+    name: 'swapExactTokensForSEI',
     outputs: [
       {
         internalType: 'uint256[]',
@@ -399,7 +399,7 @@ export default function SwapInterface({
         writeContract({
           address: CONTRACTS.V2_ROUTER as `0x${string}`,
           abi: ROUTER_ABI,
-          functionName: 'swapTokensForExactSEI',
+          functionName: 'swapExactTokensForSEI',
           args: [
             amountInWei,
             minAmountOut,
@@ -596,7 +596,7 @@ export default function SwapInterface({
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-xl p-6 mb-8">
+    <div className="bg-gradient-card border border-primary/30 rounded-2xl shadow-xl p-6 mb-8">
       <div className="flex flex-col lg:flex-row gap-8">
         {/* Left Side - Token Info */}
         <div className="flex-1">
@@ -618,15 +618,15 @@ export default function SwapInterface({
             </div>
             <div>
               <span className="text-gray-600">Status:</span>
-              <span className="font-semibold ml-2 text-red-600">Finalized & Listed</span>
+              <span className="font-semibold ml-2 text-primary">Finalized & Listed</span>
             </div>
             <div>
               <span className="text-gray-600">Token Address:</span>
               <a
-                href={`https://seitrace.com/token/${tokenAddress}?chain=atlantic-2`}
+                href={`https://seiscan.io/token/${tokenAddress}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-mono text-xs font-semibold ml-2 text-blue-600 hover:text-blue-800 underline cursor-pointer"
+                className="font-mono text-xs font-semibold ml-2 text-primary hover:text-primary/80 cursor-pointer"
               >
                 {tokenAddress}
               </a>
@@ -645,13 +645,13 @@ export default function SwapInterface({
           ) : (
             <div className="space-y-6">
               {/* Swap Direction Toggle */}
-              <div className="flex bg-gray-100 rounded-lg p-1">
+              <div className="flex bg-primary/10 rounded-lg p-2">
                 <button
                   onClick={() => setSwapDirection('buy')}
                   className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all ${
                     swapDirection === 'buy'
-                      ? 'bg-red-600 text-white shadow-sm'
-                      : 'text-gray-600 hover:text-red-600'
+                      ? 'bg-primary text-white shadow-sm'
+                      : 'text-gray-600 hover:text-primary'
                   }`}
                 >
                   Buy {tokenSymbol}
@@ -660,8 +660,8 @@ export default function SwapInterface({
                   onClick={() => setSwapDirection('sell')}
                   className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all ${
                     swapDirection === 'sell'
-                      ? 'bg-red-600 text-white shadow-sm'
-                      : 'text-gray-600 hover:text-red-600'
+                      ? 'bg-primary text-white shadow-sm'
+                      : 'text-gray-600 hover:text-primary'
                   }`}
                 >
                   Sell {tokenSymbol}
@@ -688,7 +688,7 @@ export default function SwapInterface({
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
                     disabled={isLoading}
                   />
-                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+                  <div className="absolute right-10 top-1/2 transform -translate-y-1/2 text-gray-500">
                     {swapDirection === 'buy' ? 'Sei' : tokenSymbol}
                   </div>
                 </div>
@@ -715,9 +715,9 @@ export default function SwapInterface({
 
               {/* Output Amount */}
               {amount && parseFloat(amount) > 0 && (
-                <div className="bg-red-50 rounded-lg p-4">
+                <div className="bg-primary/10 rounded-lg p-4">
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-700">You will receive approximately:</span>
+                    <span>You will receive approximately:</span>
                     <span className="font-bold text-red-800">
                       {calculateOutput()} {swapDirection === 'buy' ? tokenSymbol : 'Sei'}
                     </span>
@@ -741,7 +741,7 @@ export default function SwapInterface({
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
                     placeholder="5.0"
                   />
-                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+                  <div className="absolute right-10 top-1/2 transform -translate-y-1/2 text-gray-500">
                     %
                   </div>
                 </div>
