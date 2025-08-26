@@ -276,7 +276,7 @@ export default function ParticipateFormWrapper({ presale }: ParticipateFormWrapp
                       <span
                         className="font-bold"
                         style={{
-                          backgroundImage: 'url("/SeiLaunchBannerBackground.jpg")',
+                          backgroundImage: 'url("/SEILaunchBanner.jpg")',
                           backgroundSize: 'cover',
                           backgroundPosition: 'center',
                           WebkitBackgroundClip: 'text',
@@ -309,7 +309,7 @@ export default function ParticipateFormWrapper({ presale }: ParticipateFormWrapp
                   style={
                     !isPending && !isConfirming && !statusError
                       ? {
-                          backgroundImage: 'url("/SeiLaunchBannerBackground.jpg")',
+                          backgroundImage: 'url("/SEILaunchBanner.jpg")',
                           backgroundSize: 'cover',
                           backgroundPosition: 'center',
                         }

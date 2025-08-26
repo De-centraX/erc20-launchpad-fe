@@ -415,7 +415,7 @@ export default function ParticipateForm({ presale }: ParticipateFormProps) {
                             <span
                               className="font-bold"
                               style={{
-                                backgroundImage: 'url("/SeiLaunchBannerBackground.jpg")',
+                                backgroundImage: 'url("/SEILaunchBanner.jpg")',
                                 backgroundSize: 'cover',
                                 backgroundPosition: 'center',
                                 WebkitBackgroundClip: 'text',
@@ -448,7 +448,7 @@ export default function ParticipateForm({ presale }: ParticipateFormProps) {
                         style={
                           !shouldDisableButton
                             ? {
-                                backgroundImage: 'url("/SeiLaunchBannerBackground.jpg")',
+                                backgroundImage: 'url("/SEILaunchBanner.jpg")',
                                 backgroundSize: 'cover',
                                 backgroundPosition: 'center',
                               }

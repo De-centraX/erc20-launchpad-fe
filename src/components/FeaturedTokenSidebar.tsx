@@ -118,7 +118,7 @@ export default function FeaturedTokenSidebar() {
                       onClick={() => handleParticipate(presaleData1, featuredPresales[0])}
                       className="px-3 py-1.5 rounded text-xs font-semibold transition-all duration-300 text-white animate-pulse cursor-pointer relative overflow-hidden"
                       style={{
-                        backgroundImage: 'url("/SeiLaunchBannerBackground.jpg")',
+                        backgroundImage: 'url("/SEILaunchBanner.jpg")',
                         backgroundSize: 'cover',
                         backgroundPosition: 'center',
                       }}
@@ -173,7 +173,7 @@ export default function FeaturedTokenSidebar() {
                       onClick={() => handleParticipate(presaleData2, featuredPresales[1])}
                       className="px-3 py-1.5 rounded text-xs font-semibold transition-all duration-300 text-white animate-pulse cursor-pointer relative overflow-hidden"
                       style={{
-                        backgroundImage: 'url("/SeiLaunchBannerBackground.jpg")',
+                        backgroundImage: 'url("/SEILaunchBanner.jpg")',
                         backgroundSize: 'cover',
                         backgroundPosition: 'center',
                       }}
@@ -228,7 +228,7 @@ export default function FeaturedTokenSidebar() {
                       onClick={() => handleParticipate(presaleData3, featuredPresales[2])}
                       className="px-3 py-1.5 rounded text-xs font-semibold transition-all duration-300 text-white animate-pulse cursor-pointer relative overflow-hidden"
                       style={{
-                        backgroundImage: 'url("/SeiLaunchBannerBackground.jpg")',
+                        backgroundImage: 'url("/SEILaunchBanner.jpg")',
                         backgroundSize: 'cover',
                         backgroundPosition: 'center',
                       }}
