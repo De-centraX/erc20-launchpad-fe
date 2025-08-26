@@ -1,23 +1,19 @@
-import type { Metadata } from "next";
-import "./globals.css";
-import { Providers } from "./providers";
-import ClientHeader from "@/components/ClientHeader";
+import type { Metadata } from 'next';
+import './globals.css';
+import { Providers } from './providers';
+import ClientHeader from '@/components/ClientHeader';
 
 export const metadata: Metadata = {
-  title: "Hyped Launch",
-  description: "Token Launchpad on Hyperliquid",
+  title: 'Sei Launch',
+  description: 'Token Launchpad on Sei',
   icons: {
-    icon: "/hllogo.svg",
-    shortcut: "/hllogo.svg",
-    apple: "/hllogo.svg",
+    icon: '/SeiLaunchLogo.svg',
+    shortcut: '/SeiLaunchLogo.svg',
+    apple: '/SeiLaunchLogo.svg',
   },
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body className="bg-charcoal text-light min-h-screen">

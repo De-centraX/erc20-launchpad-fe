@@ -1,52 +1,10 @@
 'use client';
 
-import { defineChain } from 'viem';
 import { getDefaultConfig } from '@rainbow-me/rainbowkit';
 import { darkTheme } from '@rainbow-me/rainbowkit';
 
 import { isBrowser } from '@/utils/environment';
-
-const hypeEvmTestnet = /*#__PURE__*/ defineChain({
-  id: 998,
-  name: 'Hype EVM Testnet',
-  nativeCurrency: { name: 'Hype', symbol: 'HYPE', decimals: 18 },
-  rpcUrls: {
-    default: {
-      http: ['https://rpc.hyperliquid-testnet.xyz/evm'],
-    },
-  },
-  blockExplorers: {
-    default: {
-      name: 'HyperEVMScan Testnet',
-      url: 'https://testnet.purrsec.com/',
-    },
-  },
-  contracts: {
-    multicall3: {
-      address: '0xca11bde05977b3631167028862be2a173976ca11',
-      blockCreated: 14_353_601,
-    },
-  },
-  testnet: true,
-});
-
-const hypeEvm = /*#__PURE__*/ defineChain({
-  id: 999,
-  name: 'Hype EVM',
-  nativeCurrency: { name: 'Hype', symbol: 'HYPE', decimals: 18 },
-  rpcUrls: {
-    default: {
-      http: ['https://rpc.hyperliquid.xyz/evm'],
-    },
-  },
-  blockExplorers: {
-    default: {
-      name: 'HyperEVMScan',
-      url: 'https://hyperevmscan.io/',
-    },
-  },
-  contracts: {},
-});
+import { seiTestnet } from 'viem/chains';
 
 // Only create config on client side
 const createConfig = () => {
@@ -55,9 +13,9 @@ const createConfig = () => {
   }
 
   return getDefaultConfig({
-    appName: 'Hyped Launch',
+    appName: 'Sei Launch',
     projectId: process.env.NEXT_PUBLIC_PROJECT_ID!,
-    chains: [hypeEvmTestnet],
+    chains: [seiTestnet],
     ssr: false,
   });
 };
@@ -66,39 +24,39 @@ export default createConfig;
 
 // Custom RainbowKit theme
 export const customTheme = darkTheme({
-  accentColor: '#97fce4',
-  accentColorForeground: '#1a2f2e',
+  accentColor: '#9D1F19',
+  accentColorForeground: '#1A1A1A',
   borderRadius: 'medium',
   fontStack: 'system',
   overlayBlur: 'small',
 });
 
 // Update colors to match our theme
-customTheme.colors.actionButtonBorder = '#33a085';
-customTheme.colors.actionButtonBorderMobile = '#33a085';
-customTheme.colors.actionButtonSecondaryBackground = '#1a2f2e';
-customTheme.colors.closeButton = '#97fce4';
-customTheme.colors.closeButtonBackground = '#1a2f2e';
-customTheme.colors.connectButtonBackground = '#97fce4';
-customTheme.colors.connectButtonBackgroundError = '#ff6b6b';
-customTheme.colors.connectButtonInnerBackground = '#1a2f2e';
+customTheme.colors.actionButtonBorder = 'rgba(255, 255, 255, 0.1)';
+customTheme.colors.actionButtonBorderMobile = 'rgba(255, 255, 255, 0.1)';
+customTheme.colors.actionButtonSecondaryBackground = '#2A2A2A';
+customTheme.colors.closeButton = '#FFFFFF';
+customTheme.colors.closeButtonBackground = '#1A1A1A';
+customTheme.colors.connectButtonBackground = '#9D1F19';
+customTheme.colors.connectButtonBackgroundError = '#FF4444';
+customTheme.colors.connectButtonInnerBackground = '#1A1A1A';
 customTheme.colors.connectButtonText = '#ffffff';
 customTheme.colors.connectButtonTextError = '#ffffff';
-customTheme.colors.connectionIndicator = '#97fce4';
-customTheme.colors.downloadBottomCardBackground = '#1a2f2e';
-customTheme.colors.downloadTopCardBackground = '#2a4f4e';
-customTheme.colors.error = '#ff6b6b';
-customTheme.colors.generalBorder = '#33a085';
-customTheme.colors.generalBorderDim = '#2a4f4e';
-customTheme.colors.menuItemBackground = '#1a2f2e';
-customTheme.colors.modalBackdrop = 'rgba(26, 47, 46, 0.8)';
-customTheme.colors.modalBackground = '#1a2f2e';
-customTheme.colors.modalBorder = '#33a085';
+customTheme.colors.connectionIndicator = '#9D1F19';
+customTheme.colors.downloadBottomCardBackground = '#1A1A1A';
+customTheme.colors.downloadTopCardBackground = '#2A2A2A';
+customTheme.colors.error = '#FF4444';
+customTheme.colors.generalBorder = '#rgba(157, 31, 25, 0.2)';
+customTheme.colors.generalBorderDim = 'rgba(255, 255, 255, 0.05)';
+customTheme.colors.menuItemBackground = '#2A2A2A';
+customTheme.colors.modalBackdrop = 'rgba(0, 0, 0, 0.6)';
+customTheme.colors.modalBackground = '#1A1A1A';
+customTheme.colors.modalBorder = 'rgba(157, 31, 25, 0.2)';
 customTheme.colors.modalText = '#ffffff';
-customTheme.colors.modalTextDim = '#b3b3b3';
-customTheme.colors.modalTextSecondary = '#97fce4';
-customTheme.colors.profileAction = '#97fce4';
-customTheme.colors.profileActionHover = '#7ee8d0';
-customTheme.colors.profileForeground = '#1a2f2e';
-customTheme.colors.selectedOptionBorder = '#97fce4';
-customTheme.colors.standby = '#97fce4';
+customTheme.colors.modalTextDim = '#AAAAAA';
+customTheme.colors.modalTextSecondary = '#CCCCCC';
+customTheme.colors.profileAction = '#2A2A2A';
+customTheme.colors.profileActionHover = '#3A3A3A';
+customTheme.colors.profileForeground = '#1A1A1A';
+customTheme.colors.selectedOptionBorder = 'rgba(157, 31, 25, 0.3)';
+customTheme.colors.standby = '#9D1F19';

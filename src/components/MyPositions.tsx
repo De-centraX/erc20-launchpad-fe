@@ -138,36 +138,6 @@ interface UserPosition {
   isFinalizable: boolean; // Add this field
 }
 
-// Add this custom hook to read storage slots
-const useStorageSlot = (address: string, slot: bigint) => {
-  const publicClient = usePublicClient();
-  const [data, setData] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    if (!address) return;
-
-    const fetchStorage = async () => {
-      setLoading(true);
-      try {
-        const storageData = await publicClient.getStorageAt({
-          address: address as `0x${string}`,
-          slot: slot,
-        });
-        setData(storageData);
-      } catch (error) {
-        console.error('Error reading storage:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchStorage();
-  }, [address, slot, publicClient]);
-
-  return { data, loading };
-};
-
 export default function MyPositions() {
   const { address, isConnected } = useAccount();
   const publicClient = usePublicClient();
@@ -396,13 +366,13 @@ export default function MyPositions() {
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <Image
-                  src="/hllogo.svg"
-                  alt="Hyperliquid Logo"
+                  src="/SeiLaunchLogo.svg"
+                  alt="Sei Launch Logo"
                   width={32}
                   height={32}
                   className="w-9 h-9"
                 />
-                <span className="text-lg font-medium text-light">Hyperliquid</span>
+                <span className="text-lg font-medium text-light">Sei</span>
               </div>
               <span className="text-2xl font-bold text-primary">
                 {parseFloat(nativeBalance).toFixed(4)}
@@ -438,7 +408,7 @@ export default function MyPositions() {
                         <p className="text-sm text-gray-300">
                           Pool:{' '}
                           <a
-                            href={`https://testnet.purrsec.com/address/${position.poolAddress}`}
+                            href={`https://seiscan.io/address/${position.poolAddress}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-primary hover:text-primary/80 underline cursor-pointer"
@@ -450,7 +420,7 @@ export default function MyPositions() {
                         <p className="text-sm text-gray-300">
                           Token:{' '}
                           <a
-                            href={`https://testnet.purrsec.com/address/${position.tokenAddress}`}
+                            href={`https://seiscan.io/address/${position.tokenAddress}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-primary hover:text-primary/80 underline cursor-pointer"
@@ -483,7 +453,7 @@ export default function MyPositions() {
                       <div>
                         <p className="text-sm text-gray-300">Presale Rate</p>
                         <p className="text-sm font-medium text-light">
-                          {position.presaleRate} {position.tokenSymbol} per HL
+                          {position.presaleRate} {position.tokenSymbol} per SEI
                         </p>
                       </div>
                     </div>
@@ -492,12 +462,12 @@ export default function MyPositions() {
                       <div>
                         <p className="text-sm text-gray-300">Pool Progress</p>
                         <p className="text-sm font-medium text-light">
-                          {position.totalContributedPool} / {position.hardcap} HL
+                          {position.totalContributedPool} / {position.hardcap} SEI
                         </p>
                       </div>
                       <div>
                         <p className="text-sm text-gray-300">Softcap</p>
-                        <p className="text-sm font-medium text-light">{position.softcap} HL</p>
+                        <p className="text-sm font-medium text-light">{position.softcap} SEI</p>
                       </div>
                     </div>
 

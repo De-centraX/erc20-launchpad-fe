@@ -1,9 +1,9 @@
+import { CONTRACTS } from '@/contracts/addresses';
 import { NextRequest, NextResponse } from 'next/server';
 import { createPublicClient, http, parseAbi } from 'viem';
-import { mainnet } from 'viem/chains';
 
 const publicClient = createPublicClient({
-  transport: http('https://rpc.hyperliquid-testnet.xyz/evm'),
+  transport: http(process.env.RPC_URL),
 });
 
 // Fixed ABI definitions - using proper tuple syntax
@@ -85,7 +85,7 @@ export async function GET(request: NextRequest) {
       console.log('API: Direct call failed, trying pool manager...', error);
       // If that fails, try to get it through the pool manager
       presaleData = await publicClient.readContract({
-        address: '0x221B91b96Fc6a6a13D98788224d534E961a53Ed2' as `0x${string}`,
+        address: CONTRACTS.POOL_MANAGER,
         abi: PoolManagerABI,
         functionName: 'getPresalesData',
         args: [address as `0x${string}`],

@@ -114,7 +114,7 @@ export default function HomeForm() {
       );
     }
 
-    // Fallback to cyan star ball
+    // Fallback to red star ball
     return (
       <div className="w-8 h-8 bg-gradient-primary rounded-full flex items-center justify-center text-white text-sm font-bold border border-primary/30">
         ⭐
@@ -326,8 +326,8 @@ export default function HomeForm() {
 
   // Add a new function to format the rate properly
   const formatRate = (rate: string) => {
-    // The presaleRate is already the number of tokens per Hype
-    // (when accounting for both Hype and token decimals)
+    // The presaleRate is already the number of tokens per SEI
+    // (when accounting for both SEI and token decimals)
     const rateNumber = Number(rate);
 
     return rateNumber.toLocaleString(undefined, {
@@ -422,14 +422,14 @@ export default function HomeForm() {
             className="text-4xl font-bold text-light mb-4 opacity-0 animate-fadeInUp"
             style={{ animationDelay: '0.2s', animationFillMode: 'forwards' }}
           >
-            Welcome to Hyped Launch
+            Welcome to Sei Launch
           </h1>
           <p
             className="text-xl text-gray-300 max-w-2xl mx-auto opacity-0 animate-fadeInUp"
             style={{ animationDelay: '0.4s', animationFillMode: 'forwards' }}
           >
-            Discover and participate in the latest token presales on the Hyperliquid blockchain.
-            Join exciting projects early and be part of the next big thing.
+            Discover and participate in the latest token presales on the Sei blockchain. Join
+            exciting projects early and be part of the next big thing.
           </p>
         </div>
 
@@ -451,7 +451,7 @@ export default function HomeForm() {
                 <span className="text-2xl font-bold text-primary">1</span>
               </div>
               <h3 className="font-bold text-lg mb-2 text-light">Connect Wallet</h3>
-              <p className="text-gray-300">Connect your Hyperliquid wallet to get started</p>
+              <p className="text-gray-300">Connect your Sei wallet to get started</p>
             </div>
             <div
               className="text-center opacity-0 animate-fadeInUp"
@@ -606,15 +606,15 @@ export default function HomeForm() {
                       </div>
                       <div className="flex justify-between text-sm">
                         <span className="text-gray-300">
-                          Raised: {formatAmount(presale.totalContributed)} HL
+                          Raised: {formatAmount(presale.totalContributed)} SEI
                         </span>
                         <span className="text-gray-300">
-                          Goal: {formatAmount(presale.hardcap)} HL
+                          Goal: {formatAmount(presale.hardcap)} SEI
                         </span>
                       </div>
                       <div className="text-xs text-gray-400">
                         <div>
-                          Rate: 1 HL = {formatRate(presale.presaleRate)} {presale.tokenSymbol}
+                          Rate: 1 SEI = {formatRate(presale.presaleRate)} {presale.tokenSymbol}
                         </div>
                         <div>Start: {formatDateTime(presale.startTime)}</div>
                         <div>End: {formatDateTime(presale.endTime)}</div>
@@ -652,7 +652,7 @@ export default function HomeForm() {
               {presales
                 .reduce((total, presale) => total + Number(formatAmount(presale.hardcap)), 0)
                 .toFixed(1)}{' '}
-              HL
+              SEI
             </div>
             <div className="text-gray-300">Total Goal</div>
           </div>

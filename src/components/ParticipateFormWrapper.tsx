@@ -1,12 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import {
-  useAccount,
-  useWriteContract,
-  useWaitForTransactionReceipt,
-  useReadContract,
-} from 'wagmi';
+import { useAccount, useWriteContract, useWaitForTransactionReceipt, useReadContract } from 'wagmi';
 import { parseEther, formatEther } from 'viem';
 import { useRouter } from 'next/navigation';
 import PoolABI from '../contracts/abis/Pool.json';
@@ -26,9 +21,7 @@ interface ParticipateFormWrapperProps {
   };
 }
 
-export default function ParticipateFormWrapper({
-  presale,
-}: ParticipateFormWrapperProps) {
+export default function ParticipateFormWrapper({ presale }: ParticipateFormWrapperProps) {
   const [amount, setAmount] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [presaleStatus, setPresaleStatus] = useState<any>(null);
@@ -96,8 +89,7 @@ export default function ParticipateFormWrapper({
     }
 
     if (presaleStatus?.totalContributed && presale.hardcap) {
-      const remaining =
-        BigInt(presale.hardcap) - BigInt(presaleStatus.totalContributed);
+      const remaining = BigInt(presale.hardcap) - BigInt(presaleStatus.totalContributed);
       if (remaining <= 0n) {
         return 'Presale hardcap has been reached';
       }
@@ -158,39 +150,35 @@ export default function ParticipateFormWrapper({
   const statusError = checkPresaleStatus();
 
   return (
-    <div className='min-h-screen bg-gradient-to-br from-orange-50 to-yellow-50 py-12'>
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-yellow-50 py-12">
       {/* Featured Tokens Sidebar - Left Side */}
       <FeaturedTokensCarousel />
 
       {/* Main Content - Right Side with Left Margin */}
-      <div className='ml-56 px-4 sm:px-6 lg:px-8'>
-        <div className='max-w-2xl mx-auto'>
+      <div className="ml-56 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-2xl mx-auto">
           {/* Header */}
-          <div className='text-center mb-8'>
+          <div className="text-center mb-8">
             <button
               onClick={handleBack}
-              className='mb-4 text-orange-600 hover:text-orange-700 font-medium'
+              className="mb-4 text-orange-600 hover:text-orange-700 font-medium"
             >
               ← Back to Launchpad
             </button>
-            <h1 className='text-3xl font-bold text-light mb-2'>
+            <h1 className="text-3xl font-bold text-light mb-2">
               Participate in {presale.tokenName}
             </h1>
-            <p className='text-gray-600'>
-              Contribute HL tokens to receive {presale.tokenSymbol}
-            </p>
+            <p className="text-gray-600">Contribute SEI tokens to receive {presale.tokenSymbol}</p>
           </div>
 
           {/* Presale Info Card */}
-          <div className='bg-white rounded-2xl shadow-xl p-6 mb-8'>
-            <div className='flex items-center justify-between mb-4'>
-              <h2 className='text-xl font-bold text-light'>
-                {presale.tokenName}
-              </h2>
+          <div className="bg-white rounded-2xl shadow-xl p-6 mb-8">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-bold text-light">{presale.tokenName}</h2>
               <span
                 className={`text-xs font-medium px-2.5 py-0.5 rounded-full ${
                   presale.status === 'Live'
-                    ? 'bg-green-100 text-green-800'
+                    ? 'bg-red-100 text-red-800'
                     : 'bg-gray-100 text-gray-800'
                 }`}
               >
@@ -198,48 +186,40 @@ export default function ParticipateFormWrapper({
               </span>
             </div>
 
-            <div className='grid grid-cols-1 md:grid-cols-2 gap-4 text-sm'>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
               <div>
-                <span className='text-gray-600'>Rate:</span>
-                <span className='font-semibold ml-2'>
-                  1 HL = {formatRate(presale.presaleRate)} {presale.tokenSymbol}
+                <span className="text-gray-600">Rate:</span>
+                <span className="font-semibold ml-2">
+                  1 SEI = {formatRate(presale.presaleRate)} {presale.tokenSymbol}
                 </span>
               </div>
               <div>
-                <span className='text-gray-600'>Soft Cap:</span>
-                <span className='font-semibold ml-2'>
-                  {formatAmount(presale.softcap)} HL
-                </span>
+                <span className="text-gray-600">Soft Cap:</span>
+                <span className="font-semibold ml-2">{formatAmount(presale.softcap)} SEI</span>
               </div>
               <div>
-                <span className='text-gray-600'>Hard Cap:</span>
-                <span className='font-semibold ml-2'>
-                  {formatAmount(presale.hardcap)} HL
-                </span>
+                <span className="text-gray-600">Hard Cap:</span>
+                <span className="font-semibold ml-2">{formatAmount(presale.hardcap)} SEI</span>
               </div>
               <div>
-                <span className='text-gray-600'>Start Time:</span>
-                <span className='font-semibold ml-2'>
-                  {formatDateTime(presale.startTime)}
-                </span>
+                <span className="text-gray-600">Start Time:</span>
+                <span className="font-semibold ml-2">{formatDateTime(presale.startTime)}</span>
               </div>
               <div>
-                <span className='text-gray-600'>End Time:</span>
-                <span className='font-semibold ml-2'>
-                  {formatDateTime(presale.endTime)}
-                </span>
+                <span className="text-gray-600">End Time:</span>
+                <span className="font-semibold ml-2">{formatDateTime(presale.endTime)}</span>
               </div>
               {presaleStatus && (
                 <>
                   <div>
-                    <span className='text-gray-600'>Total Contributed:</span>
-                    <span className='font-semibold ml-2'>
-                      {formatAmount(presaleStatus.totalContributed)} HL
+                    <span className="text-gray-600">Total Contributed:</span>
+                    <span className="font-semibold ml-2">
+                      {formatAmount(presaleStatus.totalContributed)} SEI
                     </span>
                   </div>
                   <div>
-                    <span className='text-gray-600'>Status:</span>
-                    <span className='font-semibold ml-2'>
+                    <span className="text-gray-600">Status:</span>
+                    <span className="font-semibold ml-2">
                       {presaleStatus.isFinalized ? 'Finalized' : 'Active'}
                     </span>
                   </div>
@@ -249,61 +229,54 @@ export default function ParticipateFormWrapper({
 
             {/* Status Error */}
             {statusError && (
-              <div className='mt-4 bg-red-50 border border-red-200 rounded-lg p-4'>
-                <p className='text-sm text-red-800'>{statusError}</p>
+              <div className="mt-4 bg-red-50 border border-red-200 rounded-lg p-4">
+                <p className="text-sm text-red-800">{statusError}</p>
               </div>
             )}
           </div>
 
           {/* Participation Form */}
-          <div className='bg-white rounded-2xl shadow-xl p-8'>
-            <h3 className='text-xl font-bold text-light mb-6'>
-              Contribute HL Tokens
-            </h3>
+          <div className="bg-white rounded-2xl shadow-xl p-8">
+            <h3 className="text-xl font-bold text-light mb-6">Contribute SEI Tokens</h3>
 
             {!isConnected ? (
-              <div className='text-center py-8'>
-                <p className='text-gray-600 mb-4'>
-                  Please connect your wallet to participate
-                </p>
+              <div className="text-center py-8">
+                <p className="text-gray-600 mb-4">Please connect your wallet to participate</p>
               </div>
             ) : (
-              <div className='space-y-6'>
+              <div className="space-y-6">
                 {/* Amount Input */}
                 <div>
-                  <label
-                    htmlFor='amount'
-                    className='block text-sm font-medium text-gray-700 mb-2'
-                  >
-                    Amount (HL)
+                  <label htmlFor="amount" className="block text-sm font-medium text-gray-700 mb-2">
+                    Amount (SEI)
                   </label>
-                  <div className='relative'>
+                  <div className="relative">
                     <input
-                      type='number'
-                      id='amount'
+                      type="number"
+                      id="amount"
                       value={amount}
                       onChange={(e) => setAmount(e.target.value)}
-                      placeholder='0.0'
-                      min='0'
-                      step='0.01'
-                      className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent'
+                      placeholder="0.0"
+                      min="0"
+                      step="0.01"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                       disabled={isPending || isConfirming || !!statusError}
                     />
-                    <div className='absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500'>
-                      HL
+                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+                      SEI
                     </div>
                   </div>
                 </div>
 
                 {/* Tokens to Receive */}
                 {amount && parseFloat(amount) > 0 && (
-                  <div className='bg-orange-50 rounded-lg p-4'>
-                    <div className='flex justify-between items-center'>
-                      <span className='text-gray-700'>You will receive:</span>
+                  <div className="bg-orange-50 rounded-lg p-4">
+                    <div className="flex justify-between items-center">
+                      <span className="text-gray-700">You will receive:</span>
                       <span
-                        className='font-bold'
+                        className="font-bold"
                         style={{
-                          backgroundImage: 'url("/MagmaBannerBackground.jpg")',
+                          backgroundImage: 'url("/SeiLaunchBannerBackground.jpg")',
                           backgroundSize: 'cover',
                           backgroundPosition: 'center',
                           WebkitBackgroundClip: 'text',
@@ -319,10 +292,8 @@ export default function ParticipateFormWrapper({
 
                 {/* Debug Info */}
                 {error && (
-                  <div className='bg-red-50 border border-red-200 rounded-lg p-4'>
-                    <p className='text-sm text-red-800'>
-                      Error: {error.message}
-                    </p>
+                  <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                    <p className="text-sm text-red-800">Error: {error.message}</p>
                   </div>
                 )}
 
@@ -338,7 +309,7 @@ export default function ParticipateFormWrapper({
                   style={
                     !isPending && !isConfirming && !statusError
                       ? {
-                          backgroundImage: 'url("/Magma Banner.jpg")',
+                          backgroundImage: 'url("/SeiLaunchBannerBackground.jpg")',
                           backgroundSize: 'cover',
                           backgroundPosition: 'center',
                         }
@@ -347,10 +318,10 @@ export default function ParticipateFormWrapper({
                 >
                   {/* Dark overlay for better text readability */}
                   {!isPending && !isConfirming && !statusError && (
-                    <div className='absolute inset-0 bg-black/30'></div>
+                    <div className="absolute inset-0 bg-black/30"></div>
                   )}
 
-                  <div className='relative z-10'>
+                  <div className="relative z-10">
                     {isPending
                       ? 'Confirming...'
                       : isConfirming
@@ -363,25 +334,24 @@ export default function ParticipateFormWrapper({
 
                 {/* Transaction Status */}
                 {isSuccess && (
-                  <div className='bg-green-50 border border-green-200 rounded-lg p-4'>
-                    <div className='flex items-center'>
-                      <div className='flex-shrink-0'>
+                  <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                    <div className="flex items-center">
+                      <div className="flex-shrink-0">
                         <svg
-                          className='h-5 w-5 text-green-400'
-                          viewBox='0 0 20 20'
-                          fill='currentColor'
+                          className="h-5 w-5 text-red-400"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
                         >
                           <path
-                            fillRule='evenodd'
-                            d='M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z'
-                            clipRule='evenodd'
+                            fillRule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 001.414 0l4-4z"
+                            clipRule="evenodd"
                           />
                         </svg>
                       </div>
-                      <div className='ml-3'>
-                        <p className='text-sm font-medium text-green-800'>
-                          Transaction successful! You have successfully
-                          contributed to the presale.
+                      <div className="ml-3">
+                        <p className="text-sm font-medium text-red-800">
+                          Transaction successful! You have successfully contributed to the presale.
                         </p>
                       </div>
                     </div>
@@ -390,11 +360,11 @@ export default function ParticipateFormWrapper({
 
                 {/* Transaction Hash */}
                 {hash && (
-                  <div className='bg-blue-50 border text-center border-blue-200 text-wrap rounded-lg p-4'>
+                  <div className="bg-blue-50 border text-center border-blue-200 text-wrap rounded-lg p-4">
                     <a
-                      href={`https://testnet.purrsec.com/tx/${hash}`}
-                      target='_blank'
-                      className='w-full text-sm text-center text-blue-800 text-wrap underline'
+                      href={`https://seiscan.io/tx/${hash}`}
+                      target="_blank"
+                      className="w-full text-sm text-center text-blue-800 text-wrap underline"
                     >
                       Transaction on explorer
                     </a>

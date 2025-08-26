@@ -35,10 +35,7 @@ interface PoolData {
   tokenSymbol: string;
 }
 
-export default function TransactionList({
-  poolAddress,
-  tokenSymbol,
-}: TransactionListProps) {
+export default function TransactionList({ poolAddress, tokenSymbol }: TransactionListProps) {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -80,10 +77,7 @@ export default function TransactionList({
         const fromBlock = latestBlock > 10000n ? latestBlock - 10000n : 0n;
         console.log('📦 From block:', fromBlock.toString());
         console.log('📦 To block:', latestBlock.toString());
-        console.log(
-          '📦 Block range size:',
-          (latestBlock - fromBlock).toString()
-        );
+        console.log('📦 Block range size:', (latestBlock - fromBlock).toString());
 
         // First, let's try to get the token contract info to verify it exists
         try {
@@ -92,7 +86,7 @@ export default function TransactionList({
           });
           console.log(
             '🔍 Token contract bytecode length:',
-            tokenCode ? tokenCode.length : 'No bytecode'
+            tokenCode ? tokenCode.length : 'No bytecode',
           );
 
           // Try to get basic token info
@@ -119,9 +113,7 @@ export default function TransactionList({
         }
 
         // Try to get all Transfer events using multiple methods
-        console.log(
-          '🔍 Attempting to fetch Transfer events from genesis block...'
-        );
+        console.log('🔍 Attempting to fetch Transfer events from genesis block...');
 
         let transferEvents: any[] = [];
 
@@ -130,15 +122,12 @@ export default function TransactionList({
           const events1 = await publicClient.getLogs({
             address: tokenAddress as `0x${string}`,
             event: parseAbiItem(
-              'event Transfer(address indexed from, address indexed to, uint256 value)'
+              'event Transfer(address indexed from, address indexed to, uint256 value)',
             ),
             fromBlock: 0n, // Always search from genesis
             toBlock: latestBlock,
           });
-          console.log(
-            '📊 Method 1 (parseAbiItem from genesis) found:',
-            events1.length
-          );
+          console.log('📊 Method 1 (parseAbiItem from genesis) found:', events1.length);
           transferEvents = events1;
         } catch (err) {
           console.error('❌ Method 1 failed:', err);
@@ -160,10 +149,7 @@ export default function TransactionList({
             fromBlock: 0n, // Always search from genesis
             toBlock: latestBlock,
           });
-          console.log(
-            '📊 Method 2 (event object from genesis) found:',
-            events2.length
-          );
+          console.log('📊 Method 2 (event object from genesis) found:', events2.length);
 
           if (events2.length > transferEvents.length) {
             console.log('✅ Method 2 found more events, using those instead');
@@ -180,20 +166,14 @@ export default function TransactionList({
             fromBlock: 0n, // Always search from genesis
             toBlock: latestBlock,
           });
-          console.log(
-            '📊 Method 3 (all logs from genesis) found:',
-            allLogs.length
-          );
+          console.log('📊 Method 3 (all logs from genesis) found:', allLogs.length);
 
           const transferSignature =
             '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef';
           const manualTransferEvents = allLogs.filter(
-            (log) => log.topics && log.topics[0] === transferSignature
+            (log) => log.topics && log.topics[0] === transferSignature,
           );
-          console.log(
-            '📊 Method 3 filtered Transfer events:',
-            manualTransferEvents.length
-          );
+          console.log('📊 Method 3 filtered Transfer events:', manualTransferEvents.length);
 
           if (manualTransferEvents.length > transferEvents.length) {
             console.log('✅ Method 3 found more events, using those instead');
@@ -225,9 +205,7 @@ export default function TransactionList({
             console.log('📊 Genesis block search found:', genesisEvents.length);
 
             if (genesisEvents.length > transferEvents.length) {
-              console.log(
-                '✅ Genesis search found more events, using those instead'
-              );
+              console.log('✅ Genesis search found more events, using those instead');
               transferEvents = genesisEvents;
             }
           } catch (err) {
@@ -245,16 +223,15 @@ export default function TransactionList({
           // Group events by type
           const eventsByType = {
             mint: transferEvents.filter(
-              (e) =>
-                e.args?.from === '0x0000000000000000000000000000000000000000'
+              (e) => e.args?.from === '0x0000000000000000000000000000000000000000',
             ),
             burn: transferEvents.filter(
-              (e) => e.args?.to === '0x0000000000000000000000000000000000000000'
+              (e) => e.args?.to === '0x0000000000000000000000000000000000000000',
             ),
             transfer: transferEvents.filter(
               (e) =>
                 e.args?.from !== '0x0000000000000000000000000000000000000000' &&
-                e.args?.to !== '0x0000000000000000000000000000000000000000'
+                e.args?.to !== '0x0000000000000000000000000000000000000000',
             ),
           };
 
@@ -272,7 +249,7 @@ export default function TransactionList({
               hash: e.transactionHash,
               to: e.args?.to,
               value: e.args?.value?.toString(),
-            }))
+            })),
           );
 
           console.log(
@@ -282,7 +259,7 @@ export default function TransactionList({
               hash: e.transactionHash,
               from: e.args?.from,
               value: e.args?.value?.toString(),
-            }))
+            })),
           );
 
           console.log(
@@ -293,7 +270,7 @@ export default function TransactionList({
               from: e.args?.from,
               to: e.args?.to,
               value: e.args?.value?.toString(),
-            }))
+            })),
           );
 
           // Check for any patterns in block numbers
@@ -305,14 +282,12 @@ export default function TransactionList({
             '📊 Block number range:',
             Math.min(...blockNumbers),
             'to',
-            Math.max(...blockNumbers)
+            Math.max(...blockNumbers),
           );
         }
 
         if (transferEvents.length === 0) {
-          console.log(
-            '❌ No Transfer events found. Token might not have any transfers yet.'
-          );
+          console.log('❌ No Transfer events found. Token might not have any transfers yet.');
           setTransactions([]);
           setIsLoading(false);
           return;
@@ -335,16 +310,13 @@ export default function TransactionList({
         // Process the events into transactions
         const processedTransactions: Transaction[] = await Promise.all(
           transferEvents.map(async (event, index) => {
-            console.log(
-              `🔄 Processing event ${index + 1}/${transferEvents.length}:`,
-              {
-                blockNumber: event.blockNumber.toString(),
-                transactionHash: event.transactionHash,
-                from: event.args.from,
-                to: event.args.to,
-                value: event.args.value?.toString(),
-              }
-            );
+            console.log(`🔄 Processing event ${index + 1}/${transferEvents.length}:`, {
+              blockNumber: event.blockNumber.toString(),
+              transactionHash: event.transactionHash,
+              from: event.args.from,
+              to: event.args.to,
+              value: event.args.value?.toString(),
+            });
 
             // Get block details for timestamp
             const block = await publicClient.getBlock({
@@ -366,41 +338,28 @@ export default function TransactionList({
               from: event.args.from,
               to: event.args.to,
               poolAddress: poolAddress.toLowerCase(),
-              isFromZero:
-                event.args.from ===
-                '0x0000000000000000000000000000000000000000',
-              isToZero:
-                event.args.to === '0x0000000000000000000000000000000000000000',
-              isFromPool:
-                event.args.from.toLowerCase() === poolAddress.toLowerCase(),
-              isToPool:
-                event.args.to.toLowerCase() === poolAddress.toLowerCase(),
+              isFromZero: event.args.from === '0x0000000000000000000000000000000000000000',
+              isToZero: event.args.to === '0x0000000000000000000000000000000000000000',
+              isFromPool: event.args.from.toLowerCase() === poolAddress.toLowerCase(),
+              isToPool: event.args.to.toLowerCase() === poolAddress.toLowerCase(),
             });
 
-            if (
-              event.args.from === '0x0000000000000000000000000000000000000000'
-            ) {
+            if (event.args.from === '0x0000000000000000000000000000000000000000') {
               // Mint: from zero address
               type = 'mint';
               user = event.args.to;
               console.log('✅ Identified as MINT');
-            } else if (
-              event.args.to === '0x0000000000000000000000000000000000000000'
-            ) {
+            } else if (event.args.to === '0x0000000000000000000000000000000000000000') {
               // Burn: to zero address
               type = 'burn';
               user = event.args.from;
               console.log('✅ Identified as BURN');
-            } else if (
-              event.args.from.toLowerCase() === poolAddress.toLowerCase()
-            ) {
+            } else if (event.args.from.toLowerCase() === poolAddress.toLowerCase()) {
               // Buy: from pool contract (presale participation)
               type = 'buy';
               user = event.args.to;
               console.log('✅ Identified as BUY');
-            } else if (
-              event.args.to.toLowerCase() === poolAddress.toLowerCase()
-            ) {
+            } else if (event.args.to.toLowerCase() === poolAddress.toLowerCase()) {
               // Sell: to pool contract (refund/withdrawal)
               type = 'sell';
               user = event.args.from;
@@ -425,17 +384,11 @@ export default function TransactionList({
 
             console.log('✅ Created transaction:', transaction);
             return transaction;
-          })
+          }),
         );
 
-        console.log(
-          '📊 All processed transactions before sorting:',
-          processedTransactions
-        );
-        console.log(
-          '📊 Processed transactions count:',
-          processedTransactions.length
-        );
+        console.log('📊 All processed transactions before sorting:', processedTransactions);
+        console.log('📊 Processed transactions count:', processedTransactions.length);
 
         // Sort by timestamp (newest first)
         processedTransactions.sort((a, b) => b.timestamp - a.timestamp);
@@ -448,17 +401,11 @@ export default function TransactionList({
         // Remove duplicates based on transaction hash
         const uniqueTransactions = recentTransactions.filter(
           (transaction, index, self) =>
-            index === self.findIndex((t) => t.hash === transaction.hash)
+            index === self.findIndex((t) => t.hash === transaction.hash),
         );
 
-        console.log(
-          '✅ Final processed transactions:',
-          recentTransactions.length
-        );
-        console.log(
-          '✅ Unique transactions after deduplication:',
-          uniqueTransactions.length
-        );
+        console.log('✅ Final processed transactions:', recentTransactions.length);
+        console.log('✅ Unique transactions after deduplication:', uniqueTransactions.length);
         console.log('📊 All transactions:', recentTransactions);
         console.log('📊 Unique transactions:', uniqueTransactions);
 
@@ -466,9 +413,7 @@ export default function TransactionList({
       } catch (err) {
         console.error('❌ Error fetching transactions:', err);
         setError(
-          `Failed to fetch transactions: ${
-            err instanceof Error ? err.message : 'Unknown error'
-          }`
+          `Failed to fetch transactions: ${err instanceof Error ? err.message : 'Unknown error'}`,
         );
       } finally {
         setIsLoading(false);
@@ -514,18 +459,18 @@ export default function TransactionList({
       case 'buy':
       case 'mint':
         return (
-          <div className='w-8 h-8 bg-green-100 rounded-full flex items-center justify-center'>
+          <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center">
             <svg
-              className='w-4 h-4 text-green-600'
-              fill='none'
-              stroke='currentColor'
-              viewBox='0 0 24 24'
+              className="w-4 h-4 text-red-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
             >
               <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
+                strokeLinecap="round"
+                strokeLinejoin="round"
                 strokeWidth={2}
-                d='M5 10l7-7m0 0l7 7m-7-7v18'
+                d="M5 10l7-7m0 0l7 7m-7-7v18"
               />
             </svg>
           </div>
@@ -533,36 +478,36 @@ export default function TransactionList({
       case 'sell':
       case 'burn':
         return (
-          <div className='w-8 h-8 bg-red-100 rounded-full flex items-center justify-center'>
+          <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center">
             <svg
-              className='w-4 h-4 text-red-600'
-              fill='none'
-              stroke='currentColor'
-              viewBox='0 0 24 24'
+              className="w-4 h-4 text-red-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
             >
               <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
+                strokeLinecap="round"
+                strokeLinejoin="round"
                 strokeWidth={2}
-                d='M19 14l-7 7m0 0l-7-7m7 7V3'
+                d="M19 14l-7 7m0 0l-7-7m7 7V3"
               />
             </svg>
           </div>
         );
       default:
         return (
-          <div className='w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center'>
+          <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
             <svg
-              className='w-4 h-4 text-gray-600'
-              fill='none'
-              stroke='currentColor'
-              viewBox='0 0 24 24'
+              className="w-4 h-4 text-gray-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
             >
               <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
+                strokeLinecap="round"
+                strokeLinejoin="round"
                 strokeWidth={2}
-                d='M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'
+                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
               />
             </svg>
           </div>
@@ -601,108 +546,88 @@ export default function TransactionList({
   };
 
   return (
-    <div className='bg-white rounded-2xl shadow-xl p-6'>
-      <div className='flex items-center justify-between mb-6'>
-        <h3 className='text-xl font-bold text-light'>Recent Transactions</h3>
-        <div className='flex items-center space-x-2'>
+    <div className="bg-white rounded-2xl shadow-xl p-6">
+      <div className="flex items-center justify-between mb-6">
+        <h3 className="text-xl font-bold text-light">Recent Transactions</h3>
+        <div className="flex items-center space-x-2">
           {tokenAddress && (
-            <div className='text-xs text-gray-500'>
-              Token: {shortenAddress(tokenAddress)}
-            </div>
+            <div className="text-xs text-gray-500">Token: {shortenAddress(tokenAddress)}</div>
           )}
         </div>
       </div>
 
       {isLoading ? (
-        <div className='space-y-4'>
+        <div className="space-y-4">
           {[...Array(5)].map((_, i) => (
-            <div
-              key={i}
-              className='flex items-center space-x-4 animate-pulse'
-            >
-              <div className='w-8 h-8 bg-gray-200 rounded-full'></div>
-              <div className='flex-1 space-y-2'>
-                <div className='h-4 bg-gray-200 rounded w-24'></div>
-                <div className='h-3 bg-gray-200 rounded w-32'></div>
+            <div key={i} className="flex items-center space-x-4 animate-pulse">
+              <div className="w-8 h-8 bg-gray-200 rounded-full"></div>
+              <div className="flex-1 space-y-2">
+                <div className="h-4 bg-gray-200 rounded w-24"></div>
+                <div className="h-3 bg-gray-200 rounded w-32"></div>
               </div>
-              <div className='h-4 bg-gray-200 rounded w-20'></div>
+              <div className="h-4 bg-gray-200 rounded w-20"></div>
             </div>
           ))}
         </div>
       ) : error ? (
-        <div className='text-center py-8'>
-          <div className='text-red-500 mb-2'>
-            <svg
-              className='w-8 h-8 mx-auto'
-              fill='none'
-              stroke='currentColor'
-              viewBox='0 0 24 24'
-            >
+        <div className="text-center py-8">
+          <div className="text-red-500 mb-2">
+            <svg className="w-8 h-8 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
+                strokeLinecap="round"
+                strokeLinejoin="round"
                 strokeWidth={2}
-                d='M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'
+                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
               />
             </svg>
           </div>
-          <p className='text-gray-600'>{error}</p>
+          <p className="text-gray-600">{error}</p>
           <button
             onClick={() => window.location.reload()}
-            className='mt-2 text-orange-600 hover:text-orange-700 text-sm font-medium'
+            className="mt-2 text-orange-600 hover:text-orange-700 text-sm font-medium"
           >
             Try Again
           </button>
         </div>
       ) : !tokenAddress ? (
-        <div className='text-center py-8'>
-          <div className='text-gray-400 mb-2'>
-            <svg
-              className='w-8 h-8 mx-auto'
-              fill='none'
-              stroke='currentColor'
-              viewBox='0 0 24 24'
-            >
+        <div className="text-center py-8">
+          <div className="text-gray-400 mb-2">
+            <svg className="w-8 h-8 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
+                strokeLinecap="round"
+                strokeLinejoin="round"
                 strokeWidth={2}
-                d='M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
               />
             </svg>
           </div>
-          <p className='text-gray-600'>Loading token information...</p>
+          <p className="text-gray-600">Loading token information...</p>
         </div>
       ) : transactions.length === 0 ? (
-        <div className='text-center py-8'>
-          <div className='text-gray-400 mb-2'>
-            <svg
-              className='w-8 h-8 mx-auto'
-              fill='none'
-              stroke='currentColor'
-              viewBox='0 0 24 24'
-            >
+        <div className="text-center py-8">
+          <div className="text-gray-400 mb-2">
+            <svg className="w-8 h-8 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
+                strokeLinecap="round"
+                strokeLinejoin="round"
                 strokeWidth={2}
-                d='M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
               />
             </svg>
           </div>
-          <p className='text-gray-600'>No transactions found for this token</p>
-          <p className='text-xs text-gray-500 mt-2'>
+          <p className="text-gray-600">No transactions found for this token</p>
+          <p className="text-xs text-gray-500 mt-2">
             Transactions will appear here once the token is active
           </p>
         </div>
       ) : (
-        <div className='space-y-4'>
+        <div className="space-y-4">
           {transactions.map((tx, index) => (
             <div
               key={index}
               className={`flex items-center space-x-4 p-4 rounded-lg border ${
                 tx.type === 'buy' || tx.type === 'mint'
-                  ? 'bg-green-50 border-green-200'
+                  ? 'bg-red-50 border-red-200'
                   : 'bg-red-50 border-red-200'
               }`}
             >
@@ -710,60 +635,48 @@ export default function TransactionList({
               {getTransactionIcon(tx.type)}
 
               {/* Transaction Details */}
-              <div className='flex-1 min-w-0'>
-                <div className='flex items-center justify-between'>
-                  <div className='flex items-center space-x-2'>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
                     <span
                       className={`font-semibold text-sm ${
-                        tx.type === 'buy' || tx.type === 'mint'
-                          ? 'text-green-800'
-                          : 'text-red-800'
+                        tx.type === 'buy' || tx.type === 'mint' ? 'text-red-800' : 'text-red-800'
                       }`}
                     >
                       {getTransactionTypeLabel(tx.type)}
                     </span>
-                    <span className='text-xs text-gray-500'>
+                    <span className="text-xs text-gray-500">
                       {formatAmount(tx.amount)} {tokenSymbol}
                     </span>
                   </div>
-                  <span className='text-xs text-gray-500'>
-                    {formatDateTime(tx.timestamp)}
-                  </span>
+                  <span className="text-xs text-gray-500">{formatDateTime(tx.timestamp)}</span>
                 </div>
 
-                <div className='mt-1'>
-                  <p className='text-xs text-gray-300'>
-                    {getTransactionDescription(tx)}
-                  </p>
+                <div className="mt-1">
+                  <p className="text-xs text-gray-300">{getTransactionDescription(tx)}</p>
                 </div>
 
-                <div className='flex items-center justify-between mt-2'>
-                  <div className='flex items-center space-x-2'>
-                    <span className='text-xs text-gray-600'>From:</span>
-                    <span className='text-xs font-mono text-gray-300'>
+                <div className="flex items-center justify-between mt-2">
+                  <div className="flex items-center space-x-2">
+                    <span className="text-xs text-gray-600">From:</span>
+                    <span className="text-xs font-mono text-gray-300">
                       {shortenAddress(tx.from)}
                     </span>
                   </div>
-                  <div className='flex items-center space-x-2'>
-                    <span className='text-xs text-gray-600'>To:</span>
-                    <span className='text-xs font-mono text-gray-300'>
-                      {shortenAddress(tx.to)}
-                    </span>
+                  <div className="flex items-center space-x-2">
+                    <span className="text-xs text-gray-600">To:</span>
+                    <span className="text-xs font-mono text-gray-300">{shortenAddress(tx.to)}</span>
                   </div>
                 </div>
 
-                <div className='flex items-center justify-between mt-1'>
-                  <div className='flex items-center space-x-2'>
-                    <span className='text-xs text-gray-600'>Block:</span>
-                    <span className='text-xs font-mono text-gray-300'>
-                      {tx.blockNumber}
-                    </span>
+                <div className="flex items-center justify-between mt-1">
+                  <div className="flex items-center space-x-2">
+                    <span className="text-xs text-gray-600">Block:</span>
+                    <span className="text-xs font-mono text-gray-300">{tx.blockNumber}</span>
                   </div>
-                  <div className='flex items-center space-x-2'>
-                    <span className='text-xs text-gray-600'>Hash:</span>
-                    <span className='text-xs font-mono text-gray-300'>
-                      {shortenHash(tx.hash)}
-                    </span>
+                  <div className="flex items-center space-x-2">
+                    <span className="text-xs text-gray-600">Hash:</span>
+                    <span className="text-xs font-mono text-gray-300">{shortenHash(tx.hash)}</span>
                   </div>
                 </div>
               </div>
@@ -774,20 +687,20 @@ export default function TransactionList({
 
       {/* Transaction Count */}
       {transactions.length > 0 && (
-        <div className='mt-6 text-center'>
-          <p className='text-sm text-gray-600'>
+        <div className="mt-6 text-center">
+          <p className="text-sm text-gray-600">
             Showing {transactions.length} most recent transactions
             {transactions.length < 5 && (
-              <span className='text-orange-600 ml-1'>
+              <span className="text-orange-600 ml-1">
                 (only {transactions.length} found on blockchain)
               </span>
             )}
           </p>
           <a
-            href={`https://testnet.purrsec.com/token/${tokenAddress}`}
-            target='_blank'
-            rel='noopener noreferrer'
-            className='inline-block mt-2 text-orange-600 hover:text-orange-700 text-sm font-medium hover:underline'
+            href={`https://seiscan.io/token/${tokenAddress}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block mt-2 text-orange-600 hover:text-orange-700 text-sm font-medium hover:underline"
           >
             View All Transactions →
           </a>

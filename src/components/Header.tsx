@@ -29,8 +29,8 @@ export default function Header() {
               }}
             >
               <Image
-                src="/hllogo.svg"
-                alt="Hyped Logo"
+                src="/SeiLaunchLogo.svg"
+                alt="Sei Launch Logo"
                 width={124}
                 height={124}
                 className="w-12 h-auto"

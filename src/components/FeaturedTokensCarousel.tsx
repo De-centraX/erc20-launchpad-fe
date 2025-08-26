@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { useReadContract } from "wagmi";
-import { CONTRACTS } from "@/contracts/addresses";
-import PoolManagerABI from "@/contracts/abis/PoolManager.json";
-import PoolABI from "@/contracts/abis/Pool.json";
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useReadContract } from 'wagmi';
+import { CONTRACTS } from '@/contracts/addresses';
+import PoolManagerABI from '@/contracts/abis/PoolManager.json';
+import PoolABI from '@/contracts/abis/Pool.json';
 
 export default function FeaturedTokensCarousel() {
   const router = useRouter();
@@ -14,44 +14,42 @@ export default function FeaturedTokensCarousel() {
   const { data: presales } = useReadContract({
     address: CONTRACTS.POOL_MANAGER,
     abi: PoolManagerABI,
-    functionName: "getAllPresales",
+    functionName: 'getAllPresales',
   });
 
   // Get data for up to 5 presales for the carousel
   const featuredPresales =
-    Array.isArray(presales) && presales.length > 0
-      ? presales.slice(-5).reverse()
-      : [];
+    Array.isArray(presales) && presales.length > 0 ? presales.slice(-5).reverse() : [];
 
   // Get data for each featured presale - using the exact same approach as FeaturedTokenSidebar
   const { data: presaleData1 } = useReadContract({
     address: featuredPresales[0] as `0x${string}`,
     abi: PoolABI,
-    functionName: "getPoolData",
+    functionName: 'getPoolData',
   });
 
   const { data: presaleData2 } = useReadContract({
     address: featuredPresales[1] as `0x${string}`,
     abi: PoolABI,
-    functionName: "getPoolData",
+    functionName: 'getPoolData',
   });
 
   const { data: presaleData3 } = useReadContract({
     address: featuredPresales[2] as `0x${string}`,
     abi: PoolABI,
-    functionName: "getPoolData",
+    functionName: 'getPoolData',
   });
 
   const { data: presaleData4 } = useReadContract({
     address: featuredPresales[3] as `0x${string}`,
     abi: PoolABI,
-    functionName: "getPoolData",
+    functionName: 'getPoolData',
   });
 
   const { data: presaleData5 } = useReadContract({
     address: featuredPresales[4] as `0x${string}`,
     abi: PoolABI,
-    functionName: "getPoolData",
+    functionName: 'getPoolData',
   });
 
   const handleParticipate = (presaleData: any, poolAddress: string) => {
@@ -66,7 +64,7 @@ export default function FeaturedTokensCarousel() {
         hardcap: presaleData.hardcap.toString(),
         startTime: presaleData.startTime.toString(),
         endTime: presaleData.endTime.toString(),
-        status: "Live", // Default status
+        status: 'Live', // Default status
       };
 
       // Navigate to participate page with the presale data
@@ -120,21 +118,19 @@ export default function FeaturedTokensCarousel() {
     uniqueKey: string;
     cardIndex: number;
   }) => {
-    const [tokenImage, setTokenImage] = useState<string>("");
+    const [tokenImage, setTokenImage] = useState<string>('');
 
     // Fetch token metadata on mount
     useEffect(() => {
       const fetchMetadata = async () => {
         try {
-          const response = await fetch(
-            `/api/token-metadata?address=${presale.address}`
-          );
+          const response = await fetch(`/api/token-metadata?address=${presale.address}`);
           if (response.ok) {
             const metadata = await response.json();
-            setTokenImage(metadata.imageUrl || "");
+            setTokenImage(metadata.imageUrl || '');
           }
         } catch (error) {
-          console.error("Failed to fetch metadata:", error);
+          console.error('Failed to fetch metadata:', error);
         }
       };
 
@@ -173,15 +169,13 @@ export default function FeaturedTokensCarousel() {
               {/* Token Name */}
               <div className="flex items-center justify-center space-x-2">
                 <p className="text-xl font-semibold text-white">
-                  {(presale.data as any)?.tokenName ?? "Loading..."}
+                  {(presale.data as any)?.tokenName ?? 'Loading...'}
                 </p>
               </div>
             </div>
 
             <div className="text-center">
-              <div className="px-6 py-3 text-sm text-white/80">
-                Click to Participate
-              </div>
+              <div className="px-6 py-3 text-sm text-white/80">Click to Participate</div>
             </div>
           </div>
         </div>
@@ -205,14 +199,15 @@ export default function FeaturedTokensCarousel() {
               />
             ))}
             {/* Duplicate set for seamless infinite loop */}
-            {availablePresales.map((presale, index) => (
-              <TokenCard
-                key={`duplicate-${index}`}
-                presale={presale}
-                uniqueKey={`duplicate-${index}`}
-                cardIndex={index}
-              />
-            ))}
+            {availablePresales?.length > 1 &&
+              availablePresales.map((presale, index) => (
+                <TokenCard
+                  key={`duplicate-${index}`}
+                  presale={presale}
+                  uniqueKey={`duplicate-${index}`}
+                  cardIndex={index}
+                />
+              ))}
           </div>
         </div>
       </div>

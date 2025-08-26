@@ -5,6 +5,7 @@ import { useAccount, useWriteContract, useWaitForTransactionReceipt } from 'wagm
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { parseEther } from 'viem';
 import { useEffect } from 'react';
+import { CONTRACTS } from '@/contracts/addresses';
 
 // PoolManager ABI - only the functions we need
 const POOL_MANAGER_ABI = [
@@ -35,8 +36,6 @@ const POOL_MANAGER_ABI = [
     type: 'function',
   },
 ] as const;
-
-const POOL_MANAGER_ADDRESS = '0x6c34f5f65838a749104847024DCAcF2e3BD54455';
 
 export default function CreateCoinForm() {
   const { isConnected } = useAccount();
@@ -84,10 +83,7 @@ export default function CreateCoinForm() {
             console.log('Log:', log);
 
             // Look for logs from the PoolManager contract
-            if (
-              log.address?.toLowerCase() ===
-              '0x6c34f5f65838a749104847024DCAcF2e3BD54455'.toLowerCase()
-            ) {
+            if (log.address?.toLowerCase() === CONTRACTS.POOL_MANAGER.toLowerCase()) {
               console.log('Found log from PoolManager contract');
               console.log('Topics count:', log.topics?.length);
               console.log('First topic:', log.topics?.[0]);
@@ -118,10 +114,7 @@ export default function CreateCoinForm() {
           // Additional debugging: log all topics from PoolManager logs
           console.log('🔍 Debugging: All PoolManager logs:');
           for (const log of receipt.logs) {
-            if (
-              log.address?.toLowerCase() ===
-              '0x6c34f5f65838a749104847024DCAcF2e3BD54455'.toLowerCase()
-            ) {
+            if (log.address?.toLowerCase() === CONTRACTS.POOL_MANAGER.toLowerCase()) {
               console.log('PoolManager log:', {
                 address: log.address,
                 topics: log.topics,
@@ -262,7 +255,7 @@ export default function CreateCoinForm() {
 
       // Call the contract
       writeContract({
-        address: POOL_MANAGER_ADDRESS,
+        address: CONTRACTS.POOL_MANAGER,
         abi: POOL_MANAGER_ABI,
         functionName: 'createPresale',
         args: [
@@ -323,7 +316,7 @@ export default function CreateCoinForm() {
             {hash && (
               <div className="bg-primary/10 border text-center border-primary/30 text-wrap rounded-lg p-4">
                 <a
-                  href={`https://testnet.purrsec.com/tx/${hash}`}
+                  href={`https://seiscan.io/tx/${hash}`}
                   target="_blank"
                   className="w-full text-sm text-center text-blue-800 text-wrap underline"
                 >
@@ -456,7 +449,7 @@ export default function CreateCoinForm() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-light mb-2">
-                    Presale Rate (tokens per HL) *
+                    Presale Rate (tokens per SEI) *
                   </label>
                   <input
                     type="number"
@@ -470,7 +463,7 @@ export default function CreateCoinForm() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-light mb-2">
-                    Soft Cap (HL) *
+                    Soft Cap (SEI) *
                   </label>
                   <input
                     type="number"
@@ -484,7 +477,7 @@ export default function CreateCoinForm() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-light mb-2">
-                    Hard Cap (HL) *
+                    Hard Cap (SEI) *
                   </label>
                   <input
                     type="number"
@@ -506,7 +499,7 @@ export default function CreateCoinForm() {
                       Listing Rate (Auto-calculated):
                     </span>
                     <span className="text-sm font-bold text-blue-900">
-                      {calculatedListingRate.toLocaleString()} tokens per HL (80% of presale rate)
+                      {calculatedListingRate.toLocaleString()} tokens per SEI (80% of presale rate)
                     </span>
                   </div>
                   <p className="text-xs text-blue-600 mt-1">
@@ -552,7 +545,7 @@ export default function CreateCoinForm() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-light mb-2">
-                    Minimum Buy (HL) *
+                    Minimum Buy (SEI) *
                   </label>
                   <input
                     type="number"
@@ -566,7 +559,7 @@ export default function CreateCoinForm() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-light mb-2">
-                    Maximum Buy (HL) *
+                    Maximum Buy (SEI) *
                   </label>
                   <input
                     type="number"

@@ -1,15 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import {
-  useAccount,
-  useReadContract,
-  usePublicClient,
-  useWriteContract,
-  useWaitForTransactionReceipt,
-} from 'wagmi';
+import { useAccount, usePublicClient, useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
 import { parseEther, formatEther } from 'viem';
-import PoolABI from '@/contracts/abis/Pool.json';
+import { CONTRACTS } from '@/contracts/addresses';
 
 // Uniswap V2 Router ABI for getAmountsOut and swap functions
 const ROUTER_ABI = [
@@ -65,7 +59,7 @@ const ROUTER_ABI = [
         type: 'uint256',
       },
     ],
-    name: 'swapExactTokensForETH',
+    name: 'swapTokensForExactSEI',
     outputs: [
       {
         internalType: 'uint256[]',
@@ -138,7 +132,7 @@ const ROUTER_ABI = [
         type: 'uint256',
       },
     ],
-    name: 'swapExactETHForTokens',
+    name: 'swapExactSEIForTokens',
     outputs: [
       {
         internalType: 'uint256[]',
@@ -183,17 +177,6 @@ export default function SwapInterface({
     hash,
   });
 
-  // Hardcoded addresses
-  const WHYPE_ADDRESS = '0x5555555555555555555555555555555555555555';
-  const ROUTER_ADDRESS = '0x85aA63EB2ab9BaAA74eAd7e7f82A571d74901853';
-
-  // Get pool data to check if finalized
-  const { data: poolData } = useReadContract({
-    address: poolAddress as `0x${string}`,
-    abi: PoolABI,
-    functionName: 'getPoolData',
-  });
-
   // Function to approve tokens
   const handleApprove = async () => {
     if (!isConnected || !publicClient || !tokenAddress) {
@@ -220,7 +203,7 @@ export default function SwapInterface({
           },
         ],
         functionName: 'approve',
-        args: [ROUTER_ADDRESS as `0x${string}`, parseEther(approvalAmount)],
+        args: [CONTRACTS.V2_ROUTER as `0x${string}`, parseEther(approvalAmount)],
       });
 
       console.log('🔐 Approval transaction sent:', result);
@@ -249,7 +232,7 @@ export default function SwapInterface({
                 },
               ],
               functionName: 'allowance',
-              args: [address as `0x${string}`, ROUTER_ADDRESS as `0x${string}`],
+              args: [address as `0x${string}`, CONTRACTS.V2_ROUTER as `0x${string}`],
             });
 
             const amountToApprove = parseEther(approvalAmount);
@@ -320,7 +303,7 @@ export default function SwapInterface({
             },
           ],
           functionName: 'allowance',
-          args: [address as `0x${string}`, ROUTER_ADDRESS as `0x${string}`],
+          args: [address as `0x${string}`, CONTRACTS.V2_ROUTER as `0x${string}`],
         });
 
         const amountToApprove = parseEther(amount);
@@ -355,8 +338,8 @@ export default function SwapInterface({
         direction: swapDirection,
         amount: amount,
         tokenAddress: tokenAddress,
-        whypeAddress: WHYPE_ADDRESS,
-        routerAddress: ROUTER_ADDRESS,
+        wethAddress: CONTRACTS.WETH,
+        routerAddress: CONTRACTS.V2_ROUTER,
         userAddress: address,
       });
 
@@ -374,11 +357,11 @@ export default function SwapInterface({
       // Determine the path based on swap direction
       let path: `0x${string}`[];
       if (swapDirection === 'buy') {
-        // Buy tokens: Hype -> Token (using WETH address for path, but sending native ETH)
-        path = [WHYPE_ADDRESS as `0x${string}`, tokenAddress as `0x${string}`];
+        // Buy tokens: Sei -> Token (using WETH address for path, but sending native ETH)
+        path = [CONTRACTS.WETH as `0x${string}`, tokenAddress as `0x${string}`];
       } else {
-        // Sell tokens: Token -> Hype (using WETH address for path, but receiving native ETH)
-        path = [tokenAddress as `0x${string}`, WHYPE_ADDRESS as `0x${string}`];
+        // Sell tokens: Token -> Sei (using WETH address for path, but receiving native ETH)
+        path = [tokenAddress as `0x${string}`, CONTRACTS.WETH as `0x${string}`];
       }
       console.log('🛤️ Swap path:', path);
 
@@ -396,27 +379,27 @@ export default function SwapInterface({
 
       // Execute the swap based on direction
       if (swapDirection === 'buy') {
-        // Buy tokens: Hype -> Token (use swapExactETHForTokens)
-        console.log('🟢 Executing buy swap with swapExactETHForTokens');
+        // Buy tokens: Sei -> Token (use swapExactSEIForTokens)
+        console.log('🟢 Executing buy swap with swapExactSEIForTokens');
         writeContract({
-          address: ROUTER_ADDRESS as `0x${string}`,
+          address: CONTRACTS.V2_ROUTER as `0x${string}`,
           abi: ROUTER_ABI,
-          functionName: 'swapExactETHForTokens',
+          functionName: 'swapExactSEIForTokens',
           args: [
             minAmountOut,
             path,
             address as `0x${string}`, // recipient address
             deadline,
           ],
-          value: amountInWei, // Send Hype ETH with the transaction
+          value: amountInWei, // Send Sei ETH with the transaction
         });
       } else {
-        // Sell tokens: Token -> Hype (use swapExactTokensForETH)
-        console.log('🔴 Executing sell swap with swapExactTokensForETH');
+        // Sell tokens: Token -> Sei (use swapTokensForExactSEI)
+        console.log('🔴 Executing sell swap with swapTokensForExactSEI');
         writeContract({
-          address: ROUTER_ADDRESS as `0x${string}`,
+          address: CONTRACTS.V2_ROUTER as `0x${string}`,
           abi: ROUTER_ABI,
-          functionName: 'swapExactTokensForETH',
+          functionName: 'swapTokensForExactSEI',
           args: [
             amountInWei,
             minAmountOut,
@@ -448,16 +431,16 @@ export default function SwapInterface({
       // Determine the path based on swap direction
       let path: `0x${string}`[];
       if (direction === 'buy') {
-        // Buy tokens: Hype -> Token (using WETH address for path, but sending native ETH)
-        path = [WHYPE_ADDRESS as `0x${string}`, tokenAddress as `0x${string}`];
+        // Buy tokens: Sei -> Token (using WETH address for path, but sending native ETH)
+        path = [CONTRACTS.WETH as `0x${string}`, tokenAddress as `0x${string}`];
       } else {
-        // Sell tokens: Token -> Hype (using WETH address for path, but receiving native ETH)
-        path = [tokenAddress as `0x${string}`, WHYPE_ADDRESS as `0x${string}`];
+        // Sell tokens: Token -> Sei (using WETH address for path, but receiving native ETH)
+        path = [tokenAddress as `0x${string}`, CONTRACTS.WETH as `0x${string}`];
       }
 
       // Call getAmountsOut on the router
       const amounts = await publicClient.readContract({
-        address: ROUTER_ADDRESS as `0x${string}`,
+        address: CONTRACTS.V2_ROUTER as `0x${string}`,
         abi: ROUTER_ABI,
         functionName: 'getAmountsOut',
         args: [amountInWei, path],
@@ -493,10 +476,10 @@ export default function SwapInterface({
       try {
         // Try to get amounts for a small amount to check if pair exists
         const testAmount = parseEther('0.001');
-        const testPath = [WHYPE_ADDRESS as `0x${string}`, tokenAddress as `0x${string}`];
+        const testPath = [CONTRACTS.WETH as `0x${string}`, tokenAddress as `0x${string}`];
 
         const amounts = await publicClient.readContract({
-          address: ROUTER_ADDRESS as `0x${string}`,
+          address: CONTRACTS.V2_ROUTER as `0x${string}`,
           abi: ROUTER_ABI,
           functionName: 'getAmountsOut',
           args: [testAmount, testPath],
@@ -504,11 +487,11 @@ export default function SwapInterface({
 
         console.log('✅ Liquidity pair exists, test amounts:', amounts);
 
-        // Check Hype ETH balance (for buy operations)
-        const hypeBalance = await publicClient.getBalance({
+        // Check ETH balance (for buy operations)
+        const balance = await publicClient.getBalance({
           address: address as `0x${string}`,
         });
-        console.log('💰 Hype Balance:', formatEther(hypeBalance));
+        console.log('💰Balance:', formatEther(balance));
 
         // Check token balance and approval (if selling)
         if (swapDirection === 'sell') {
@@ -557,7 +540,7 @@ export default function SwapInterface({
                   },
                 ],
                 functionName: 'allowance',
-                args: [address as `0x${string}`, ROUTER_ADDRESS as `0x${string}`],
+                args: [address as `0x${string}`, CONTRACTS.V2_ROUTER as `0x${string}`],
               }),
             ]);
 
@@ -635,12 +618,12 @@ export default function SwapInterface({
             </div>
             <div>
               <span className="text-gray-600">Status:</span>
-              <span className="font-semibold ml-2 text-green-600">Finalized & Listed</span>
+              <span className="font-semibold ml-2 text-red-600">Finalized & Listed</span>
             </div>
             <div>
               <span className="text-gray-600">Token Address:</span>
               <a
-                href={`https://testnet.purrsec.com/token/${tokenAddress}`}
+                href={`https://seiscan.io/token/${tokenAddress}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="font-mono text-xs font-semibold ml-2 text-blue-600 hover:text-blue-800 underline cursor-pointer"
@@ -667,8 +650,8 @@ export default function SwapInterface({
                   onClick={() => setSwapDirection('buy')}
                   className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all ${
                     swapDirection === 'buy'
-                      ? 'bg-green-600 text-white shadow-sm'
-                      : 'text-gray-600 hover:text-green-600'
+                      ? 'bg-red-600 text-white shadow-sm'
+                      : 'text-gray-600 hover:text-red-600'
                   }`}
                 >
                   Buy {tokenSymbol}
@@ -691,7 +674,7 @@ export default function SwapInterface({
                   htmlFor="swapAmount"
                   className="block text-sm font-medium text-gray-700 mb-2"
                 >
-                  {swapDirection === 'buy' ? 'Amount (Hype)' : `Amount (${tokenSymbol})`}
+                  {swapDirection === 'buy' ? 'Amount (Sei)' : `Amount (${tokenSymbol})`}
                 </label>
                 <div className="relative">
                   <input
@@ -702,11 +685,11 @@ export default function SwapInterface({
                     placeholder="0.0"
                     min="0"
                     step="0.001"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
                     disabled={isLoading}
                   />
                   <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">
-                    {swapDirection === 'buy' ? 'Hype' : tokenSymbol}
+                    {swapDirection === 'buy' ? 'Sei' : tokenSymbol}
                   </div>
                 </div>
               </div>
@@ -732,11 +715,11 @@ export default function SwapInterface({
 
               {/* Output Amount */}
               {amount && parseFloat(amount) > 0 && (
-                <div className="bg-green-50 rounded-lg p-4">
+                <div className="bg-red-50 rounded-lg p-4">
                   <div className="flex justify-between items-center">
                     <span className="text-gray-700">You will receive approximately:</span>
-                    <span className="font-bold text-green-800">
-                      {calculateOutput()} {swapDirection === 'buy' ? tokenSymbol : 'Hype'}
+                    <span className="font-bold text-red-800">
+                      {calculateOutput()} {swapDirection === 'buy' ? tokenSymbol : 'Sei'}
                     </span>
                   </div>
                 </div>
@@ -755,7 +738,7 @@ export default function SwapInterface({
                     min="0.1"
                     max="50"
                     step="0.1"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
                     placeholder="5.0"
                   />
                   <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">
@@ -772,7 +755,7 @@ export default function SwapInterface({
                   !amount || parseFloat(amount) <= 0 || isPending || isConfirming
                     ? 'bg-gray-400 text-white cursor-not-allowed'
                     : swapDirection === 'buy'
-                    ? 'bg-green-600 hover:bg-green-700 text-white'
+                    ? 'bg-red-600 hover:bg-red-700 text-white'
                     : 'bg-red-600 hover:bg-red-700 text-white'
                 }`}
               >
@@ -787,28 +770,24 @@ export default function SwapInterface({
 
               {/* Transaction Status */}
               {isSuccess && (
-                <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                <div className="bg-red-50 border border-red-200 rounded-lg p-4">
                   <div className="flex items-center">
                     <div className="flex-shrink-0">
-                      <svg
-                        className="h-5 w-5 text-green-400"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                      >
+                      <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
                         <path
                           fillRule="evenodd"
-                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                          d="M10 18a8 8 0 100-16 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
                           clipRule="evenodd"
                         />
                       </svg>
                     </div>
                     <div className="ml-3">
-                      <p className="text-sm font-medium text-green-800">
+                      <p className="text-sm font-medium text-red-800">
                         Swap successful! Your transaction has been completed.
                       </p>
-                      <p className="text-sm text-green-700 mt-1">
+                      <p className="text-sm text-red-700 mt-1">
                         You received: {calculateOutput()}{' '}
-                        {swapDirection === 'buy' ? tokenSymbol : 'Hype'}
+                        {swapDirection === 'buy' ? tokenSymbol : 'Sei'}
                       </p>
                     </div>
                   </div>
