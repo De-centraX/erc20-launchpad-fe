@@ -524,7 +524,7 @@ export default function ParticipateForm({ presale }: ParticipateFormProps) {
                       {hash && (
                         <div className="bg-blue-50 border text-center border-blue-200 text-wrap rounded-lg p-4">
                           <a
-                            href={`https://seiscan.io/tx/${hash}`}
+                            href={`https://seitrace.com/tx/${hash}?chain=atlantic-2`}
                             target="_blank"
                             className="w-full text-sm text-center text-blue-800 text-wrap underline"
                           >

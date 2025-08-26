@@ -408,7 +408,7 @@ export default function MyPositions() {
                         <p className="text-sm text-gray-300">
                           Pool:{' '}
                           <a
-                            href={`https://seiscan.io/address/${position.poolAddress}`}
+                            href={`https://seitrace.com/address/${position.poolAddress}?chain=atlantic-2`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-primary hover:text-primary/80 underline cursor-pointer"
@@ -420,7 +420,7 @@ export default function MyPositions() {
                         <p className="text-sm text-gray-300">
                           Token:{' '}
                           <a
-                            href={`https://seiscan.io/address/${position.tokenAddress}`}
+                            href={`https://seitrace.com/address/${position.tokenAddress}?chain=atlantic-2`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-primary hover:text-primary/80 underline cursor-pointer"

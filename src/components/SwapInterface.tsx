@@ -623,7 +623,7 @@ export default function SwapInterface({
             <div>
               <span className="text-gray-600">Token Address:</span>
               <a
-                href={`https://seiscan.io/token/${tokenAddress}`}
+                href={`https://seitrace.com/token/${tokenAddress}?chain=atlantic-2`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="font-mono text-xs font-semibold ml-2 text-blue-600 hover:text-blue-800 underline cursor-pointer"
