@@ -117,12 +117,13 @@ export default function CreateCoinForm() {
           let tokenAddress = null;
           try {
             console.log('🔍 Getting pool data to extract token address and deployment block...');
+            console.log('🔍 Public client available:', !!publicClient);
 
             // We need to wait a bit for the transaction to be processed
             await new Promise((resolve) => setTimeout(resolve, 2000));
 
             // Get the pool data to find the token address
-            const poolDataResponse = await fetch(`/api/presale-data?poolAddress=${poolAddress}`);
+            const poolDataResponse = await fetch(`/api/presale-data?address=${poolAddress}`);
             if (poolDataResponse.ok) {
               const poolData = await poolDataResponse.json();
               console.log('📦 Pool data received:', poolData);
@@ -135,15 +136,26 @@ export default function CreateCoinForm() {
                 // Note: This is an approximation - the actual deployment might be a few blocks earlier
                 try {
                   if (publicClient) {
+                    console.log('🔍 Getting current block number from public client...');
                     const blockNumber = await publicClient.getBlockNumber();
                     deploymentBlock = Number(blockNumber);
                     console.log('✅ Token deployment block (approximate):', deploymentBlock);
+                  } else {
+                    console.warn('⚠️ Public client not available');
                   }
                 } catch (error) {
                   console.warn('Could not get current block number:', error);
                   // Continue without deployment block
                 }
+              } else {
+                console.warn('⚠️ No token address found in pool data');
               }
+            } else {
+              console.warn(
+                '⚠️ Failed to get pool data:',
+                poolDataResponse.status,
+                poolDataResponse.statusText,
+              );
             }
           } catch (error) {
             console.warn('Could not get deployment block:', error);
@@ -168,28 +180,35 @@ export default function CreateCoinForm() {
           console.log('📦 Deployment block:', deploymentBlock);
           console.log('🪙 Token address:', tokenAddress);
 
+          const metadataPayload = {
+            contractAddress: poolAddress,
+            tokenAddress: tokenAddress,
+            name: formData.tokenName,
+            symbol: formData.tokenSymbol,
+            imageUrl: imageUrl,
+            description: formData.description,
+            website: formData.website,
+            telegram: formData.telegram,
+            twitter: formData.twitter,
+            deploymentBlock: deploymentBlock,
+          };
+
+          console.log('📤 Sending metadata payload:', metadataPayload);
+
           const metadataResponse = await fetch('/api/token-metadata', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              contractAddress: poolAddress,
-              tokenAddress: tokenAddress,
-              name: formData.tokenName,
-              symbol: formData.tokenSymbol,
-              imageUrl: imageUrl,
-              description: formData.description,
-              website: formData.website,
-              telegram: formData.telegram,
-              twitter: formData.twitter,
-              deploymentBlock: deploymentBlock,
-            }),
+            body: JSON.stringify(metadataPayload),
           });
 
           if (metadataResponse.ok) {
+            const responseData = await metadataResponse.json();
             console.log('✅ Metadata saved successfully for address:', poolAddress);
+            console.log('📦 Response data:', responseData);
           } else {
             const errorText = await metadataResponse.text();
             console.error('❌ Failed to save metadata:', errorText);
+            console.error('❌ Response status:', metadataResponse.status);
           }
         } catch (error) {
           console.error('Failed to save metadata:', error);
