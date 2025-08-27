@@ -1,25 +1,20 @@
-"use client";
+'use client';
 
-import { useSearchParams } from "next/navigation";
-import dynamic from "next/dynamic";
-import { Suspense } from "react";
+import { useSearchParams } from 'next/navigation';
+import dynamic from 'next/dynamic';
+import { Suspense } from 'react';
 
-const ParticipateForm = dynamic(
-  () => import("../../components/ParticipateForm"),
-  { ssr: false }
-);
+const ParticipateForm = dynamic(() => import('../../components/ParticipateForm'), { ssr: false });
 
 function ParticipateContent() {
   const searchParams = useSearchParams();
-  const presaleData = searchParams.get("data");
+  const presaleData = searchParams.get('data');
 
   if (!presaleData) {
     return (
       <div className="min-h-screen bg-charcoal flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-light mb-4">
-            Invalid Presale
-          </h1>
+          <h1 className="text-2xl font-bold text-light mb-4">Invalid Presale</h1>
           <p className="text-gray-300">No presale data provided.</p>
         </div>
       </div>

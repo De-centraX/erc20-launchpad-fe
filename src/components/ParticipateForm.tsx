@@ -1,12 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import {
-  useAccount,
-  useWriteContract,
-  useWaitForTransactionReceipt,
-  useReadContract,
-} from 'wagmi';
+import { useAccount, useWriteContract, useWaitForTransactionReceipt, useReadContract } from 'wagmi';
 import { parseEther, formatEther } from 'viem';
 import { useRouter } from 'next/navigation';
 import PoolABI from '../contracts/abis/Pool.json';
@@ -66,9 +61,7 @@ export default function ParticipateForm({ presale }: ParticipateFormProps) {
   useEffect(() => {
     const fetchTokenImage = async () => {
       try {
-        const response = await fetch(
-          `/api/token-metadata?address=${presale.poolAddress}`
-        );
+        const response = await fetch(`/api/token-metadata?address=${presale.poolAddress}`);
         if (response.ok) {
           const metadata = await response.json();
           setTokenImage(metadata.imageUrl || '');
@@ -134,8 +127,7 @@ export default function ParticipateForm({ presale }: ParticipateFormProps) {
     }
 
     if (presaleStatus?.totalContributed && presale.hardcap) {
-      const remaining =
-        BigInt(presale.hardcap) - BigInt(presaleStatus.totalContributed);
+      const remaining = BigInt(presale.hardcap) - BigInt(presaleStatus.totalContributed);
       if (remaining <= 0n) {
         return 'Presale hardcap has been reached';
       }
@@ -190,9 +182,9 @@ export default function ParticipateForm({ presale }: ParticipateFormProps) {
 
   const calculateTokensToReceive = () => {
     if (!amount || parseFloat(amount) <= 0) return '0';
-    const coreAmount = parseFloat(amount);
+    const tkAmount = parseFloat(amount);
     const rate = Number(presale.presaleRate);
-    const tokensToReceive = coreAmount * rate;
+    const tokensToReceive = tkAmount * rate;
     return tokensToReceive.toLocaleString(undefined, {
       minimumFractionDigits: 0,
       maximumFractionDigits: 6,
@@ -224,8 +216,7 @@ export default function ParticipateForm({ presale }: ParticipateFormProps) {
     }
 
     if (presaleStatus.totalContributed && presale.hardcap) {
-      const remaining =
-        BigInt(presale.hardcap) - BigInt(presaleStatus.totalContributed);
+      const remaining = BigInt(presale.hardcap) - BigInt(presaleStatus.totalContributed);
       if (remaining <= 0n) {
         return 'Hardcap Reached';
       }
@@ -237,38 +228,34 @@ export default function ParticipateForm({ presale }: ParticipateFormProps) {
   // Update the button disabled logic
   const isPresaleActive = getRealPresaleStatus() === 'Live';
   const shouldDisableButton =
-    !amount ||
-    parseFloat(amount) <= 0 ||
-    isPending ||
-    isConfirming ||
-    !isPresaleActive;
+    !amount || parseFloat(amount) <= 0 || isPending || isConfirming || !isPresaleActive;
 
   return (
-    <div className='min-h-screen bg-charcoal pb-12'>
+    <div className="min-h-screen bg-charcoal pb-12">
       {/* Featured Tokens Sidebar - Left Side */}
       <FeaturedTokensCarousel />
 
       {/* Main Content - Centered */}
-      <div className='px-2 sm:px-4 lg:px-6'>
+      <div className="px-2 sm:px-4 lg:px-6">
         {' '}
         {/* Reduced padding to extend closer to edges */}
-        <div className='w-full'>
+        <div className="w-full">
           {' '}
           {/* Removed max-width constraint to use full width */}
           {/* Header */}
-          <div className='text-center mb-8'>
+          <div className="text-center mb-8">
             <button
               onClick={handleBack}
-              className='mb-4 text-orange-600 hover:text-orange-700 font-medium'
+              className="mb-4 text-orange-600 hover:text-orange-700 font-medium"
             >
               ← Back to Launchpad
             </button>
-            <h1 className='text-3xl font-bold text-light mb-2'>
+            <h1 className="text-3xl font-bold text-light mb-2">
               {presaleStatus?.isFinalized
                 ? `Swap ${presale.tokenName}`
                 : `Participate in ${presale.tokenName}`}
             </h1>
-            <p className='text-gray-300'>
+            <p className="text-gray-300">
               {presaleStatus?.isFinalized
                 ? `Trade ${presale.tokenSymbol} tokens on Hyped Launch`
                 : `Contribute HL tokens to receive ${presale.tokenSymbol}`}
@@ -285,33 +272,29 @@ export default function ParticipateForm({ presale }: ParticipateFormProps) {
             />
           ) : (
             // Show Contribute Form for active presales
-            <div className='bg-card rounded-2xl shadow-xl p-6 mb-8 border border-primary/20'>
-              <div className='flex flex-col lg:flex-row gap-8'>
+            <div className="bg-card rounded-2xl shadow-xl p-6 mb-8 border border-primary/20">
+              <div className="flex flex-col lg:flex-row gap-8">
                 {/* Left Side - Token Data */}
-                <div className='flex-1'>
-                  <div className='flex items-center justify-between mb-4'>
-                    <div className='flex items-center space-x-4'>
+                <div className="flex-1">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center space-x-4">
                       {/* Token Image */}
                       {tokenImage ? (
                         <img
                           src={tokenImage}
-                          alt='Token logo'
-                          className='w-16 h-16 rounded-full object-cover border-2 border-orange-200 shadow-lg'
+                          alt="Token logo"
+                          className="w-16 h-16 rounded-full object-cover border-2 border-orange-200 shadow-lg"
                         />
                       ) : (
-                        <div className='w-16 h-16 bg-gradient-to-br from-orange-400 to-red-500 rounded-full flex items-center justify-center text-white text-lg font-bold shadow-lg'>
+                        <div className="w-16 h-16 bg-gradient-to-br from-orange-400 to-red-500 rounded-full flex items-center justify-center text-white text-lg font-bold shadow-lg">
                           ⭐
                         </div>
                       )}
 
                       {/* Token Name */}
                       <div>
-                        <h2 className='text-xl font-bold text-light'>
-                          {presale.tokenName}
-                        </h2>
-                        <p className='text-sm text-gray-300'>
-                          {presale.tokenSymbol}
-                        </p>
+                        <h2 className="text-xl font-bold text-light">{presale.tokenName}</h2>
+                        <p className="text-sm text-gray-300">{presale.tokenSymbol}</p>
                       </div>
                     </div>
 
@@ -335,45 +318,42 @@ export default function ParticipateForm({ presale }: ParticipateFormProps) {
                     </span>
                   </div>
 
-                  <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 text-sm'>
+                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 text-sm">
                     <div>
-                      <span className='text-gray-300'>Rate:</span>
-                      <span className='text-light font-semibold ml-2'>
-                        1 HL = {formatRate(presale.presaleRate)}{' '}
-                        {presale.tokenSymbol}
+                      <span className="text-gray-300">Rate:</span>
+                      <span className="text-light font-semibold ml-2">
+                        1 HL = {formatRate(presale.presaleRate)} {presale.tokenSymbol}
                       </span>
                     </div>
                     <div>
-                      <span className='text-gray-300'>Soft Cap:</span>
-                      <span className='text-light font-semibold ml-2'>
+                      <span className="text-gray-300">Soft Cap:</span>
+                      <span className="text-light font-semibold ml-2">
                         {formatAmount(presale.softcap)} HL
                       </span>
                     </div>
                     <div>
-                      <span className='text-gray-300'>Hard Cap:</span>
-                      <span className='text-light font-semibold ml-2'>
+                      <span className="text-gray-300">Hard Cap:</span>
+                      <span className="text-light font-semibold ml-2">
                         {formatAmount(presale.hardcap)} HL
                       </span>
                     </div>
                     <div>
-                      <span className='text-gray-300'>Start Time:</span>
-                      <span className='text-light font-semibold ml-2'>
+                      <span className="text-gray-300">Start Time:</span>
+                      <span className="text-light font-semibold ml-2">
                         {formatDateTime(presale.startTime)}
                       </span>
                     </div>
                     <div>
-                      <span className='text-gray-300'>End Time:</span>
-                      <span className='text-light font-semibold ml-2'>
+                      <span className="text-gray-300">End Time:</span>
+                      <span className="text-light font-semibold ml-2">
                         {formatDateTime(presale.endTime)}
                       </span>
                     </div>
                     {presaleStatus && (
                       <>
                         <div>
-                          <span className='text-gray-300'>
-                            Total Contributed:
-                          </span>
-                          <span className='text-light font-semibold ml-2'>
+                          <span className="text-gray-300">Total Contributed:</span>
+                          <span className="text-light font-semibold ml-2">
                             {formatAmount(presaleStatus.totalContributed)} HL
                           </span>
                         </div>
@@ -383,49 +363,45 @@ export default function ParticipateForm({ presale }: ParticipateFormProps) {
 
                   {/* Status Error */}
                   {statusError && (
-                    <div className='mt-4 inline-block bg-red-50 border border-red-200 rounded-lg px-3 py-2'>
-                      <p className='text-sm text-red-800'>{statusError}</p>
+                    <div className="mt-4 inline-block bg-red-50 border border-red-200 rounded-lg px-3 py-2">
+                      <p className="text-sm text-red-800">{statusError}</p>
                     </div>
                   )}
                 </div>
 
                 {/* Right Side - Contribute Form */}
-                <div className='lg:w-96'>
-                  <h3 className='text-xl font-bold text-light mb-6'>
-                    Contribute HL Tokens
-                  </h3>
+                <div className="lg:w-96">
+                  <h3 className="text-xl font-bold text-light mb-6">Contribute HL Tokens</h3>
 
                   {!isConnected ? (
-                    <div className='text-center py-8'>
-                      <p className='text-gray-300 mb-4'>
+                    <div className="text-center py-8">
+                      <p className="text-gray-300 mb-4">
                         Please connect your wallet to participate
                       </p>
                     </div>
                   ) : (
-                    <div className='space-y-6'>
+                    <div className="space-y-6">
                       {/* Amount Input */}
                       <div>
                         <label
-                          htmlFor='amount'
-                          className='block text-sm font-medium text-gray-300 mb-2'
+                          htmlFor="amount"
+                          className="block text-sm font-medium text-gray-300 mb-2"
                         >
                           Amount (HL)
                         </label>
-                        <div className='relative'>
+                        <div className="relative">
                           <input
-                            type='number'
-                            id='amount'
+                            type="number"
+                            id="amount"
                             value={amount}
                             onChange={(e) => setAmount(e.target.value)}
-                            placeholder='0.0'
-                            min='0'
-                            step='0.01'
-                            className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent'
-                            disabled={
-                              isPending || isConfirming || !!statusError
-                            }
+                            placeholder="0.0"
+                            min="0"
+                            step="0.01"
+                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                            disabled={isPending || isConfirming || !!statusError}
                           />
-                          <div className='absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500'>
+                          <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-300">
                             HL
                           </div>
                         </div>
@@ -433,23 +409,10 @@ export default function ParticipateForm({ presale }: ParticipateFormProps) {
 
                       {/* Tokens to Receive */}
                       {amount && parseFloat(amount) > 0 && (
-                        <div className='bg-orange-50 rounded-lg p-4'>
-                          <div className='flex justify-between items-center'>
-                            <span className='text-gray-300'>
-                              You will receive:
-                            </span>
-                            <span
-                              className='font-bold'
-                              style={{
-                                backgroundImage:
-                                  'url("/MagmaBannerBackground.jpg")',
-                                backgroundSize: 'cover',
-                                backgroundPosition: 'center',
-                                WebkitBackgroundClip: 'text',
-                                WebkitTextFillColor: 'transparent',
-                                backgroundClip: 'text',
-                              }}
-                            >
+                        <div className="bg-orange-50 rounded-lg p-4">
+                          <div className="flex justify-between items-center">
+                            <span className="text-gray-900">You will receive:</span>
+                            <span className="font-bold text-black">
                               {calculateTokensToReceive()} {presale.tokenSymbol}
                             </span>
                           </div>
@@ -458,10 +421,8 @@ export default function ParticipateForm({ presale }: ParticipateFormProps) {
 
                       {/* Debug Info */}
                       {error && (
-                        <div className='bg-red-50 border border-red-200 rounded-lg p-4'>
-                          <p className='text-sm text-red-800'>
-                            Error: {error.message}
-                          </p>
+                        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                          <p className="text-sm text-red-800">Error: {error.message}</p>
                         </div>
                       )}
 
@@ -474,42 +435,32 @@ export default function ParticipateForm({ presale }: ParticipateFormProps) {
                             ? 'bg-gray-400 text-white cursor-not-allowed'
                             : 'text-white cursor-pointer hover:opacity-90'
                         }`}
-                        style={
-                          !shouldDisableButton
-                            ? {
-                                backgroundImage:
-                                  'url("/MagmaBannerBackground.jpg")',
-                                backgroundSize: 'cover',
-                                backgroundPosition: 'center',
-                              }
-                            : {}
-                        }
                       >
                         {/* Dark overlay for better text readability */}
                         {!shouldDisableButton && (
-                          <div className='absolute inset-0 bg-black/30'></div>
+                          <div className="absolute inset-0 bg-black/30"></div>
                         )}
 
-                        <div className='relative z-10 flex items-center justify-center'>
+                        <div className="relative z-10 flex items-center justify-center">
                           {(isPending || isConfirming) && (
                             <svg
-                              className='animate-spin -ml-1 mr-3 h-5 w-5 text-white'
-                              xmlns='http://www.w3.org/2000/svg'
-                              fill='none'
-                              viewBox='0 0 24 24'
+                              className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
                             >
                               <circle
-                                className='opacity-25'
-                                cx='12'
-                                cy='12'
-                                r='10'
-                                stroke='currentColor'
-                                strokeWidth='4'
+                                className="opacity-25"
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                stroke="currentColor"
+                                strokeWidth="4"
                               ></circle>
                               <path
-                                className='opacity-75'
-                                fill='currentColor'
-                                d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
+                                className="opacity-75"
+                                fill="currentColor"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                               ></path>
                             </svg>
                           )}
@@ -525,25 +476,25 @@ export default function ParticipateForm({ presale }: ParticipateFormProps) {
 
                       {/* Transaction Status */}
                       {isSuccess && (
-                        <div className='bg-green-50 border border-green-200 rounded-lg p-4'>
-                          <div className='flex items-center'>
-                            <div className='flex-shrink-0'>
+                        <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                          <div className="flex items-center">
+                            <div className="flex-shrink-0">
                               <svg
-                                className='h-5 w-5 text-green-400'
-                                viewBox='0 0 20 20'
-                                fill='currentColor'
+                                className="h-5 w-5 text-green-400"
+                                viewBox="0 0 20 20"
+                                fill="currentColor"
                               >
                                 <path
-                                  fillRule='evenodd'
-                                  d='M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z'
-                                  clipRule='evenodd'
+                                  fillRule="evenodd"
+                                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                  clipRule="evenodd"
                                 />
                               </svg>
                             </div>
-                            <div className='ml-3'>
-                              <p className='text-sm font-medium text-green-800'>
-                                Transaction successful! You have successfully
-                                contributed to the presale.
+                            <div className="ml-3">
+                              <p className="text-sm font-medium text-green-800">
+                                Transaction successful! You have successfully contributed to the
+                                presale.
                               </p>
                             </div>
                           </div>
@@ -552,11 +503,11 @@ export default function ParticipateForm({ presale }: ParticipateFormProps) {
 
                       {/* Transaction Hash */}
                       {hash && (
-                        <div className='bg-blue-50 border text-center border-blue-200 text-wrap rounded-lg p-4'>
+                        <div className="bg-blue-50 border text-center border-blue-200 text-wrap rounded-lg p-4">
                           <a
                             href={`https://testnet.purrsec.com/tx/${hash}`}
-                            target='_blank'
-                            className='w-full text-sm text-center text-blue-800 text-wrap underline'
+                            target="_blank"
+                            className="w-full text-sm text-center text-blue-800 text-wrap underline"
                           >
                             Transaction on explorer
                           </a>
@@ -569,10 +520,7 @@ export default function ParticipateForm({ presale }: ParticipateFormProps) {
             </div>
           )}
           {/* Transaction List */}
-          <TransactionList
-            poolAddress={presale.poolAddress}
-            tokenSymbol={presale.tokenSymbol}
-          />
+          <TransactionList poolAddress={presale.poolAddress} tokenSymbol={presale.tokenSymbol} />
         </div>
       </div>
     </div>

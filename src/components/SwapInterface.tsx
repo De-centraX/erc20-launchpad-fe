@@ -705,7 +705,7 @@ export default function SwapInterface({
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                     disabled={isLoading}
                   />
-                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-300">
                     {swapDirection === 'buy' ? 'Hype' : tokenSymbol}
                   </div>
                 </div>
@@ -734,7 +734,7 @@ export default function SwapInterface({
               {amount && parseFloat(amount) > 0 && (
                 <div className="bg-green-50 rounded-lg p-4">
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-700">You will receive approximately:</span>
+                    <span className="text-gray-900">You will receive approximately:</span>
                     <span className="font-bold text-green-800">
                       {calculateOutput()} {swapDirection === 'buy' ? tokenSymbol : 'Hype'}
                     </span>
@@ -758,7 +758,7 @@ export default function SwapInterface({
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                     placeholder="5.0"
                   />
-                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-300">
                     %
                   </div>
                 </div>
