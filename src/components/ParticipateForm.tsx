@@ -182,9 +182,9 @@ export default function ParticipateForm({ presale }: ParticipateFormProps) {
 
   const calculateTokensToReceive = () => {
     if (!amount || parseFloat(amount) <= 0) return '0';
-    const coreAmount = parseFloat(amount);
+    const tkAmount = parseFloat(amount);
     const rate = Number(presale.presaleRate);
-    const tokensToReceive = coreAmount * rate;
+    const tokensToReceive = tkAmount * rate;
     return tokensToReceive.toLocaleString(undefined, {
       minimumFractionDigits: 0,
       maximumFractionDigits: 6,

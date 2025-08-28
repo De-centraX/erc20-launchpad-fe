@@ -13,8 +13,6 @@
     "verify-mainnet": "npx hardhat run --network mainnet scripts/verify.ts"
   },
   "keywords": [],
-  "author": "guvenemirhan",
-  "license": "ISC",
   "devDependencies": {
     "@ethersproject/providers": "^5.7.2",
     "@nomicfoundation/hardhat-chai-matchers": "^1.0.6",
@@ -50,16 +48,5 @@
     "dotenv": "^16.0.3",
     "viem": "~2.33.3",
     "wagmi": "^2.16.1"
-  },
-  "directories": {
-    "test": "test"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/guvenemirhan/ERC20-launchpad.git"
-  },
-  "bugs": {
-    "url": "https://github.com/guvenemirhan/ERC20-launchpad/issues"
-  },
-  "homepage": "https://github.com/guvenemirhan/ERC20-launchpad#readme"
+  }
 }
